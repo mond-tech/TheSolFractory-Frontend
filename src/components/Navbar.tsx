@@ -2,10 +2,11 @@
 
 import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { ShoppingCart, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { BorderGradient } from "@/src/sharedcomponents/BorderGradient";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { CartButton } from "@/components/CartButton";
 
 const menus = [
   { name: "HOME", path: "/" },
@@ -22,7 +23,6 @@ export default function Navbar() {
 
   const activeLogin = pathname === "/login";
   const activeSignup = pathname === "/signup";
-  const activeCart = pathname === "/cart";
 
 
   const isMobile = useIsMobile();
@@ -96,17 +96,9 @@ export default function Navbar() {
                   SIGN UP
                 </Link>
 
-                  <Link
-                    href="/cart"
-                    onClick={() => setIsOpen(false)}
-                    className={`p-2 rounded-full border transition-all duration-300 ${
-                      activeCart
-                        ? "text-white border-blue-400 shadow-[0_0_15px_#3b82f6]"
-                        : "text-gray-300 border-gray-500 hover:text-white hover:border-white"
-                    }`}
-                  >
-                  <ShoppingCart size={18} />
-                </Link>
+                  <div onClick={() => setIsOpen(false)}>
+                    <CartButton variant="mobile" />
+                  </div>
               </div>
             </div>
           </div>
@@ -143,13 +135,7 @@ export default function Navbar() {
           </Link>
 
 
-            <Link
-              href="/cart"
-              className="p-2 rounded-full border border-gray-500 text-gray-300 hover:border-white transition hover:text-white hover:border-blue-400 hover:shadow-[0_0_15px_#3b82f6]
-              "
-            >
-              <ShoppingCart size={18} />
-            </Link>
+            <CartButton variant="desktop" />
           </div>
         </>
       )}

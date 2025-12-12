@@ -13,17 +13,16 @@ export default function SolFactoryAdvantage() {
       </h2>
 
       {/* VIDEO FULL WIDTH */}
-      <div className="w-full max-w-7xl flex justify-center mb-14">
-        <div className="w-full rounded-2xl bg-[#f6cdd5] aspect-25/5 flex items-center justify-center">
-          <span className="text-white text-4xl md:text-6xl font-bold text-center leading-tight">
-                <video
+<div className="w-full max-w-7xl flex justify-center mb-14">
+  <div className="w-full rounded-2xl bg-[#f6cdd5] aspect-20/5 flex items-center justify-center">
+    <video
       controls
-      className="w-full max-w-3xl rounded-xl"
+      className="w-full h-full rounded-2xl object-cover"
       src="https://ja3zeotcy2kd52jg.public.blob.vercel-storage.com/SOL%20Video%28Compressed%29.mp4"
     />
-          </span>
-        </div>
-      </div>
+  </div>
+</div>
+
 
       {/* 4 CARDS GRID */}
       <div className="
