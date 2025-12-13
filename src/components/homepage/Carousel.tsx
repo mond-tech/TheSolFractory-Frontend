@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 import MobileCarousel from "./MobileCarousel";
+import FullPageLoader from "@/src/components/FullPageLoader";
 
 interface CardItem {
   image: string;
@@ -36,6 +37,8 @@ export default function Carousel() {
     }, 1000000);
     return () => clearInterval(interval);
   }, [isMobile]);
+
+  if(isMobile === null) return <FullPageLoader />;
 
   if (isMobile) {
     return <MobileCarousel />;

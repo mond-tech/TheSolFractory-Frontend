@@ -31,7 +31,7 @@ const MobileHeroSection: React.FC = () => {
         </span>
       </h1> */}
 
-      <h3 className="text-[28px] font-semibold leading-tight mb-6 text-center">
+      <h3 className="text-[24px] font-semibold leading-tight mb-6 text-center">
         {/* Short top line with sparkle */}
         <span className="block">
           More Than Just{" "}
@@ -43,7 +43,7 @@ const MobileHeroSection: React.FC = () => {
         </span>
 
         {/* Long middle line, visually largest */}
-        <span className="block mt-2 text-[37px] font-semibold">
+        <span className="block mt-2 text-[30px] font-semibold">
           We Build Your Brands
         </span>
 

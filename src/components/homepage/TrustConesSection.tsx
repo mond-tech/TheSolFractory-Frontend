@@ -4,6 +4,7 @@ import React from "react";
 import { AnimatedPinCard } from "@/src/sharedcomponents/PinCard3D";
 import MobileTrustCones from "./MobileTrustCones";
 import { useIsMobile } from "@/hooks/use-mobile";
+import FullPageLoader from "@/src/components/FullPageLoader";
 
 const features = [
   {
@@ -34,6 +35,8 @@ const features = [
 export default function TrustConesSection() {
 
   const isMobile = useIsMobile();
+
+  if(isMobile === null) return <FullPageLoader />;
 
   if(isMobile) return <MobileTrustCones />
 

@@ -8,9 +8,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, X } from "lucide-react";
 import { useCart } from "@/src/contexts/CartContext";
-import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
+import FullPageLoader from "@/src/components/FullPageLoader";
 
 // Mock product data
 const products = [
@@ -93,6 +94,7 @@ const packagingOptions = ["Tube", "Box", "Wrapped Bundle", "Custom"];
 
 export default function CatalogPage() {
   const { addItem } = useCart();
+  const isMobile = useIsMobile();
 
   // Filter states
   const [selectedPaperTypes, setSelectedPaperTypes] = useState<string[]>(["Blunt"]);
@@ -153,6 +155,8 @@ export default function CatalogPage() {
     return true;
   });
 
+  if (isMobile === null) return <FullPageLoader />;
+
   return (
     <div className="min-h-screen bg-[#132135]">
       <Navbar />
@@ -198,8 +202,8 @@ export default function CatalogPage() {
 
         {/* Main Content */}
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Filters Sidebar */}
-          <div className="lg:col-span-1">
+          {/* Filters Sidebar - Desktop Only */}
+          <div className="hidden lg:block lg:col-span-1">
             <div className="bg-gray-800/50 rounded-lg p-6 border border-gray-700">
               <h2 className="text-xl font-semibold text-white mb-6">Filters</h2>
 
@@ -362,6 +366,70 @@ export default function CatalogPage() {
 
           {/* Product Grid */}
           <div className="lg:col-span-3">
+            {/* Mobile Horizontal Filter Bar */}
+            {isMobile && (
+              <div className="mb-4">
+                <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                  {/* Paper Type Filters */}
+                  {paperTypes.map((type) => {
+                    const isSelected = selectedPaperTypes.includes(type);
+                    return (
+                      <button
+                        key={type}
+                        onClick={() => handlePaperTypeToggle(type)}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-full border whitespace-nowrap transition-all ${
+                          isSelected
+                            ? "bg-blue-600 border-blue-400 text-white shadow-[0_0_10px_rgba(59,130,246,0.5)]"
+                            : "bg-gray-800/50 border-gray-600 text-gray-300 hover:border-gray-500"
+                        }`}
+                      >
+                        <span className="text-sm font-medium">{type}</span>
+                        {isSelected && <X className="h-3 w-3" />}
+                      </button>
+                    );
+                  })}
+                  
+                  {/* Packaging Filters */}
+                  {packagingOptions.map((option) => {
+                    const isSelected = selectedPackaging.includes(option);
+                    return (
+                      <button
+                        key={option}
+                        onClick={() => handlePackagingToggle(option)}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-full border whitespace-nowrap transition-all ${
+                          isSelected
+                            ? "bg-blue-600 border-blue-400 text-white shadow-[0_0_10px_rgba(59,130,246,0.5)]"
+                            : "bg-gray-800/50 border-gray-600 text-gray-300 hover:border-gray-500"
+                        }`}
+                      >
+                        <span className="text-sm font-medium">{option}</span>
+                        {isSelected && <X className="h-3 w-3" />}
+                      </button>
+                    );
+                  })}
+                  
+                  {/* Clear All Button */}
+                  {(selectedPaperTypes.length > 0 || selectedPackaging.length > 0) && (
+                    <button
+                      onClick={clearFilters}
+                      className="flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/50 text-red-400 hover:bg-red-500/10 whitespace-nowrap transition-all"
+                    >
+                      <X className="h-4 w-4" />
+                      <span className="text-sm font-medium">Clear All</span>
+                    </button>
+                  )}
+                </div>
+                
+                {/* Size Range Display for Mobile */}
+                <div className="mt-3 px-2">
+                  <div className="flex items-center justify-between text-sm text-gray-400">
+                    <span>Size: {sizeRange[0]} - {sizeRange[1]} mm</span>
+                    <span>Lot: {lotSize[0].toLocaleString()} - {lotSize[1].toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-semibold text-white">
                 Catalog Explorer

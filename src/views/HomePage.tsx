@@ -8,9 +8,7 @@ import Carousel from '@/src/components/homepage/Carousel'
 export default function HomePage() {
   return (
     <div>
-
         {/* Hero Section */}
-
         <HeroSection />
         <Carousel />
         <SolFactoryAdvantage />

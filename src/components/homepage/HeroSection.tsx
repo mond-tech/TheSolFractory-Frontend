@@ -3,10 +3,13 @@ import React from 'react';
 import Link from 'next/link';
 import MobileHeroSection from './MobileHeroSection';
 import { useIsMobile } from "@/hooks/use-mobile";
+import FullPageLoader from "@/src/components/FullPageLoader";
 
 const HeroSection: React.FC = () => {
 
   const isMobile = useIsMobile();
+
+  if(isMobile === null) return <FullPageLoader />;
 
   if(isMobile) return <MobileHeroSection />
 

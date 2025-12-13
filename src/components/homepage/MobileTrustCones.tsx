@@ -55,7 +55,7 @@ export default function TrustConesMobileCarousel() {
         {features.map((feature, index) => (
         <CarouselItem
             key={index}
-            className="min-h-[420px] px-2 overflow-visible"
+            className="min-h-105 px-2 overflow-visible"
         >
             <div className="py-6 overflow-visible">
             <AnimatedPinCard {...feature} />
@@ -64,8 +64,8 @@ export default function TrustConesMobileCarousel() {
         ))}
     </CarouselContent>
 
-    <CarouselPrevious className="left-1" />
-    <CarouselNext className="right-1" />
+    <CarouselPrevious className="ml-8 bg-white border-2 border-[#0D1624]/60" />
+    <CarouselNext className="mr-11 bg-white border-2 border-[#0D1624]/60" />
     </Carousel>
     </section>
   );

@@ -6,14 +6,14 @@ import { PinContainer } from "@/components/ui/3d-pin";
 
 interface AnimatedPinCardProps {
   title: string;
-  description: string;
+  description?: string;
   image: string;
 }
 
-export function AnimatedPinCard({ title, description, image }: AnimatedPinCardProps) {
+export function AnimatedPinCard({ title, image }: AnimatedPinCardProps) {
   return (
     <PinContainer title={title} href="#">
-      <div className="flex basis-full flex-col tracking-tight text-slate-100/80 w-[20rem] h-[22rem]">
+      <div className="flex basis-full flex-col tracking-tight text-slate-100/80 w-[20rem] h-88">
         
         {/* Title */}
         {/* <h3 className="text-lg font-semibold text-white mb-2">{title}</h3> */}

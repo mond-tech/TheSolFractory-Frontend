@@ -4,10 +4,13 @@ import React from "react";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
 import MobileSolFactoryAdvantage from "./MobileSolFactoryAdvantage";
 import { useIsMobile } from "@/hooks/use-mobile";
+import FullPageLoader from "@/src/components/FullPageLoader";
 
 export default function SolFactoryAdvantage() {
 
     const isMobile = useIsMobile();
+
+    if(isMobile === null) return <FullPageLoader />;
   
     if(isMobile) return <MobileSolFactoryAdvantage />
 

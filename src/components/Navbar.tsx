@@ -57,7 +57,7 @@ export default function Navbar() {
 
           <div
             ref={menuRef}
-            className="absolute top-full left-0 w-full bg-[#040E1C] overflow-hidden transition-all duration-500"
+            className="absolute top-full left-0 w-full bg-[#132135] overflow-hidden transition-all duration-500"
             style={{ maxHeight: isOpen ? `${menuHeight}px` : "0px" }}
           >
             <div className="flex flex-col items-center gap-3 py-4">
