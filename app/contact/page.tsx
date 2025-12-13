@@ -81,7 +81,7 @@ export default function ContactPage() {
             </h1>
             <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto">
               Have a question or want to discuss your custom order? We're here
-              to help. Reach out and we'll get back to you as soon as possible.
+              to help. Reach out and we will get back to you as soon as possible.
             </p>
           </div>
 
