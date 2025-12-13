@@ -101,3 +101,40 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  @keyframes slide-in-left {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slide-out-left {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+
+  .cart-drawer {
+    transform: translateX(100%) !important;
+    transition: transform 0.3s ease-out !important;
+    left: auto !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+  }
+
+  .cart-drawer[data-state="open"] {
+    transform: translateX(0) !important;
+  }
+
+  .cart-drawer[data-state="closed"] {
+    transform: translateX(100%) !important;
+  }
+}

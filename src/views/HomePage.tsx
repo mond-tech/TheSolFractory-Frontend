@@ -1,9 +1,9 @@
 import React from 'react'
-import HeroSection from '../components/HeroSection'
-import SolFactoryAdvantage from '../components/SolFactoryAdvantage'
-import MergedCards from '../components/ConeShowCase'
-import TrustConesSection from '../components/TrustConesSection'
-import Carousel from '../components/Carousel'
+import HeroSection from '@/src/components/homepage/HeroSection'
+import SolFactoryAdvantage from '@/src/components/homepage/SolFactoryAdvantage'
+import MergedCards from '@/src/components/homepage/ConeShowCase'
+import TrustConesSection from '@/src/components/homepage/TrustConesSection'
+import Carousel from '@/src/components/homepage/Carousel'
 
 export default function HomePage() {
   return (

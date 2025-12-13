@@ -1,8 +1,21 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
+
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
+export function useMounted() {
+  const [mounted, setMounted] = useState(false);
+
+  useIsomorphicLayoutEffect(() => {
+    setMounted(true);
+  }, []);
+
+  return mounted;
+}
 
 export const PinContainer = ({
   children,
@@ -29,15 +42,15 @@ export const PinContainer = ({
   };
 
   return (
-    <a
+    <div
       className={cn(
         "relative group/pin cursor-pointer",
         containerClassName
       )}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      href={href || "/"}
     >
+
       <div
         style={{
           perspective: "1000px",
@@ -55,7 +68,7 @@ export const PinContainer = ({
         </div>
       </div>
       <PinPerspective title={title} href={href} />
-    </a>
+    </div>
   );
 };
 
@@ -66,6 +79,11 @@ export const PinPerspective = ({
   title?: string;
   href?: string;
 }) => {
+
+  const mounted = useMounted();
+
+  if (!mounted) return null; // 👈 prevents SSR mismatch
+
   return (
     <motion.div className="pointer-events-none  w-96 h-80 flex items-center justify-center opacity-0 group-hover/pin:opacity-100 transition duration-500">
       <div className=" w-full h-full -mt-7 flex-none  inset-0">

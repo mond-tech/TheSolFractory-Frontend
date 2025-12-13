@@ -1,4 +1,4 @@
-import InfoCard from "../sharedcomponents/InfoCard";
+import InfoCard from "@/src/sharedcomponents/InfoCard";
 
 export default function MergedCards() {
   return (
