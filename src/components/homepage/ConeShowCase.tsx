@@ -61,7 +61,7 @@ export default function MergedCards() {
       />
 
       {/* 4 — Another paper style section */}
-    {isMobile? null : <InfoCard
+    {/* {isMobile? null : <InfoCard
             bgColor="#040E1C"
             title="Premium Rolling Papers"
             subtitle="Select from our range of premium rolling paper materials:"
@@ -74,7 +74,7 @@ export default function MergedCards() {
             footer="Every paper is precision tested for airflow, burn rate, and structural consistency."
             image="/homepage/sizechart.png"
             imageOnRight={true}
-          />}
+          />} */}
 
     </div>
   );
