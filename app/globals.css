@@ -1,12 +1,49 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-
 @custom-variant dark (&:is(.dark *));
 
 /* Set a static background and foreground for the whole app */
 :root {
-  --background: #132135; /* dark blue background */
-  --foreground: oklch(0.145 0 0); /* default text color */ --radius: 0.625rem; --card: oklch(1 0 0); --card-foreground: oklch(0.145 0 0); --popover: oklch(1 0 0); --popover-foreground: oklch(0.145 0 0); --primary: oklch(0.205 0 0); --primary-foreground: oklch(0.985 0 0); --secondary: oklch(0.97 0 0); --secondary-foreground: oklch(0.205 0 0); --muted: oklch(0.97 0 0); --muted-foreground: oklch(0.556 0 0); --accent: oklch(0.97 0 0); --accent-foreground: oklch(0.205 0 0); --destructive: oklch(0.577 0.245 27.325); --border: oklch(0.922 0 0); --input: oklch(0.922 0 0); --ring: oklch(0.708 0 0); --chart-1: oklch(0.646 0.222 41.116); --chart-2: oklch(0.6 0.118 184.704); --chart-3: oklch(0.398 0.07 227.392); --chart-4: oklch(0.828 0.189 84.429); --chart-5: oklch(0.769 0.188 70.08); --sidebar: oklch(0.985 0 0); --sidebar-foreground: oklch(0.145 0 0); --sidebar-primary: oklch(0.205 0 0); --sidebar-primary-foreground: oklch(0.985 0 0); --sidebar-accent: oklch(0.97 0 0); --sidebar-accent-foreground: oklch(0.205 0 0); --sidebar-border: oklch(0.922 0 0); --sidebar-ring: oklch(0.708 0 0);
+  --background: #132135;
+  --foreground: #ffffff;
+  --radius: 0.625rem;
+  --card: oklch(1 0 0);
+  --card-foreground: #ffffff;
+  --popover: oklch(1 0 0);
+  --popover-foreground: #ffffff;
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+
+  /* Glass palette */
+  --navy-deep: #132135;
+  --navy-france: #002395;
+  --blue-neon: #4da6ff;
+  --metallic-blue-border: #8ab4f8;
+  --glass-border: rgba(255, 255, 255, 0.25);
+  --glass-highlight: rgba(255, 255, 255, 0.35);
 }
 
 /* Optional: Tailwind theme mapping (kept for utility usage) */
@@ -54,11 +91,12 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Inter", sans-serif;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Remove dark mode media query */
-
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -139,12 +177,12 @@ body {
   }
 
   .scrollbar-hide {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 
   .scrollbar-hide::-webkit-scrollbar {
-    display: none;  /* Chrome, Safari and Opera */
+    display: none;
     width: 0;
     height: 0;
     background: transparent;
@@ -159,4 +197,207 @@ body {
     display: none;
     background: transparent;
   }
+}
+
+/* --- Glass UI from landing page --- */
+.font-serif {
+  font-family: "Playfair Display", serif;
+}
+
+.liquid-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background: radial-gradient(circle at 50% 50%, #1c304a 0%, #132135 100%);
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.5;
+  animation: float 20s infinite ease-in-out alternate;
+}
+
+.orb-1 {
+  width: 90vw;
+  height: 90vw;
+  background: var(--navy-france);
+  top: -10%;
+  left: -20%;
+}
+
+.orb-2 {
+  width: 80vw;
+  height: 80vw;
+  background: #000000;
+  bottom: -10%;
+  right: -20%;
+  animation-delay: -5s;
+}
+
+@keyframes float {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(30px, -30px);
+  }
+}
+
+.glass-panel {
+  background: rgba(19, 33, 53, 0.5);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 2px solid rgba(255, 255, 255, 0.35);
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 3px solid rgba(0, 0, 0, 0.25);
+  border-right: 2px solid rgba(0, 0, 0, 0.15);
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3),
+    inset 0 -5px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.glass-panel input:not([type="radio"]):not([type="checkbox"]),
+.glass-panel select,
+.glass-panel textarea,
+.border-dashed {
+  background: rgba(0, 0, 0, 0.2) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-top: 2px solid rgba(255, 255, 255, 0.2) !important;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.3) !important;
+  box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.3), inset 0 1px 3px rgba(255, 255, 255, 0.1) !important;
+  transition: all 0.3s;
+}
+
+.glass-panel input:not([type="radio"]):not([type="checkbox"]):focus,
+.glass-panel select:focus,
+.glass-panel textarea:focus {
+  background: rgba(13, 22, 36, 0.4) !important;
+  border-color: var(--metallic-blue-border) !important;
+  border-top-color: var(--blue-neon) !important;
+  box-shadow: 0 0 15px rgba(77, 166, 255, 0.2), inset 0 2px 5px rgba(0, 0, 0, 0.4) !important;
+}
+
+.btn-liquid {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 2px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 10px 20px rgba(0, 0, 0, 0.2),
+    inset 0 2px 3px rgba(255, 255, 255, 0.7),
+    inset 0 -5px 10px rgba(0, 0, 0, 0.3),
+    inset 0 0 20px rgba(255, 255, 255, 0.02);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 1;
+  cursor: pointer;
+  border-radius: 9999px !important;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.btn-liquid::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: skewX(-20deg);
+  transition: 0.5s;
+  z-index: -1;
+}
+
+.btn-liquid:hover {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+  box-shadow:
+    0 15px 30px rgba(77, 166, 255, 0.2),
+    inset 0 3px 5px rgba(255, 255, 255, 0.8),
+    inset 0 -5px 10px rgba(0, 0, 0, 0.4);
+  transform: translateY(-3px) scale(1.03);
+}
+
+.btn-liquid:hover::before {
+  left: 100%;
+  transition: 0.7s;
+}
+
+.btn-liquid.active,
+.builder-option.active,
+.nav-btn.active,
+.btn-primary {
+  background: linear-gradient(145deg, rgba(15, 36, 68, 0.9) 0%, rgba(58, 110, 165, 0.9) 50%, rgba(15, 36, 68, 0.9) 100%);
+  border-color: rgba(138, 180, 248, 0.5);
+  border-top: 2px solid rgba(180, 210, 255, 0.9);
+  border-bottom: 2px solid rgba(10, 25, 50, 0.6);
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.5),
+    0 0 25px rgba(77, 166, 255, 0.4),
+    inset 0 3px 8px rgba(200, 230, 255, 0.6),
+    inset 0 -8px 20px rgba(0, 15, 40, 0.6);
+  color: white !important;
+}
+
+.view-section {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.view-active {
+  display: block;
+  opacity: 1;
+}
+
+#mobile-menu {
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease;
+  transform: translateY(-100%);
+  opacity: 0;
+  background: rgba(19, 33, 53, 0.8);
+  backdrop-filter: blur(30px);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#mobile-menu.open {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.social-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.5), inset 0 -2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.social-btn:hover {
+  background: linear-gradient(145deg, #0f2444, #3a6ea5);
+  border-top: 2px solid rgba(180, 210, 255, 0.8);
+  box-shadow: 0 0 20px rgba(138, 180, 248, 0.5), inset 0 3px 5px rgba(255, 255, 255, 0.4);
+  transform: translateY(-3px);
 }

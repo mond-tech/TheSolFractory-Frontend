@@ -8,7 +8,7 @@ export default function page() {
   return (
     <div className=''>
       <Navbar />
-      <main>
+      <main className='pt-26'>
         <HomePage />
       </main>
       <footer>

@@ -133,11 +133,8 @@ export function ShoppingCartDialog({
 
           <div className="flex gap-3">
             <Button
-              className={cn(
-                "flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3",
-                "shadow-[0_0_20px_rgba(59,130,246,0.5)]",
-                "transition-all duration-300"
-              )}
+              className="btn-liquid px-9 py-5 font-bold uppercase tracking-widest active 
+                    text-gray-300 hover:text-white border-gray-500 rounded-3xl hover:bg-gray-800 transition border-[2px]"
               onClick={() => {
                 // Handle place order
                 console.log("Place order");
@@ -145,12 +142,11 @@ export function ShoppingCartDialog({
             >
               PLACE ORDER
             </Button>
+
             <Button
               variant="outline"
-              className={cn(
-                "flex-1 border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white hover:border-gray-500",
-                "font-semibold transition-all duration-300 py-3"
-              )}
+              className="btn-liquid px-9 py-5 font-bold uppercase tracking-widest
+                    text-gray-300 hover:text-white border-gray-500 rounded-3xl hover:bg-gray-800 transition border-2 mr-1.5"
               onClick={() => {
                 // Handle request quote
                 console.log("Request quote");

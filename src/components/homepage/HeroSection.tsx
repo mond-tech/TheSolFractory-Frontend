@@ -15,7 +15,7 @@ const HeroSection: React.FC = () => {
   if(isMobile) return <MobileHeroSection />
 
   return (
-    <section className="hero-section text-white py-20 px-6 text-center mt-28">
+    <section className="hero-section text-white py-20 px-6 text-center">
       <h1 className="text-4xl md:text-5xl font-bold mb-4">
         <span>
           We Don’t Just{' '}
@@ -32,17 +32,27 @@ const HeroSection: React.FC = () => {
         Exceptional quality. Endless customization. True scalability.
       </p>
       <div className="flex justify-center gap-4 flex-wrap">
-        <Link
+        {/* <Link
           href="/custom-order"
           className="px-6 py-3 w-[22vw] bg-[#132135] text-[#FFFFFF] rounded-3xl hover:bg-blue-600 transition border-[2px]
                      border-[#FFFFF] shadow-[0_0_15px_#3b82f6]
                      "
         >
           Start Your Custom Order
+        </Link> */}
+        <Link
+          href="/contact"
+          className="btn-liquid px-6 py-2 text-xs font-bold uppercase tracking-widest
+                    text-gray-300 hover:text-white
+                    flex items-center justify-center active"
+        >
+          Start Your Custom Order
         </Link>
+
         <Link
           href="/get-quote"
-          className="px-6 py-3 border border-gray-500 rounded-3xl hover:bg-gray-800 transition border-[2px]"
+          className="btn-liquid px-6 py-3 font-bold uppercase tracking-widest
+                    text-gray-300 hover:text-white border-gray-500 rounded-3xl hover:bg-gray-800 transition border-[2px]"
         >
           Get a Quote
         </Link>
