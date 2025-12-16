@@ -1,6 +1,8 @@
 "use client";
 
 import { Instagram, Linkedin, Twitter } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -9,7 +11,14 @@ export default function Footer() {
 
         {/* LEFT — Brand + Social */}
         <div>
-          <h2 className="text-3xl font-bold tracking-wide">SOL FACTORY</h2>
+          <Link href="/" className="h-10 md:h-14 block group cursor-pointer ml-1">
+            <Image
+              src="/logo.png"
+              alt=""
+              width={80}
+              height={50}
+            />
+          </Link>
           <p className="text-sm text-white/70 mt-3 leading-relaxed">
             Exceptional quality. Endless customization. True scalability.
           </p>
