@@ -29,12 +29,11 @@ export default function Carousel() {
   const isMobile = useIsMobile();
   const [active, setActive] = useState(2);
 
-  // 🔥 Auto Slide Every 3 Seconds
   useEffect(() => {
     if (isMobile) return; // Don't run auto-slide on mobile
     const interval = setInterval(() => {
       setActive((prev) => wrap(prev + 1));
-    }, 1000000);
+    }, 2000);
     return () => clearInterval(interval);
   }, [isMobile]);
 

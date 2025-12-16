@@ -11,10 +11,17 @@ import Image from "next/image";
 
 const menus = [
   { name: "HOME", path: "/" },
-  { name: "CATALOG", path: "/catalog" },
+  { name: "PRODUCTS", path: "/catalog" },
   { name: "BUILD", path: "/build" },
   { name: "CONTACT", path: "/contact" },
 ];
+
+const glassButtonBase =
+  "relative overflow-hidden px-6 py-2 rounded-full text-sm font-semibold tracking-wide border backdrop-blur-md bg-white/10 bg-[linear-gradient(120deg,rgba(255,255,255,0.08),rgba(255,255,255,0.3),rgba(255,255,255,0.08))] bg-[length:220%_100%] bg-[position:0%_0] transition-[background-position] border-white/20 text-gray-100 shadow-[0_12px_28px_rgba(0,0,0,0.38)] shadow-inner transition-all duration-300 hover:bg-[position:100%_0] hover:-translate-y-0.5 active:translate-y-0 before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-b before:from-white/70 before:via-white/10 before:to-white/0 before:opacity-50 before:pointer-events-none after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-3/4 after:h-1/2 after:rounded-full after:bg-white/15 after:blur-xl after:opacity-60 after:pointer-events-none";
+const glassButtonActive =
+  "text-white border-blue-300/70 bg-gradient-to-b from-blue-400/70 via-blue-500/40 to-blue-600/30 shadow-[0_16px_38px_rgba(59,130,246,0.4)]";
+const glassButtonIdle =
+  "text-gray-200/90 hover:text-white hover:border-white/50 hover:bg-white/15 hover:shadow-[0_18px_34px_rgba(0,0,0,0.46)]";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -68,10 +75,10 @@ export default function Navbar() {
                     key={m.path}
                     href={m.path}
                     onClick={() => setIsOpen(false)}
-                    className={`px-6 py-2 rounded-full border border-gray-500 text-sm transition-all duration-300 ${
+                    className={`${glassButtonBase} ${
                       active
-                        ? "text-white border-blue-400 shadow-[0_0_15px_#3b82f6]"
-                        : "text-gray-300 hover:text-white hover:border-white"
+                        ? glassButtonActive
+                        : glassButtonIdle
                     }`}
                   >
                     {m.name}
@@ -82,10 +89,8 @@ export default function Navbar() {
                 <Link
                   href="/login"
                   onClick={() => setIsOpen(false)}
-                  className={`px-5 py-2 rounded-full border text-sm transition-all duration-300 ${
-                    activeLogin
-                      ? "text-white border-blue-400 shadow-[0_0_15px_#3b82f6]"
-                      : "text-gray-300 border-gray-500 hover:text-white hover:border-white"
+                  className={`${glassButtonBase} ${
+                    activeLogin ? glassButtonActive : glassButtonIdle
                   }`}
                 >
                   LOGIN
@@ -94,10 +99,8 @@ export default function Navbar() {
                 <Link
                   href="/signup"
                   onClick={() => setIsOpen(false)}
-                  className={`px-5 py-2 rounded-full border text-sm transition-all duration-300 ${
-                    activeSignup
-                      ? "text-white border-blue-400 shadow-[0_0_15px_#3b82f6]"
-                      : "text-gray-300 border-gray-500 hover:text-white hover:border-white"
+                  className={`${glassButtonBase} ${
+                    activeSignup ? glassButtonActive : glassButtonIdle
                   }`}
                 >
                   SIGN UP
@@ -120,10 +123,10 @@ export default function Navbar() {
                 <Link
                   key={m.path}
                   href={m.path}
-                  className={`px-6 py-2 rounded-full border border-gray-500 text-sm transition-all duration-300 ${
+                  className={`${glassButtonBase} ${
                     active
-                      ? "text-white border-blue-400 shadow-[0_0_15px_#3b82f6]"
-                      : "text-gray-300 hover:text-white hover:border-white hover:text-white hover:border-white transition hover:text-white hover:border-blue-400 hover:shadow-[0_0_15px_#3b82f6]"
+                      ? glassButtonActive
+                      : glassButtonIdle
                   }`}
                 >
                   {m.name}

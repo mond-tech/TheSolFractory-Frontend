@@ -32,48 +32,45 @@ export default function ContactPage() {
       <main className="pt-28 px-6">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20">
           {/* Left Content */}
-{/* Left Content */}
-<div className="space-y-6">
-  <h1 className="text-5xl font-semibold text-gray-900">Contact Us</h1>
+          <div className="space-y-6">
+            <h1 className="text-5xl font-semibold text-gray-900">Contact Us</h1>
 
-  <p className="text-gray-500 max-w-md leading-relaxed">
-    A better future is possible. Contact us to learn more about our mission and work, or to become involved yourself.
-  </p>
+            <p className="text-gray-500 max-w-md leading-relaxed">
+              A better future is possible. Contact us to learn more about our mission and work, or to become involved yourself.
+            </p>
 
-  {/* Email */}
-  <a
-    href="mailto:braj@thesolfactory.com"
-    className="text-blue-600 font-medium block"
-  >
-    braj@thesolfactory.com
-  </a>
+            {/* Email */}
+            <a
+              href="mailto:braj@thesolfactory.com"
+              className="text-blue-600 font-medium block"
+            >
+              braj@thesolfactory.com
+            </a>
 
-  {/* Company & Address */}
-  <div className="text-gray-500 space-y-4">
-    <p className="font-medium text-gray-700">Solitude Flame Private Limited</p>
-    <p className="flex items-start gap-2 w-200">
-      <MapPin className="h-4 w-4 mt-1" />
-      D63B, Site 4, Behind Fortis Hospital,
-      <br />
-      Greater Noida 201310
-    </p>
-  </div>
+            {/* Company & Address */}
+            <div className="text-gray-500 space-y-4">
+              <p className="font-medium text-gray-700">Solitude Flame Private Limited</p>
+              <p className="flex items-start gap-2 w-200">
+                <MapPin className="h-4 w-4 mt-1" />
+                D63B, Site 4, Behind Fortis Hospital,
+                <br />
+                Greater Noida 201310
+              </p>
+            </div>
 
-  {/* Social icons */}
-  <div className="flex gap-4 pt-4">
-    <div className="h-9 w-9 rounded-full border flex items-center justify-center">
-      <span className="text-sm font-medium">in</span>
-    </div>
-    <div className="h-9 w-9 rounded-full border flex items-center justify-center">
-      <span className="text-sm font-medium">X</span>
-    </div>
-    <div className="h-9 w-9 rounded-full border flex items-center justify-center">
-      <span className="text-sm font-medium">IG</span>
-    </div>
-  </div>
-</div>
-
-
+            {/* Social icons */}
+            <div className="flex gap-4 pt-4">
+              <div className="h-9 w-9 rounded-full border flex items-center justify-center">
+                <span className="text-sm font-medium">in</span>
+              </div>
+              <div className="h-9 w-9 rounded-full border flex items-center justify-center">
+                <span className="text-sm font-medium">X</span>
+              </div>
+              <div className="h-9 w-9 rounded-full border flex items-center justify-center">
+                <span className="text-sm font-medium">IG</span>
+              </div>
+            </div>
+          </div>  
           {/* Right Form */}
           <div className="bg-white shadow-xl rounded-2xl p-8">
             <form onSubmit={handleSubmit} className="space-y-6">
