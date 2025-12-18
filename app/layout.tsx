@@ -20,7 +20,13 @@ export default function RootLayout({
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         />
       </head>
-      <body>
+      <body className="antialiased selection:bg-blue-600 selection:text-white">
+        {/* Global liquid glass background – shared across all pages */}
+        <div className="liquid-canvas">
+          <div className="orb orb-1" />
+          <div className="orb orb-2" />
+        </div>
+
         <CartProvider>
           {children}
         </CartProvider>

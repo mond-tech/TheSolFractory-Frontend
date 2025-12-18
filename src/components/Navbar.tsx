@@ -43,7 +43,7 @@ export default function Navbar() {
             />
           </Link>
 
-          <nav className="hidden lg:flex gap-4 ml-14">
+          <nav className="hidden lg:flex gap-4 ml-44">
             {navLinks.map((link) => (
               <Link
                 key={link.id}

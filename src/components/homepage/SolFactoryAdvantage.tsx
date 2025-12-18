@@ -4,6 +4,7 @@ import React from "react";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
 import MobileSolFactoryAdvantage from "./MobileSolFactoryAdvantage";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { IconLeaf, IconBrain, IconBuilding, IconHeartHandshake  } from '@tabler/icons-react';
 import FullPageLoader from "@/src/components/FullPageLoader";
 
 export default function SolFactoryAdvantage() {
@@ -41,37 +42,50 @@ export default function SolFactoryAdvantage() {
         grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 
         gap-8
       ">
-        <CardGlowWrapper>
-          <h3 className="font-semibold text-lg mb-2 text-white">Premium Quality</h3>
-          <p className="text-sm text-white/70 leading-relaxed">
-            Machine-made cones crafted with food-grade materials and strict QC 
-            for smooth packing and even burns.
-          </p>
-        </CardGlowWrapper>
+<CardGlowWrapper>
+  <h3 className="font-semibold text-lg mb-2 text-white flex items-center gap-3">
+    <IconLeaf />
+    <span>Premium Quality</span>
+  </h3>
+  <p className="text-sm text-white/70 leading-relaxed">
+    Machine-made cones crafted with food-grade materials and strict QC 
+    for smooth packing and even burns.
+  </p>
+</CardGlowWrapper>
 
-        <CardGlowWrapper>
-          <h3 className="font-semibold text-lg mb-2 text-white">White-Label Experts</h3>
-          <p className="text-sm text-white/70 leading-relaxed">
-            Custom sizes, branded filters, and packaging tailored 
-            to your product line.
-          </p>
-        </CardGlowWrapper>
+<CardGlowWrapper>
+  <h3 className="font-semibold text-lg mb-2 text-white flex items-center gap-3">
+    <IconBrain />
+    <span>White-Label Experts</span>
+  </h3>
+  <p className="text-sm text-white/70 leading-relaxed">
+    Custom sizes, branded filters, and packaging tailored 
+    to your product line.
+  </p>
+</CardGlowWrapper>
 
-        <CardGlowWrapper>
-          <h3 className="font-semibold text-lg mb-2 text-white">Built for Scale</h3>
-          <p className="text-sm text-white/70 leading-relaxed">
-            Fully compatible with top filling machines—perfect for 
-            high-volume production.
-          </p>
-        </CardGlowWrapper>
+<CardGlowWrapper>
+  <h3 className="font-semibold text-lg mb-2 text-white flex items-center gap-3">
+    <IconBuilding stroke={2} size={25} />
+    <span>Built for Scale</span>
+  </h3>
+  <p className="text-sm text-white/70 leading-relaxed">
+    Fully compatible with top filling machines—perfect for 
+    high-volume production.
+  </p>
+</CardGlowWrapper>
 
-        <CardGlowWrapper>
-          <h3 className="font-semibold text-lg mb-2 text-white">Full Support</h3>
-          <p className="text-sm text-white/70 leading-relaxed">
-            From design to delivery, we handle every step for a seamless 
-            manufacturing experience.
-          </p>
-        </CardGlowWrapper>
+<CardGlowWrapper>
+  <h3 className="font-semibold text-lg mb-2 text-white flex items-center gap-3">
+    <IconHeartHandshake stroke={2} />
+    <span>Full Support</span>
+  </h3>
+  <p className="text-sm text-white/70 leading-relaxed">
+    From design to delivery, we handle every step for a seamless 
+    manufacturing experience.
+  </p>
+</CardGlowWrapper>
+
       </div>
     </section>
   );

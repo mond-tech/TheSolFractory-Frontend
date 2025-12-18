@@ -2,18 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-
-/* Previous signup layout kept for reference:
-<div className="min-h-screen flex items-center justify-center p-4 mt-20 mb-8">
-  <div className="w-full max-w-[380px] sm:max-w-[480px] md:max-w-155 backdrop-blur-lg border border-white rounded-2xl shadow-[0_15px_30px_rgba(0,0,0,0.9)]">
-    <div className="bg-[#D9D9D9] border-22 border-[#132135] rounded-2xl">
-      <CardContent className="p-8 sm:p-10">
-        ...form fields and buttons...
-      </CardContent>
-    </div>
-  </div>
-</div>
-*/
+import { IconBrandGoogle } from '@tabler/icons-react';
 
 export default function SignupPage() {
   const [form, setForm] = useState({
@@ -40,6 +29,7 @@ export default function SignupPage() {
 
       <div className="glass-panel p-8 md:p-10 w-full max-w-lg relative z-10">
         <h2 className="text-3xl font-serif text-center mb-2">Create Your SOL Factory Account</h2>
+
         <form className="space-y-4 mt-6" onSubmit={handleSubmit}>
           <div className="grid grid-cols-2 gap-4">
             <input
@@ -77,27 +67,33 @@ export default function SignupPage() {
           />
           <button
             type="submit"
-            className="w-full btn-liquid btn-primary py-4 text-xs font-bold uppercase tracking-widest"
+            className="btn-liquid w-full max-w-[280px] mx-auto flex items-center justify-center gap-2 px-3 py-2 text-sm font-semibold uppercase tracking-widest 
+                       text-gray-300 hover:text-white border-gray-500 rounded-3xl hover:bg-gray-800 transition border-2"
           >
             Submit Application
           </button>
         </form>
 
         <div className="mt-8 pt-6 border-t border-white/10 text-center">
-          <p className="text-[10px] uppercase tracking-widest text-gray-500 mb-4">
+          <p className="text-[11px] uppercase tracking-widest text-gray-500 mb-4">
             Or continue with
           </p>
           <div className="flex justify-center gap-4">
-            <a href="#" className="btn-liquid px-1 py-3 w-70 font-semibold uppercase tracking-widest 
-                    text-gray-300 hover:text-white border-gray-500 rounded-3xl hover:bg-gray-800 transition border-2">
-              Continue With Google
+            <a
+              href="#"
+              className="btn-liquid flex items-center justify-center gap-2 px-3 py-2 text-sm w-full max-w-[280px] 
+                         font-semibold text-gray-300 hover:text-white border-gray-500 rounded-3xl hover:bg-gray-800 transition border-2"
+            >
+              <IconBrandGoogle className="w-5 h-5" />
+              Continue with Google
             </a>
           </div>
         </div>
+
         <div className="text-center mt-6">
           <span className="text-xs text-gray-500 mr-1">Already have an account?</span>
           <Link href="/login" className="text-xs hover:text-white transition">
-             Login
+            Login
           </Link>
         </div>
       </div>

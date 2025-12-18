@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect } from "react";
 import Footer from "@/src/components/Footer";
 import Navbar from "@/src/components/Navbar";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 // import { Checkbox } from "@/components/ui/checkbox";
 // import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -92,6 +93,12 @@ const products = [
 const paperTypes = ["Blunt", "Hemp", "Natural", "Organic", "Rice"];
 const packagingOptions = ["Tube", "Box", "Wrapped Bundle", "Custom"];
 
+const heroSlides = [
+  { src: "/homepage/conestack.png", label: "Natural Hemp Cones" },
+  { src: "/homepage/sizechart.png", label: "Precision Size Options" },
+  { src: "/homepage/conestack.png", label: "Production-Ready Inventory" },
+];
+
 export default function CatalogPage() {
   const { addItem } = useCart();
   const isMobile = useIsMobile();
@@ -102,6 +109,9 @@ export default function CatalogPage() {
   const [sizeRange, setSizeRange] = useState<[number, number]>([0, 500]);
   const [lotSize, setLotSize] = useState<[number, number]>([1000, 5000]);
   const [sortBy, setSortBy] = useState("featured");
+
+  // Hero slider state
+  const [activeSlide, setActiveSlide] = useState(0);
 
   // Collapsible filter states
   const [paperTypeOpen, setPaperTypeOpen] = useState(false);
@@ -124,6 +134,15 @@ export default function CatalogPage() {
         : [...prev, option]
     );
   };
+
+  // Auto-advance hero slider on desktop
+  useEffect(() => {
+    if (isMobile) return;
+    const interval = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, [isMobile]);
 
   const handleAddToCart = (product: typeof products[0]) => {
     addItem({
@@ -158,38 +177,47 @@ export default function CatalogPage() {
   if (isMobile === null) return <CatalogPageSkeleton />;
 
   return (
-    <div className="min-h-screen h-screen bg-[#132135] overflow-y-scroll scrollbar-hide">
+    <div className="min-h-screen h-screen overflow-y-scroll scrollbar-hide">
       <Navbar />
       <main className="pt-24 md:pt-32 pb-20">
         {/* Header Section */}
-        <div className="max-w-400 mx-auto px-4 md:px-6 mb-10">
-          <div className="text-center mb-6">
-            <h1 className="text-4xl md:text-5xl font-serif mb-3">
-              Wholesale Inventory
-            </h1>
-            <p className="text-gray-400 text-sm">
-              Select products to build your wholesale quote.
-            </p>
+        <div className="max-w-400 mx-auto px-0 md:px-6 mb-10">
+          <div className="px-4 md:px-0">
+            <div className="text-center mb-6">
+              <h1 className="text-4xl md:text-5xl font-serif mb-3">
+                Wholesale Inventory
+              </h1>
+              <p className="text-gray-400 text-sm">
+                Select products to build your wholesale quote.
+              </p>
+            </div>
           </div>
 
-          {/* Selected Items Preview - glass strip */}
-          <div className="glass-panel p-6 rounded-xl flex items-center justify-between gap-4 border border-white/10">
-            <div className="flex-1 flex gap-3 md:gap-4">
-              <div className="w-14 h-14 md:w-16 md:h-16 bg-white/5 rounded-xl flex items-center justify-center shrink-0">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-white/10 rounded-xl" />
+          {/* Full-width hero image slider (one image at a time, reduced height) */}
+          {isMobile? null : <div className="w-full h-48 md:h-64 relative rounded-2xl overflow-hidden bor-shadow backdrop-blur-lg border border-white/15">
+            {heroSlides.map((slide, idx) => (
+              <div
+                key={idx}
+                className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+                  idx === activeSlide ? "opacity-100" : "opacity-0 pointer-events-none"
+                }`}
+              >
+                <Image
+                  src={slide.src}
+                  alt={slide.label}
+                  fill
+                  style={{ objectFit: "cover" }}
+                  priority={idx === activeSlide} // optional: preload current slide
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-6 py-3 flex items-end">
+                  <p className="text-white text-sm md:text-base font-semibold">
+                    {slide.label}
+                  </p>
+                </div>
               </div>
-              <div className="w-14 h-14 md:w-16 md:h-16 bg-white/5 rounded-xl flex items-center justify-center shrink-0">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-white/10 rounded-full" />
-              </div>
-              <div className="hidden sm:flex w-14 h-14 md:w-16 md:h-16 bg-white/5 rounded-xl items-center justify-center shrink-0">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-white/10 rounded-xl" />
-              </div>
-            </div>
-            <div className="hidden md:flex flex-col items-center justify-center text-[10px] uppercase tracking-[0.3em] text-gray-400">
-              <span className="mb-1 text-blue-300">Solitude Flame Pvt Ltd</span>
-              <span className="text-gray-500">Elite B2B Manufacturing</span>
-            </div>
-          </div>
+            ))}
+          </div>}
+
         </div>
 
         {/* Main Content */}
@@ -455,7 +483,7 @@ export default function CatalogPage() {
             )}
 
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl md:text-3xl font-serif">Catalog</h2>
+              <h2 className="text-2xl md:text-3xl font-serif">Products</h2>
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-[180px] glass-panel !bg-black/40 border-white/10 text-white px-3 py-2 h-10">
                   <SelectValue placeholder="Sort by" />

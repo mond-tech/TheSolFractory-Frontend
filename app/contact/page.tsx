@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Navbar from "@/src/components/Navbar";
 import Footer from "@/src/components/Footer";
+import { IconBrandGoogle } from '@tabler/icons-react';
 
 export default function ContactPage() {
   const [form, setForm] = useState({
@@ -24,11 +25,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#132135] text-white relative">
-      <div className="liquid-canvas">
-        <div className="orb orb-1" />
-        <div className="orb orb-2" />
-      </div>
+    <div className="min-h-screen text-white relative">
       <Navbar />
 
       <main className="min-h-screen pt-24 md:pt-32 pb-20 relative z-10">

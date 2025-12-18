@@ -69,7 +69,7 @@ export default function Footer() {
         </div>
 
         {/* COLUMN 4 — Contacts */}
-        <div>
+        {/* <div>
           <h3 className="text-lg font-semibold mb-4">Contacts</h3>
           <ul className="space-y-3 text-white/70">
             <li>Address..</li>
@@ -78,7 +78,7 @@ export default function Footer() {
             <li>Monday - Friday</li>
             <li>8976XXXXXX</li>
           </ul>
-        </div>
+        </div> */}
 
       </div>
     </footer>

@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import Navbar from "@/src/components/Navbar";
 import Footer from "@/src/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { IconTrafficCone } from "@tabler/icons-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, Check, Leaf, Droplets, Sparkles, Infinity, ChevronsDown, CircleDot, FileText, Sparkle, AlertCircle, X, ArrowRight } from "lucide-react";
 import { useCart } from "@/src/contexts/CartContext";
@@ -140,7 +140,6 @@ const LOT_SIZES = [
 ];
 
 export default function BuildPage() {
-  const router = useRouter();
   const { addItem } = useCart();
   const [step, setStep] = useState(1);
   const [state, setState] = useState<CustomizationState>({
@@ -270,10 +269,10 @@ export default function BuildPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#132135]">
+    <div className="min-h-screen">
       <Navbar />
       <main className="pt-24 pb-12 px-8">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto mt-21">
           {/* Step Indicator */}
           {/* <div className="flex justify-center mb-8">
             <div className="px-4 py-2 rounded-lg bg-gray-800/50 border border-gray-700 text-white text-sm font-medium">
@@ -511,7 +510,7 @@ export default function BuildPage() {
                           </div>
                         )}
                         <div className="flex flex-col items-center space-y-3">
-                          <div className="text-4xl font-bold text-white">A</div>
+                          <div className="text-4xl font-bold text-white"><IconTrafficCone size={70} stroke={1.5} /></div>
                           <div className="text-white font-semibold text-xl">{size.name}</div>
                           <div className="text-gray-400 text-sm">{size.description}</div>
                         </div>
