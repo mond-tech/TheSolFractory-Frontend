@@ -51,7 +51,7 @@ export default function TrustConesMobileCarousel() {
     opts={{ align: "center", loop: true }}
     className="w-full max-w-sm mx-auto overflow-visible"
     >
-    <CarouselContent className="overflow-visible">
+    <CarouselContent className="ml-4 overflow-visible">
         {features.map((feature, index) => (
         <CarouselItem
             key={index}
