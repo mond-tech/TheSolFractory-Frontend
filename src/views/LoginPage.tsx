@@ -23,7 +23,7 @@ export default function LoginPage() {
       </div>
 
       <div className="glass-panel p-8 md:p-10 w-full max-w-md relative z-10">
-        <h2 className="text-3xl font-serif text-center mb-2">Login</h2>
+        <h2 className="text-3xl font-serif text-center mb-2" style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>Login</h2>
 
         <form className="space-y-5 mt-6" onSubmit={handleSubmit}>
           <input
@@ -44,21 +44,21 @@ export default function LoginPage() {
           />
           <button
             type="submit"
-            className="btn-liquid w-full max-w-[280px] mx-auto flex items-center justify-center gap-2 px-3 py-2 text-sm font-semibold uppercase tracking-widest 
+            className="btn-liquid w-full max-w-70 mt-4 mx-auto flex items-center justify-center gap-2 px-5 py-2 text-sm font-semibold uppercase tracking-widest 
                        text-gray-300 hover:text-white border-gray-500 rounded-3xl hover:bg-gray-800 transition border-2"
           >
             Sign In
           </button>
         </form>
 
-        <div className="mt-8 pt-6 border-t border-white/10 text-center">
-          <p className="text-[11px] uppercase tracking-widest text-gray-500 mb-4">
+        <div className="mt-7 pt-6 border-t border-white/10 text-center">
+          <p className="text-[11px] uppercase tracking-widest text-gray-500 mb-6 mt-0">
             Or continue with
           </p>
           <div className="flex justify-center gap-4">
             <a
               href="#"
-              className="btn-liquid flex items-center justify-center gap-2 px-3 py-2 text-sm w-full max-w-[280px] 
+              className="btn-liquid flex items-center justify-center gap-2 px-3 py-2 text-sm w-full max-w-70
                          font-semibold text-gray-300 hover:text-white border-gray-500 rounded-3xl hover:bg-gray-800 transition border-2"
             >
               <IconBrandGoogle className="w-5 h-5" />
@@ -69,9 +69,19 @@ export default function LoginPage() {
 
         <div className="text-center mt-6">
           <span className="text-xs text-gray-500 mr-1">Don’t have an account?</span>
-          <Link href="/signup" className="text-xs hover:text-white transition">
-            Sign Up
+          <Link
+            href="/signup"
+            className="text-xs text-gray-300 hover:text-white transition"
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.textShadow = "0 0 8px rgba(255,255,255,0.6)")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.textShadow = "none")
+            }
+          >
+            SignUp
           </Link>
+
         </div>
       </div>
     </div>

@@ -77,23 +77,33 @@ export default function Navbar() {
 
             <button
               onClick={() => setCartOpen(true)}
-              className="relative btn-liquid group ml-1
-                        w-8 h-8 md:w-10 md:h-10
-                        flex items-center justify-center
-                        rounded-full"
+              className="relative group ml-1
+                         w-8 h-8 md:w-10 md:h-10
+                         flex items-center justify-center
+                         rounded-full"
               aria-label="Open cart"
             >
-              <i className="fas fa-shopping-cart text-sm md:text-base text-gray-300 group-hover:text-white transition" />
+              <span
+                className="btn-liquid w-full h-full flex items-center justify-center rounded-full overflow-hidden"
+              >
+                <i className="fas fa-shopping-cart text-sm md:text-base text-gray-300 group-hover:text-white transition" />
+              </span>
 
               {itemCount > 0 && (
-                <span className="absolute -top-1 -right-1
-                                w-3 h-3 md:w-4 md:h-4
-                                bg-red-600 rounded-full
-                                text-[8px] flex items-center justify-center font-bold">
+                <span
+                  className="absolute -top-1.5 -right-1.5
+                             w-4 h-4 md:w-5 md:h-5
+                             bg-red-600 rounded-full
+                             text-white text-[10px] md:text-xs
+                             flex items-center justify-center
+                             font-bold z-10"
+                >
                   {itemCount > 9 ? "9+" : itemCount}
                 </span>
               )}
             </button>
+
+
 
 
 
@@ -133,8 +143,8 @@ export default function Navbar() {
 
           {/* <h3 className="text-xs font-bold uppercase tracking-widest text-blue-400 mt-6 mb-2">
             Account
-          </h3>
-          <div className="flex gap-4">
+          </h3> */}
+          <div className="flex gap-4 mt-25">
             <Link
               href="/login"
               onClick={() => setMobileOpen(false)}
@@ -153,7 +163,7 @@ export default function Navbar() {
             >
               Sign Up
             </Link>
-          </div> */}
+          </div>
 
           {/* <div className="mt-8 flex justify-center gap-6">
             <a href="#" className="social-btn">

@@ -57,7 +57,10 @@ export function ShoppingCartDialog({
           </div>
         </DialogHeader>
 
-        <div className="px-6 py-4 flex-1 overflow-y-auto" style={{ maxHeight: "calc(100vh - 200px)" }}>
+        <div
+          className="px-6 py-4 flex-1 overflow-y-auto scrollbar-hide"
+          style={{ maxHeight: "calc(100vh - 200px)" }}
+        >
           {items.length === 0 ? (
             <div className="text-center py-12 text-gray-400">
               <p>Your cart is empty</p>

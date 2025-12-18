@@ -13,6 +13,7 @@ import { ChevronDown, ChevronUp, X } from "lucide-react";
 import { useCart } from "@/src/contexts/CartContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import CatalogPageSkeleton from "@/src/components/skeletons/CatalogPageSkeleton";
+import { toast } from "sonner";
 
 // Mock product data
 const products = [
@@ -153,6 +154,10 @@ export default function CatalogPage() {
       price: product.price,
       image: product.image,
     });
+
+    toast.success("Added to cart", {
+      description: `${product.name} (${product.paperType})`,
+    });
   };
 
   const clearFilters = () => {
@@ -184,8 +189,9 @@ export default function CatalogPage() {
         <div className="max-w-400 mx-auto px-0 md:px-6 mb-10">
           <div className="px-4 md:px-0">
             <div className="text-center mb-6">
-              <h1 className="text-4xl md:text-5xl font-serif mb-3">
-                Wholesale Inventory
+              <h1 className="text-4xl md:text-5xl font-serif mb-3"
+              style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>
+                Wholesale <span className="text-blue-400">Inventory</span>
               </h1>
               <p className="text-gray-400 text-sm">
                 Select products to build your wholesale quote.
@@ -483,7 +489,7 @@ export default function CatalogPage() {
             )}
 
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl md:text-3xl font-serif">Products</h2>
+              <h2 className="text-2xl md:text-3xl font-serif" style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>Products</h2>
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-[180px] glass-panel !bg-black/40 border-white/10 text-white px-3 py-2 h-10">
                   <SelectValue placeholder="Sort by" />

@@ -1,5 +1,6 @@
-import './globals.css'
-import { CartProvider } from '@/src/contexts/CartContext'
+import "./globals.css";
+import { CartProvider } from "@/src/contexts/CartContext";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function RootLayout({
   children,
@@ -29,6 +30,7 @@ export default function RootLayout({
 
         <CartProvider>
           {children}
+          <Toaster />
         </CartProvider>
       </body>
     </html>

@@ -64,8 +64,8 @@ export default function TrustConesMobileCarousel() {
         ))}
     </CarouselContent>
 
-    <CarouselPrevious className="ml-8 bg-white border-2 border-[#0D1624]/60" />
-    <CarouselNext className="mr-11 bg-white border-2 border-[#0D1624]/60" />
+    <CarouselPrevious className="ml-8 bg-blue-600 border-2 border-[#0D1624]/60" />
+    <CarouselNext className="mr-11 bg-blue-600 border-2 border-[#0D1624]/60" />
     </Carousel>
     </section>
   );

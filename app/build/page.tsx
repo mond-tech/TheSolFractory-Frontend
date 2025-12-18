@@ -9,6 +9,7 @@ import { IconTrafficCone } from "@tabler/icons-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, Check, Leaf, Droplets, Sparkles, Infinity, ChevronsDown, CircleDot, FileText, Sparkle, AlertCircle, X, ArrowRight } from "lucide-react";
 import { useCart } from "@/src/contexts/CartContext";
+import { toast } from "sonner";
 
 type PaperType = "unbleached" | "hemp" | "bleached" | "colored";
 type FilterType = "standard" | "crutch" | "branded" | "printed-pattern" | "natural";
@@ -213,7 +214,9 @@ export default function BuildPage() {
 
   const handleAddToCart = () => {
     if (!state.paperType || !state.filterType || !state.coneSize || !state.lotSize) {
-      alert("Please complete all customization steps before adding to cart.");
+      toast.error("Complete customization first", {
+        description: "Please finish all steps before adding to cart.",
+      });
       return; // Don't add if required fields are missing
     }
 
@@ -237,9 +240,11 @@ export default function BuildPage() {
     };
 
     addItem(cartItem);
-    
+
     // Show success message
-    alert(`Added to cart! ${quantity.toLocaleString()} cones - ${getTotalPrice()}`);
+    toast.success("Custom cone added to cart", {
+      description: `${quantity.toLocaleString()} cones • ${getTotalPrice()}`,
+    });
     
     // Optionally redirect to catalog
     // router.push("/catalog");
@@ -283,7 +288,7 @@ export default function BuildPage() {
           {/* Step 1: Paper Type Selection */}
           {step === 1 && (
             <div className="space-y-8">
-              <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-4">
+              <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-4" style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>
                 Create your cone exactly the way you{" "}
                 <span className="text-blue-400">want it.</span>
               </h1>
@@ -294,23 +299,23 @@ export default function BuildPage() {
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Visual Preview */}
-                <div className="bg-[#E8E8E8] rounded-xl border-2 border-blue-400/30 shadow-[0_0_20px_rgba(59,130,246,0.3)] p-6 min-h-[500px]">
-                  <h2 className="text-2xl font-semibold text-gray-900 mb-4">Visual Preview</h2>
-                  <div className="text-red-600 font-medium mb-2">Current Filter:</div>
+                <div className=" rounded-xl border-2 border-blue-400/30 shadow-[0_0_20px_rgba(59,130,246,0.3)] p-6 min-h-[500px]">
+                  <h2 className="text-2xl font-semibold text-white mb-8 mt-3" style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>Visual Preview</h2>
+                  {/* <div className="text-red-600 font-medium mb-2">Current Filter:</div> */}
                   <div className="grid grid-cols-2 gap-4 mt-4">
-                    <div className="bg-white rounded-lg p-4 flex flex-col items-center">
+                    <div className="bg-white/70 rounded-lg p-4 flex flex-col items-center">
                       <div className="w-32 h-32 bg-amber-900/30 rounded-lg mb-2"></div>
                       <p className="text-gray-900 font-medium">Unbleached (Brown)</p>
                     </div>
-                    <div className="bg-white rounded-lg p-4 flex flex-col items-center">
+                    <div className="bg-white/70 rounded-lg p-4 flex flex-col items-center">
                       <div className="w-32 h-32 bg-white rounded-lg mb-2 border border-gray-300"></div>
                       <p className="text-gray-900 font-medium">Bleached (White)</p>
                     </div>
-                    <div className="bg-white rounded-lg p-4 flex flex-col items-center">
+                    <div className="bg-white/70 rounded-lg p-4 flex flex-col items-center">
                       <div className="w-32 h-32 bg-green-100 rounded-lg mb-2"></div>
                       <p className="text-gray-900 font-medium">Hemp Paper</p>
                     </div>
-                    <div className="bg-white rounded-lg p-4 flex flex-col items-center">
+                    <div className="bg-white/70 rounded-lg p-4 flex flex-col items-center">
                       <div className="w-32 h-32 bg-gradient-to-br from-pink-200 via-blue-200 to-green-200 rounded-lg mb-2"></div>
                       <p className="text-gray-900 font-medium">Colored Paper (Pink, Blue, Green, Seasonal)</p>
                     </div>
@@ -376,7 +381,7 @@ export default function BuildPage() {
           {/* Step 2: Filter/Tip Selection */}
           {step === 2 && (
             <div className="space-y-8">
-              <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-12">
+              <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-12"style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>
                 Select Your Filter / Tip
               </h1>
 
@@ -469,7 +474,7 @@ export default function BuildPage() {
           {/* Step 3: Cone Size Selection */}
           {step === 3 && (
             <div className="space-y-8">
-              <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-12">
+              <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-12" style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>
                 Choose Cone Size
               </h1>
 
@@ -544,7 +549,7 @@ export default function BuildPage() {
           {/* Step 4: Lot Size Selection */}
           {step === 4 && (
             <div className="space-y-8">
-              <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-12">
+              <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-12" style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>
                 Select Your Lot Size
               </h1>
 
@@ -659,7 +664,7 @@ export default function BuildPage() {
           {/* Step 5: Location/Shipping */}
           {step === 5 && (
             <div className="space-y-8">
-              <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-12">
+              <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-12" style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>
                 Where Are You Located?
               </h1>
 
@@ -743,7 +748,7 @@ export default function BuildPage() {
 
                     {/* Product Item */}
                     <div className="p-4">
-                      <div className="bg-gray-700/30 backdrop-blur-lg rounded-lg p-4 border border-gray-600 flex items-start space-x-3">
+                      <div className="bg-gray-700/30 mt-1 mb-1 backdrop-blur-lg rounded-lg p-4 border border-gray-600 flex items-start space-x-3">
                         {/* Product Image Placeholder */}
                         <div className="w-16 h-16 bg-gray-600 rounded-lg flex-shrink-0"></div>
                         <div className="flex-1 min-w-0">
@@ -765,16 +770,16 @@ export default function BuildPage() {
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="p-4 space-y-3 border-t border-gray-700">
+                    <div className="p-4 space-y-5 border-t border-gray-700">
                       <Button
-                        className="btn-liquid-rect active w-full bg-transparent border-2 border-blue-400 text-white hover:bg-blue-400/10 shadow-[0_0_20px_rgba(59,130,246,0.5)]"
+                        className="btn-liquid-rect mt-2.5 active w-full bg-transparent border-2 border-blue-400 text-white hover:bg-blue-400/10 shadow-[0_0_20px_rgba(59,130,246,0.5)]"
                         onClick={handleAddToCart}
                       >
                         PLACE ORDER
                       </Button>
                       <Button
                         variant="outline"
-                        className="btn-liquid-rect w-full bg-transparent border-2 border-blue-400 text-white hover:bg-blue-400/10"
+                        className="btn-liquid-rect mb-2 w-full bg-transparent border-2 border-blue-400 text-white hover:bg-blue-400/10"
                         onClick={() => {
                           // Handle request quote
                         }}
