@@ -4,7 +4,6 @@ import Link from 'next/link';
 import MobileHeroSection from './MobileHeroSection';
 import { useIsMobile } from "@/hooks/use-mobile";
 import FullPageLoader from "@/src/components/FullPageLoader";
-import { PointerHighlight } from "@/components/ui/pointer-highlight";
 
 const HeroSection: React.FC = () => {
 
@@ -19,9 +18,7 @@ const HeroSection: React.FC = () => {
       <h1 className="text-4xl md:text-5xl font-bold mb-4">
         <span>
           We Don’t Just{' '}
-          <PointerHighlight containerClassName="inline-block">
             <span className="text-[#98BFF5]">Make Cones</span>
-          </PointerHighlight>
         </span>
         <br />
         <span>
@@ -46,7 +43,7 @@ const HeroSection: React.FC = () => {
         </Link> */}
         <Link
           href="/contact"
-          className="btn-liquid px-6 py-2 text-xs font-bold uppercase tracking-widest text-[12px]
+          className="btn-liquid w-70 px-6 py-2 text-xs font-bold uppercase tracking-widest text-[12px]
                     text-gray-300 hover:text-white
                     flex items-center justify-center active"
         >
@@ -55,7 +52,7 @@ const HeroSection: React.FC = () => {
 
         <Link
           href="/get-quote"
-          className="btn-liquid px-6 py-3 font-bold uppercase tracking-widest text-[12px]
+          className="btn-liquid w-70 px-6 py-3 font-bold uppercase tracking-widest text-[12px]
                     text-gray-300 hover:text-white border-gray-500 rounded-3xl hover:bg-gray-800 transition border-2"
         >
           Get a Quote

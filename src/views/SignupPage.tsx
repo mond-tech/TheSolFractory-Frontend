@@ -27,8 +27,8 @@ export default function SignupPage() {
         <div className="orb orb-2" />
       </div>
 
-      <div className="glass-panel p-8 md:p-10 w-full max-w-lg relative z-10">
-        <h2 className="text-3xl font-serif text-center mb-2" style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>Create Your <span className="text-blue-400">SOL Factory </span>Account </h2>
+      <div className="glass-panel p-8 md:p-10 w-full max-w-lg relative z-10 mb-7 mt-1">
+        <h2 className="text-3xl font-serif text-center mb-2 w-[450px]" style={{ textShadow: "0 0 4px rgba(255,255,255,0.6)" }}>Sign Up to <span className="text-blue-400">SOL Factory </span> </h2>
 
         <form className="space-y-4 mt-6" onSubmit={handleSubmit}>
           <div className="grid grid-cols-2 gap-4">

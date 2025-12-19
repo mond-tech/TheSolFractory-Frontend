@@ -12,9 +12,22 @@ export default function MergedCards() {
   return (
     <div>
 
+    <h1 className="text-center text-white mb-11 mt-18 px-6">
+      <span className="block text-3xl md:text-4xl font-serif">
+        Create Your Perfect Cone:
+      </span>
+
+      <span className="block mt-3 text-2xl md:text-3xl font-serif uppercase tracking-wider">
+        Only At SOL
+      </span>
+
+      <span className="block mx-auto mt-4 w-16 h-[2px] bg-white"></span>
+    </h1>
+
+
       {/* 1 — Size Chart (your first one) */}
       <InfoCard
-        bgColor="#0F1620"
+        bgColor=""
         title="Size That Fits Your Product Line:"
         description="We manufacture cones in all industry-standard sizes — fully custom dimensions for brands that want something unique. Whether you’re creating:"
         bullets={["Minis", "Mid-sizes", "Oversized cones"]}
@@ -28,7 +41,7 @@ export default function MergedCards() {
 
       {/* 2 — Paper Options */}
       {isMobile? null : <InfoCard
-        bgColor="#040E1C"
+        bgColor=""
         title="Paper Options That Match Your Brand Identity"
         subtitle="Choose the paper that aligns with your product vision and target market:"
         description=""
@@ -48,7 +61,7 @@ export default function MergedCards() {
 
       {/* 3 — Your second version of Size Chart */}
       <InfoCard
-        bgColor="#0F1620"
+        bgColor=""
         title="Custom Cone Dimensions:"
         description="We help brands create signature sizes for special product lines, collaborations, or market trends."
         bullets={["Slim cones", "Extra-wide cones", "Limited-edition custom lengths"]}

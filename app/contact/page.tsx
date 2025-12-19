@@ -60,7 +60,7 @@ export default function ContactPage() {
                 </div>
               </div>
             </div>
-            <div>
+            {/* <div>
               <h4 className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-4">
                 Connect With Us
               </h4>
@@ -75,7 +75,7 @@ export default function ContactPage() {
                   <i className="fab fa-twitter text-white" />
                 </a>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="glass-panel p-8 md:p-10 order-1 lg:order-2">
@@ -144,7 +144,7 @@ export default function ContactPage() {
               />
               <button
                 type="submit"
-                className="w-full btn-liquid py-4 text-xs font-bold uppercase tracking-widest"
+                className="block w-[300px] mx-auto btn-liquid py-4 text-xs font-bold uppercase tracking-widest"
                 onMouseEnter={(e) =>
                   (e.currentTarget.classList.add("active"))
                 }
