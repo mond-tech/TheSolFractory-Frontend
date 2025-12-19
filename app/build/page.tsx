@@ -144,10 +144,10 @@ export default function BuildPage() {
   const { addItem } = useCart();
   const [step, setStep] = useState(1);
   const [state, setState] = useState<CustomizationState>({
-    paperType: "hemp",
-    filterType: "crutch",
-    coneSize: "109mm",
-    lotSize: "sample",
+    paperType: null,
+    filterType: null,
+    coneSize: null,
+    lotSize: null,
     customQuantity: "",
     country: "",
     zipCode: "",
@@ -155,6 +155,13 @@ export default function BuildPage() {
 
   const updateState = (updates: Partial<CustomizationState>) => {
     setState((prev) => ({ ...prev, ...updates }));
+  };
+
+  const selectAndNext = (updates: Partial<CustomizationState>) => {
+    updateState(updates);
+    setTimeout(() => {
+      if (step < 5) setStep((prev) => Math.min(prev + 1, 5));
+    }, 120);
   };
 
   const nextStep = () => {
@@ -169,7 +176,7 @@ export default function BuildPage() {
   const getQuantity = (): number => {
     if (state.lotSize === "custom") {
       const qty = parseInt(state.customQuantity) || 0;
-      return qty > 0 ? qty : 5000; // Default to 5000 if invalid
+      return qty > 0 ? qty : 0;
     }
     
     switch (state.lotSize) {
@@ -182,7 +189,7 @@ export default function BuildPage() {
       case "large":
         return 100000; // Estimate
       default:
-        return 5000;
+        return 0;
     }
   };
 
@@ -224,7 +231,7 @@ export default function BuildPage() {
     const totalPrice = getTotalPriceNumber(); // Total price for the lot
 
     // Generate unique ID based on customization
-    const itemId = `custom-${state.paperType}-${state.filterType}-${state.coneSize}-${state.lotSize}-${Date.now()}`;
+    const itemId = `custom-${state.paperType}-${state.filterType}-${state.coneSize}-${state.lotSize}-${crypto.randomUUID()}`;
 
     // Create descriptive name with all customization details
     const itemName = `Custom Cone - ${getPaperTypeName()}, ${getFilterTypeName()}, ${getConeSizeName()}, ${getLotSizeName()}`;
@@ -252,23 +259,23 @@ export default function BuildPage() {
 
   const getPaperTypeName = () => {
     const paper = PAPER_TYPES.find((p) => p.id === state.paperType);
-    return paper?.name || "Hemp Paper";
+    return paper?.name || "Select Paper";
   };
 
   const getFilterTypeName = () => {
     const filter = FILTER_TYPES.find((f) => f.id === state.filterType);
-    return filter?.name || "Branded Filter";
+    return filter?.name || "Select Filter";
   };
 
   const getConeSizeName = () => {
-    if (!state.coneSize) return "109mm (King Size)";
+    if (!state.coneSize) return "Choose Size";
     const size = CONE_SIZES.find((s) => s.id === state.coneSize);
     return `${size?.id}${size?.description ? ` (${size.description})` : ""}`;
   };
 
   const getLotSizeName = () => {
-    if (!state.lotSize) return "Small Batch (5,000 cones)";
-    if (state.lotSize === "custom") return `Custom (${state.customQuantity})`;
+    if (!state.lotSize) return "Choose Lot Size";
+    if (state.lotSize === "custom") return `Custom (${state.customQuantity || "Enter quantity"})`;
     const lot = LOT_SIZES.find((l) => l.id === state.lotSize);
     return `${lot?.name} (${lot?.quantity})`;
   };
@@ -276,8 +283,8 @@ export default function BuildPage() {
   return (
     <div className="min-h-screen">
       <Navbar />
-      <main className="pt-24 pb-12 px-8">
-        <div className="max-w-7xl mx-auto mt-21">
+      <main className="pt-16 pb-10 px-6">
+        <div className="max-w-6xl mx-auto">
           {/* Step Indicator */}
           {/* <div className="flex justify-center mb-8">
             <div className="px-4 py-2 rounded-lg bg-gray-800/50 border border-gray-700 text-white text-sm font-medium">
@@ -287,68 +294,70 @@ export default function BuildPage() {
 
           {/* Step 1: Paper Type Selection */}
           {step === 1 && (
-            <div className="space-y-8">
-              <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-4" style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>
+            <div className="space-y-6">
+              <h1 className="text-3xl md:text-4xl mt-14 font-bold text-white text-center mb-2" style={{ textShadow: "0 0 3px rgba(255,255,255,0.5)" }}>
                 Create your cone exactly the way you{" "}
                 <span className="text-blue-400">want it.</span>
               </h1>
-              <p className="text-gray-400 text-center mb-12 max-w-2xl mx-auto">
+              <p className="text-gray-400 text-center mb-6 max-w-2xl mx-auto text-sm">
                 Dive into a world of endless possibilities. Select the perfect paper for
                 your custom cones and begin crafting your unique smoking experience.
               </p>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Visual Preview */}
-                <div className=" rounded-xl border-2 border-blue-400/30 shadow-[0_0_20px_rgba(59,130,246,0.3)] p-6 min-h-[500px]">
-                  <h2 className="text-2xl font-semibold text-white mb-8 mt-3" style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>Visual Preview</h2>
-                  {/* <div className="text-red-600 font-medium mb-2">Current Filter:</div> */}
-                  <div className="grid grid-cols-2 gap-4 mt-4">
-                    <div className="bg-white/70 rounded-lg p-4 flex flex-col items-center">
-                      <div className="w-32 h-32 bg-amber-900/30 rounded-lg mb-2"></div>
-                      <p className="text-gray-900 font-medium">Unbleached (Brown)</p>
-                    </div>
-                    <div className="bg-white/70 rounded-lg p-4 flex flex-col items-center">
-                      <div className="w-32 h-32 bg-white rounded-lg mb-2 border border-gray-300"></div>
-                      <p className="text-gray-900 font-medium">Bleached (White)</p>
-                    </div>
-                    <div className="bg-white/70 rounded-lg p-4 flex flex-col items-center">
-                      <div className="w-32 h-32 bg-green-100 rounded-lg mb-2"></div>
-                      <p className="text-gray-900 font-medium">Hemp Paper</p>
-                    </div>
-                    <div className="bg-white/70 rounded-lg p-4 flex flex-col items-center">
-                      <div className="w-32 h-32 bg-gradient-to-br from-pink-200 via-blue-200 to-green-200 rounded-lg mb-2"></div>
-                      <p className="text-gray-900 font-medium">Colored Paper (Pink, Blue, Green, Seasonal)</p>
-                    </div>
+                <div className="rounded-xl border border-blue-400/30 shadow-[0_0_12px_rgba(59,130,246,0.25)] p-4 min-h-[340px]">
+                  <h2 className="text-xl font-semibold text-white mb-3 mt-1" style={{ textShadow: "0 0 3px rgba(255,255,255,0.6)" }}>Visual Preview</h2>
+                  <div className="bg-white/80 rounded-lg p-4 flex flex-col items-center justify-center min-h-[250px]">
+                    {state.paperType ? (
+                      <>
+                        <div
+                          className="w-24 h-24 rounded-lg mb-3 border border-gray-200"
+                          style={
+                            state.paperType === "unbleached"
+                              ? { backgroundColor: "rgba(120,72,25,0.15)" }
+                              : state.paperType === "hemp"
+                              ? { backgroundColor: "rgba(74,222,128,0.2)" }
+                              : state.paperType === "bleached"
+                              ? { backgroundColor: "rgba(255,255,255,0.9)" }
+                              : { background: "linear-gradient(to bottom right, #fbcfe8, #bfdbfe, #bbf7d0)" }
+                          }
+                        ></div>
+                        <p className="text-gray-900 font-medium text-center">{getPaperTypeName()}</p>
+                      </>
+                    ) : (
+                      <p className="text-gray-700 text-sm text-center">Select a paper type to preview it here.</p>
+                    )}
                   </div>
                 </div>
 
                 {/* Paper Type Options */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3">
                   {PAPER_TYPES.map((paper) => {
                     const Icon = paper.icon;
                     const isSelected = state.paperType === paper.id;
                     return (
                       <button
                         key={paper.id}
-                        onClick={() => updateState({ paperType: paper.id })}
-                        className={`relative btn-liquid-rect rounded-xl p-6 border-2 transition-all ${
+                        onClick={() => selectAndNext({ paperType: paper.id })}
+                        className={`relative btn-liquid-rect rounded-xl p-4 border transition-all text-left ${
                           isSelected
-                            ? "active border-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.5)]"
+                            ? "active border-blue-400 shadow-[0_0_14px_rgba(59,130,246,0.4)]"
                             : "border-gray-700 hover:border-gray-600"
                         }`}
                       >
                         {isSelected && (
-                          <div className="absolute top-3 right-3 w-7 h-7 tick-3d flex items-center justify-center">
+                          <div className="absolute top-2 right-2 w-6 h-6 tick-3d flex items-center justify-center">
                             <Check className="h-4 w-4 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" />
                           </div>
                         )}
-                        <div className="flex flex-col items-center space-y-4">
-                          <Icon className="h-12 w-12 text-white" />
+                        <div className="flex flex-col items-center space-y-3">
+                          <Icon className="h-9 w-9 text-white" />
                           <div className="text-center">
-                            <h3 className="text-white font-semibold text-lg mb-2">
+                            <h3 className="text-white font-semibold text-base mb-1">
                               {paper.name}
                             </h3>
-                            <p className="text-gray-400 text-sm">{paper.description}</p>
+                            <p className="text-gray-400 text-xs leading-snug">{paper.description}</p>
                           </div>
                         </div>
                       </button>
@@ -358,18 +367,18 @@ export default function BuildPage() {
               </div>
 
               {/* Navigation */}
-              <div className="flex justify-between items-center mt-12">
+              <div className="flex justify-between items-center mt-6">
                 <Button
                   variant="outline"
                   onClick={() => window.history.back()}
-                  className="nav-btn btn-liquid px-6 py-6 text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white"
+                  className="nav-btn btn-liquid md:w-48 px-5 py-4 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-300 hover:text-white"
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   BACK TO CATALOG
                 </Button>
                 <Button
                   onClick={nextStep}
-                  className="nav-btn btn-liquid active px-6 py-6 text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white"
+                  className="nav-btn md:w-48 btn-liquid active px-5 py-4 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-300 hover:text-white"
                 >
                   Next
                   <ArrowRight className="mr-2 h-4 w-4" />
@@ -380,68 +389,54 @@ export default function BuildPage() {
 
           {/* Step 2: Filter/Tip Selection */}
           {step === 2 && (
-            <div className="space-y-8">
-              <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-12"style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>
+            <div className="space-y-6">
+              <h1 className="text-3xl mt-14 md:text-4xl font-bold text-white text-center mb-10"style={{ textShadow: "0 0 3px rgba(255,255,255,0.6)" }}>
                 Select Your Filter / Tip
               </h1>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Visual Preview */}
-                <div className="bg-[#E8E8E8] rounded-xl border-2 border-blue-400/30 shadow-[0_0_20px_rgba(59,130,246,0.3)] p-6 min-h-[500px]">
-                  <h2 className="text-2xl font-semibold text-gray-900 mb-4">Visual Preview</h2>
-                  <div className="text-red-600 font-medium mb-4">Current Filter: Standard Filter</div>
-                  <div className="grid grid-cols-2 gap-4 mt-6">
-                    {["Standard Filter", "Slim Filter", "Hemp Filter", "Colored Filter"].map(
-                      (name, idx) => (
-                        <div
-                          key={idx}
-                          className="bg-white rounded-lg p-4 flex flex-col items-center"
-                        >
-                          <div
-                            className={`w-24 h-32 rounded-t-full ${
-                              idx === 0
-                                ? "bg-amber-900/30"
-                                : idx === 1
-                                ? "bg-white border border-gray-300"
-                                : idx === 2
-                                ? "bg-green-100"
-                                : "bg-pink-200"
-                            } mb-2`}
-                          ></div>
-                          <p className="text-gray-900 font-medium text-sm">{name}</p>
-                        </div>
-                      )
+                <div className="bg-[#E8E8E8] rounded-xl border border-blue-400/30 shadow-[0_0_12px_rgba(59,130,246,0.25)] p-4 min-h-[340px]">
+                  <h2 className="text-xl font-semibold text-gray-900 mb-3">Visual Preview</h2>
+                  <div className="bg-white rounded-lg p-4 flex flex-col items-center justify-center min-h-[250px]">
+                    {state.filterType ? (
+                      <>
+                        <div className="w-24 h-28 rounded-t-full bg-gradient-to-b from-gray-100 to-gray-300 border border-gray-200 mb-3"></div>
+                        <p className="text-gray-900 font-medium text-center">{getFilterTypeName()}</p>
+                      </>
+                    ) : (
+                      <p className="text-gray-700 text-sm text-center">Select a filter to preview it here.</p>
                     )}
                   </div>
                 </div>
 
                 {/* Filter Options */}
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {FILTER_TYPES.map((filter) => {
                     const Icon = filter.icon;
                     const isSelected = state.filterType === filter.id;
                     return (
                       <button
                         key={filter.id}
-                        onClick={() => updateState({ filterType: filter.id })}
-                        className={`relative w-full btn-liquid-rect rounded-xl p-6 border-2 text-left transition-all ${
+                        onClick={() => selectAndNext({ filterType: filter.id })}
+                        className={`relative w-full btn-liquid-rect rounded-xl p-4 border text-left transition-all ${
                           isSelected
-                            ? "active border-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.5)]"
+                            ? "active border-blue-400 shadow-[0_0_14px_rgba(59,130,246,0.4)]"
                             : "border-gray-700 hover:border-gray-600"
                         }`}
                       >
                         {isSelected && (
-                          <div className="absolute top-3 right-3 w-7 h-7 tick-3d flex items-center justify-center">
+                          <div className="absolute top-2 right-2 w-6 h-6 tick-3d flex items-center justify-center">
                             <Check className="h-4 w-4 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" />
                           </div>
                         )}
                         <div className="flex items-center space-x-4">
                           <Icon className="h-8 w-8 text-white flex-shrink-0" />
                           <div>
-                            <h3 className="text-white font-semibold text-lg mb-1">
+                            <h3 className="text-white font-semibold text-base mb-1">
                               {filter.name}
                             </h3>
-                            <p className="text-gray-400 text-sm">{filter.description}</p>
+                            <p className="text-gray-400 text-xs leading-snug">{filter.description}</p>
                           </div>
                         </div>
                       </button>
@@ -451,18 +446,18 @@ export default function BuildPage() {
               </div>
 
               {/* Navigation */}
-              <div className="flex justify-between items-center mt-12">
+              <div className="flex justify-between items-center mt-6">
                 <Button
                   variant="outline"
                   onClick={prevStep}
-                  className="nav-btn btn-liquid px-6 py-6 text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white"
+                  className="nav-btn btn-liquid md:w-48 px-5 py-4 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-300 hover:text-white"
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   BACK
                 </Button>
                 <Button
                   onClick={nextStep}
-                  className="nav-btn btn-liquid active px-6 py-6 text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white"
+                  className="nav-btn btn-liquid md:w-48 active px-5 py-4 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-300 hover:text-white"
                 >
                   NEXT
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -473,51 +468,57 @@ export default function BuildPage() {
 
           {/* Step 3: Cone Size Selection */}
           {step === 3 && (
-            <div className="space-y-8">
-              <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-12" style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>
+            <div className="space-y-6">
+              <h1 className="text-3xl mt-14 md:text-4xl font-bold text-white text-center mb-10" style={{ textShadow: "0 0 3px rgba(255,255,255,0.6)" }}>
                 Choose Cone Size
               </h1>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Visual Preview */}
-                <div className="bg-[#E8E8E8] rounded-xl border-2 border-blue-400/30 shadow-[0_0_20px_rgba(59,130,246,0.3)] p-6 min-h-[500px] flex flex-col">
-                  <h2 className="text-2xl font-semibold text-gray-900 mb-4">Visual Preview</h2>
+                <div className="bg-[#E8E8E8] rounded-xl border border-blue-400/30 shadow-[0_0_12px_rgba(59,130,246,0.25)] p-4 min-h-[340px] flex flex-col">
+                  <h2 className="text-xl font-semibold text-gray-900 mb-3">Visual Preview</h2>
                   <div className="text-red-600 font-medium mb-2">Current Size:</div>
-                  <div className="text-gray-900 font-semibold text-lg mb-8">
-                    {state.coneSize ? `${state.coneSize} Length x 5mm Diameter` : "100mm Length x 5mm Diameter"}
+                  <div className="text-gray-900 font-semibold text-base mb-6">
+                    {state.coneSize ? `${state.coneSize} Length x 5mm Diameter` : "Pick a size to preview"}
                   </div>
                   <div className="flex-1 flex items-center justify-center">
-                    {/* Placeholder for cone visualization */}
+                    {state.coneSize ? (
+                      <div className="flex flex-col items-center space-y-2">
+                        <IconTrafficCone size={72} stroke={1.2} />
+                        <p className="text-gray-800 text-sm">Approximate preview</p>
+                      </div>
+                    ) : (
+                      <p className="text-gray-700 text-sm text-center">Select a size to see a preview.</p>
+                    )}
                   </div>
                   <p className="text-gray-700 text-sm mt-auto">
-                    Your custom cone will be{" "}
-                    {state.coneSize ? `${state.coneSize} long` : "100mm long"} and 5mm in diameter.
+                    {state.coneSize ? `Your custom cone will be ${state.coneSize} long and 5mm in diameter.` : "Choose a size to continue."}
                   </p>
                 </div>
 
                 {/* Size Options */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3">
                   {CONE_SIZES.map((size) => {
                     const isSelected = state.coneSize === size.id;
                     return (
                       <button
                         key={size.id}
-                        onClick={() => updateState({ coneSize: size.id })}
-                        className={`relative btn-liquid-rect rounded-xl p-6 border-2 transition-all ${
+                        onClick={() => selectAndNext({ coneSize: size.id })}
+                        className={`relative btn-liquid-rect rounded-xl p-4 border transition-all ${
                           isSelected
-                            ? "active border-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.5)]"
+                            ? "active border-blue-400 shadow-[0_0_14px_rgba(59,130,246,0.4)]"
                             : "border-gray-700 hover:border-gray-600"
                         }`}
                       >
                         {isSelected && (
-                          <div className="absolute top-3 right-3 w-7 h-7 tick-3d flex items-center justify-center">
+                          <div className="absolute top-2 right-2 w-6 h-6 tick-3d flex items-center justify-center">
                             <Check className="h-4 w-4 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" />
                           </div>
                         )}
-                        <div className="flex flex-col items-center space-y-3">
-                          <div className="text-4xl font-bold text-white"><IconTrafficCone size={70} stroke={1.5} /></div>
-                          <div className="text-white font-semibold text-xl">{size.name}</div>
-                          <div className="text-gray-400 text-sm">{size.description}</div>
+                        <div className="flex flex-col items-center space-y-2">
+                          <div className="text-3xl font-bold text-white"><IconTrafficCone size={60} stroke={1.3} /></div>
+                          <div className="text-white font-semibold text-lg">{size.name}</div>
+                          <div className="text-gray-400 text-xs text-center leading-snug">{size.description}</div>
                         </div>
                       </button>
                     );
@@ -526,18 +527,18 @@ export default function BuildPage() {
               </div>
 
               {/* Navigation */}
-              <div className="flex justify-between items-center mt-12">
+              <div className="flex justify-between items-center mt-6">
                 <Button
                   variant="outline"
                   onClick={prevStep}
-                  className="nav-btn btn-liquid px-6 py-6 text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white"
+                  className="nav-btn btn-liquid md:w-48 px-5 py-4 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-300 hover:text-white"
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   BACK
                 </Button>
                 <Button
                   onClick={nextStep}
-                  className="nav-btn btn-liquid active px-6 py-6 text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white"
+                  className="nav-btn btn-liquid md:w-48 active px-5 py-4 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-300 hover:text-white"
                 >
                   NEXT
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -548,83 +549,92 @@ export default function BuildPage() {
 
           {/* Step 4: Lot Size Selection */}
           {step === 4 && (
-            <div className="space-y-8">
-              <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-12" style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>
+            <div className="space-y-6">
+              <h1 className="text-3xl mt-14 md:text-4xl font-bold text-white text-center mb-10" style={{ textShadow: "0 0 3px rgba(255,255,255,0.6)" }}>
                 Select Your Lot Size
               </h1>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Visual Preview */}
-                <div className="bg-[#E8E8E8] rounded-xl border-2 border-blue-400/30 shadow-[0_0_20px_rgba(59,130,246,0.3)] p-6 min-h-[500px] flex flex-col">
-                  <h2 className="text-2xl font-semibold text-gray-900 mb-4">Visual Preview</h2>
-                  <div className="text-red-600 font-medium mb-2">Current Size:</div>
-                  <div className="text-gray-900 font-semibold text-lg mb-8">
-                    100mm Length x 5mm Diameter
+                <div className="bg-[#E8E8E8] rounded-xl border border-blue-400/30 shadow-[0_0_12px_rgba(59,130,246,0.25)] p-4 min-h-[340px] flex flex-col">
+                  <h2 className="text-xl font-semibold text-gray-900 mb-3">Visual Preview</h2>
+                  <div className="text-red-600 font-medium mb-2">Current Lot:</div>
+                  <div className="text-gray-900 font-semibold text-base mb-4">
+                    {state.lotSize ? getLotSizeName() : "Choose a lot size to preview"}
                   </div>
-                  <div className="flex-1"></div>
-                  <p className="text-gray-700 text-sm">
-                    Your custom cone will be 100mm long and 5mm in diameter.
+                  <div className="flex-1 flex items-center justify-center">
+                    {state.lotSize ? (
+                      <div className="flex flex-col items-center space-y-2">
+                        <div className="w-24 h-16 bg-gray-200 border border-gray-300 rounded-lg"></div>
+                        <p className="text-gray-800 text-sm">{getQuantity().toLocaleString()} cones estimated</p>
+                      </div>
+                    ) : (
+                      <p className="text-gray-700 text-sm text-center">Select a lot to continue.</p>
+                    )}
+                  </div>
+                  <p className="text-gray-700 text-sm mt-auto">
+                    Lead time estimates update after you choose a lot size.
                   </p>
                 </div>
 
                 {/* Lot Size Options & Your Selection */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3">
                   {/* Lot Size Options - Top 4 cards in 2x2 grid */}
                   {LOT_SIZES.map((lot) => {
                     const isSelected = state.lotSize === lot.id;
                     return (
                       <button
                         key={lot.id}
-                        onClick={() => updateState({ lotSize: lot.id })}
-                        className={`relative btn-liquid-rect rounded-xl p-5 border-2 transition-all ${
+                        onClick={() => selectAndNext({ lotSize: lot.id })}
+                        className={`relative btn-liquid-rect rounded-xl p-4 border transition-all ${
                           isSelected
-                            ? "active border-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.5)]"
+                            ? "active border-blue-400 shadow-[0_0_14px_rgba(59,130,246,0.4)]"
                             : "border-gray-700 hover:border-gray-600"
                         }`}
                       >
                         {isSelected && (
-                          <div className="absolute top-3 right-3 w-7 h-7 tick-3d flex items-center justify-center">
+                          <div className="absolute top-2 right-2 w-6 h-6 tick-3d flex items-center justify-center">
                             <Check className="h-3 w-3 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" />
                           </div>
                         )}
                         <div className="space-y-2">
-                          <h3 className="text-white font-semibold text-lg">{lot.name}</h3>
-                          <p className="text-gray-400 text-sm">{lot.quantity}</p>
-                          <p className="text-gray-400 text-sm">{lot.leadTime}</p>
-                          <p className="text-gray-300 text-sm font-medium">{lot.price}</p>
+                          <h3 className="text-white font-semibold text-base">{lot.name}</h3>
+                          <p className="text-gray-400 text-xs">{lot.quantity}</p>
+                          <p className="text-gray-400 text-xs">{lot.leadTime}</p>
+                          <p className="text-gray-300 text-xs font-medium">{lot.price}</p>
                         </div>
                       </button>
                     );
                   })}
 
                   {/* Custom Lot Size */}
-                  <div className="btn-liquid-rect rounded-xl p-5 border-2 border-gray-700">
-                    <h3 className="text-white font-semibold text-lg mb-3">Custom Lot Size</h3>
+                  <div className="btn-liquid-rect rounded-xl p-4 border border-gray-700">
+                    <h3 className="text-white font-semibold text-base mb-2">Custom Lot Size</h3>
                     <Input
                       placeholder="ENTER QUANTITY (E.G., 25000)"
                       value={state.customQuantity}
                       onChange={(e) => {
                         updateState({ customQuantity: e.target.value, lotSize: "custom" as LotSize });
                       }}
-                      className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-500 mb-2"
+                      className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-500 mb-2 h-10 text-sm"
                     />
-                    <p className="text-gray-400 text-sm">
+                    <p className="text-gray-400 text-xs leading-snug">
                       Enter a specific quantity outside the predefined batches.
                     </p>
                   </div>
 
                   {/* Your Selection */}
-                  <div className="btn-liquid-rect rounded-xl p-5 border-2 border-gray-700">
-                    <h3 className="text-white font-semibold text-lg mb-4">Your Selection</h3>
-                    <div className="space-y-2 text-sm">
+                  <div className="btn-liquid-rect rounded-xl p-4 border border-gray-700">
+                    <h3 className="text-white font-semibold text-base mb-3">Your Selection</h3>
+                    <div className="space-y-2 text-xs">
                       <div className="flex justify-between text-gray-300">
                         <span>Lot Size:</span>
                         <span className="text-white">
                           {state.lotSize === "custom"
-                            ? `Custom (${state.customQuantity})`
+                            ? `Custom (${state.customQuantity || "Enter quantity"})`
                             : state.lotSize
                             ? LOT_SIZES.find((l) => l.id === state.lotSize)?.name || "Sample Batch"
-                            : "Sample Batch"}
+                            : "Not selected"}
                         </span>
                       </div>
                       <div className="flex justify-between text-gray-300">
@@ -641,18 +651,18 @@ export default function BuildPage() {
               </div>
 
               {/* Navigation */}
-              <div className="flex justify-between items-center mt-12">
+              <div className="flex justify-between items-center mt-6">
                 <Button
                   variant="outline"
                   onClick={prevStep}
-                  className="nav-btn btn-liquid px-6 py-6 text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white"
+                  className="nav-btn btn-liquid md:w-48 px-5 py-4 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-300 hover:text-white"
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   BACK
                 </Button>
                 <Button
                   onClick={nextStep}
-                  className="nav-btn btn-liquid active px-6 py-6 text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white"
+                  className="nav-btn btn-liquid md:w-48 active px-5 py-4 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-300 hover:text-white"
                 >
                   NEXT
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -663,24 +673,24 @@ export default function BuildPage() {
 
           {/* Step 5: Location/Shipping */}
           {step === 5 && (
-            <div className="space-y-8">
-              <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-12" style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>
+            <div className="space-y-6 max-w-5xl mx-auto">
+              <h1 className="text-3xl mt-14 md:text-4xl font-bold text-white text-center mb-9" style={{ textShadow: "0 0 3px rgba(255,255,255,0.6)" }}>
                 Where Are You Located?
               </h1>
 
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-5">
                 {/* Left Column: Shipping Address */}
-                <div className="lg:col-span-2 space-y-6">
-                  <div className="bor-shadow rounded-xl p-6 border-2 border-gray-700">
-                    <h2 className="text-white font-semibold text-xl mb-2">Shipping Address</h2>
-                    <p className="text-gray-400 text-sm mb-6">
+                <div className="lg:col-span-1 space-y-4">
+                  <div className="bor-shadow rounded-xl p-4 border border-gray-700">
+                    <h2 className="text-white font-semibold text-lg mb-2">Shipping Address</h2>
+                    <p className="text-gray-400 text-xs mb-4">
                       Provide your location details for an accurate shipping estimate.
                     </p>
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       <div>
-                        <label className="text-white text-sm font-medium mb-2 block">Country:</label>
+                        <label className="text-white text-xs font-medium mb-1 block">Country:</label>
                         <Select value={state.country} onValueChange={(value) => updateState({ country: value })}>
-                          <SelectTrigger className="bg-gray-700/50 border-gray-600 text-white h-11">
+                          <SelectTrigger className="bg-gray-700/50 border-gray-600 text-white h-10 text-sm">
                             <SelectValue placeholder="SELECT A COUNTRY" />
                           </SelectTrigger>
                           <SelectContent className="bg-gray-800 border-gray-600">
@@ -692,25 +702,25 @@ export default function BuildPage() {
                         </Select>
                       </div>
                       <div>
-                        <label className="text-white text-sm font-medium mb-2 block">
+                        <label className="text-white text-xs font-medium mb-1 block">
                           Zip / Postal Code (Optional):
                         </label>
                         <Input
                           placeholder="e.g., 90210"
                           value={state.zipCode}
                           onChange={(e) => updateState({ zipCode: e.target.value })}
-                          className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-500 h-11"
+                          className="bg-gray-700/50 border-gray-600 text-white placeholder:text-gray-500 h-10 text-sm"
                         />
                       </div>
                     </div>
                   </div>
 
                   {/* Shipping Estimate Warning */}
-                  <div className="bg-red-900/20 border-2 border-red-500/50 rounded-xl p-4 flex items-start space-x-3">
-                    <AlertCircle className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
+                  <div className="bg-red-900/20 border border-red-500/50 rounded-xl p-3 flex items-start space-x-3">
+                    <AlertCircle className="h-4 w-4 text-red-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <div className="text-red-400 font-semibold mb-1">Shipping Estimate</div>
-                      <p className="text-red-300 text-sm">
+                      <div className="text-red-400 font-semibold text-sm mb-1">Shipping Estimate</div>
+                      <p className="text-red-300 text-xs">
                         Please complete your location details to get a shipping estimate.
                       </p>
                     </div>
@@ -721,14 +731,14 @@ export default function BuildPage() {
                     <Button
                       variant="outline"
                       onClick={prevStep}
-                      className="nav-btn btn-liquid px-6 py-6 text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white"
+                      className="nav-btn btn-liquid md:w-48 px-5 py-4 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-300 hover:text-white"
                     >
                       <ArrowLeft className="mr-2 h-4 w-4" />
                       BACK
                     </Button>
                     <Button
                       onClick={handleAddToCart}
-                      className="nav-btn btn-liquid active px-6 py-6 text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white"
+                      className="nav-btn btn-liquid md:w-48 active px-5 py-4 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-300 hover:text-white"
                     >
                       ADD TO CART
                     </Button>
@@ -737,49 +747,49 @@ export default function BuildPage() {
 
                 {/* Right Column: Your Selection Sidebar */}
                 <div className="lg:col-span-1">
-                  <div className="bor-shadow active bg-gray-800/50 backdrop-blur-lg rounded-xl border-2 border-gray-700 overflow-hidden sticky top-24">
+                  <div className="bor-shadow active bg-gray-800/50 backdrop-blur-lg rounded-xl border border-gray-700 overflow-hidden sticky top-20">
                     {/* Sidebar Header */}
-                    <div className="flex items-center justify-between p-4 border-b border-gray-700">
-                      <h2 className="text-white font-semibold text-lg">Your Selection</h2>
+                    <div className="flex items-center justify-between p-3 border-b border-gray-700">
+                      <h2 className="text-white font-semibold text-base">Your Selection</h2>
                       <button className="text-gray-400 hover:text-white transition-colors">
                         <X className="h-5 w-5" />
                       </button>
                     </div>
 
                     {/* Product Item */}
-                    <div className="p-4">
-                      <div className="bg-gray-700/30 mt-1 mb-1 backdrop-blur-lg rounded-lg p-4 border border-gray-600 flex items-start space-x-3">
+                    <div className="p-3">
+                      <div className="bg-gray-700/30 mt-1 mb-1 backdrop-blur-lg rounded-lg p-3 border border-gray-600 flex items-start space-x-3">
                         {/* Product Image Placeholder */}
                         <div className="w-16 h-16 bg-gray-600 rounded-lg flex-shrink-0"></div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-white font-semibold mb-1">{getPaperTypeName()}</h3>
-                          <p className="text-gray-400 text-sm mb-1">Paper Type</p>
-                          <p className="text-gray-400 text-sm">Qty: {getQuantity().toLocaleString()}</p>
+                          <h3 className="text-white font-semibold mb-1 text-sm">{getPaperTypeName()}</h3>
+                          <p className="text-gray-400 text-xs mb-1">Paper Type</p>
+                          <p className="text-gray-400 text-xs">Qty: {getQuantity() > 0 ? getQuantity().toLocaleString() : "—"}</p>
                         </div>
                         <div className="flex flex-col items-end">
-                          <div className="text-white font-semibold">{getTotalPrice()}</div>
+                          <div className="text-white font-semibold text-sm">{getQuantity() > 0 ? getTotalPrice() : "$0.00"}</div>
                           <div className="w-2 h-2 bg-red-500 rounded-full mt-1"></div>
                         </div>
                       </div>
                     </div>
 
                     {/* Total Estimate */}
-                    <div className="px-4 py-3 border-t border-gray-700 flex justify-between items-center">
-                      <span className="text-white font-semibold">Total Estimate</span>
-                      <span className="text-white font-semibold text-lg">{getTotalPrice()}</span>
+                    <div className="px-3 py-3 border-t border-gray-700 flex justify-between items-center">
+                      <span className="text-white font-semibold text-sm">Total Estimate</span>
+                      <span className="text-white font-semibold text-base">{getQuantity() > 0 ? getTotalPrice() : "$0.00"}</span>
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="p-4 space-y-5 border-t border-gray-700">
+                    <div className="p-3 space-y-4 border-t border-gray-700">
                       <Button
-                        className="btn-liquid-rect mt-2.5 active w-full bg-transparent border-2 border-blue-400 text-white hover:bg-blue-400/10 shadow-[0_0_20px_rgba(59,130,246,0.5)]"
+                        className="btn-liquid-rect active w-full bg-transparent border border-blue-400 text-white hover:bg-blue-400/10 shadow-[0_0_14px_rgba(59,130,246,0.4)]"
                         onClick={handleAddToCart}
                       >
                         PLACE ORDER
                       </Button>
                       <Button
                         variant="outline"
-                        className="btn-liquid-rect mb-2 w-full bg-transparent border-2 border-blue-400 text-white hover:bg-blue-400/10"
+                        className="btn-liquid-rect w-full bg-transparent border border-blue-400 text-white hover:bg-blue-400/10"
                         onClick={() => {
                           // Handle request quote
                         }}

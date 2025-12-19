@@ -30,12 +30,11 @@ export default function Carousel() {
   const [active, setActive] = useState(2);
 
   useEffect(() => {
-    if (isMobile) return; // Don't run auto-slide on mobile
     const interval = setInterval(() => {
       setActive((prev) => wrap(prev + 1));
-    }, 3000);
+    }, 4000);
     return () => clearInterval(interval);
-  }, [isMobile]);
+  },);
 
   if(isMobile === null) return <FullPageLoader />;
 
@@ -64,7 +63,7 @@ export default function Carousel() {
                 zIndex: 10 - Math.abs(offset),
               }}
               transition={{
-                duration: 0.6,
+                duration: 1,// Adjusted for smoother transition
                 ease: "easeInOut",
               }}
             >
@@ -80,7 +79,7 @@ export default function Carousel() {
           <button
             key={i}
             onClick={() => setActive(i)}
-            className={`h-3 w-3 rounded-full transition-all ${
+            className={`h-2 w-2 rounded-full transition-all ${
               active === i ? "bg-white border-2 border-blue-400 shadow-[0_0_7px_rgba(255,255,255,0.8)]" : "bg-white/80"
             }`}
           />
@@ -120,7 +119,8 @@ function Card({ item, isActive }: { item: CardItem, isActive: boolean }) {
         src={item.image}
         alt={item.label}
         fill
-        className="object-cover border rounded-xl"
+        sizes="(max-width: 768px) 90vw, 320px"
+        className={`object-cover border rounded-xl ${isActive ? 'opacity-90' : 'opacity-60'}`}
       />
 
       {/* FULL IMAGE INNER BORDER (ALWAYS VISIBLE) */}

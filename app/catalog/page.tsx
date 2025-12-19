@@ -188,7 +188,7 @@ export default function CatalogPage() {
           <div className="px-4 md:px-0">
             <div className="text-center mb-6">
               <h1 className="text-4xl md:text-5xl font-serif mb-3"
-              style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>
+              style={{ textShadow: "0 0 5px rgba(255,255,255,0.6)" }}>
                 Wholesale <span className="text-blue-400">Inventory</span>
               </h1>
               <p className="text-gray-400 text-sm">
@@ -230,13 +230,13 @@ export default function CatalogPage() {
           {isMobile ? (null) : <aside className="w-full lg:w-1/5">
             <div className="glass-panel p-6 rounded-xl lg:sticky lg:top-32 max-h-[80vh] overflow-y-auto scrollbar-hide">
               <div className="flex justify-between items-center mb-6 pb-4 border-b border-white/10">
-                <h2 className="font-serif text-lg" style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>Filters</h2>
-                <button
+                <h2 className="font-serif text-lg" style={{ textShadow: "0 0 2px rgba(255,255,255,0.6)" }}>Filters</h2>
+                {/* <button
                   onClick={clearFilters}
                   className="text-xs text-blue-400 hover:text-white transition-colors"
                 >
                   Reset All
-                </button>
+                </button> */}
               </div>
 
               {/* Material (Paper Type) */}
@@ -249,9 +249,9 @@ export default function CatalogPage() {
                     Material
                   </span>
                   {paperTypeOpen ? (
-                    <ChevronUp className="h-4 w-4 text-gray-400" />
+                    <ChevronUp className="h-4 w-4 text-gray-400 cursor-pointer" />
                   ) : (
-                    <ChevronDown className="h-4 w-4 text-gray-400" />
+                    <ChevronDown className="h-4 w-4 text-gray-400 cursor-pointer" />
                   )}
                 </button>
                 {paperTypeOpen && (
@@ -291,9 +291,9 @@ export default function CatalogPage() {
                     Size Range [mm]
                   </span>
                   {sizeRangeOpen ? (
-                    <ChevronUp className="h-4 w-4 text-gray-400" />
+                    <ChevronUp className="h-4 w-4 text-gray-400 cursor-pointer" />
                   ) : (
-                    <ChevronDown className="h-4 w-4 text-gray-400" />
+                    <ChevronDown className="h-4 w-4 text-gray-400 cursor-pointer" />
                   )}
                 </button>
                 {sizeRangeOpen && (
@@ -326,9 +326,9 @@ export default function CatalogPage() {
                     Lot Size (Units)
                   </span>
                   {lotSizeOpen ? (
-                    <ChevronUp className="h-4 w-4 text-gray-400" />
+                    <ChevronUp className="h-4 w-4 text-gray-400 cursor-pointer" />
                   ) : (
-                    <ChevronDown className="h-4 w-4 text-gray-400" />
+                    <ChevronDown className="h-4 w-4 text-gray-400 cursor-pointer" />
                   )}
                 </button>
                 {lotSizeOpen && (
@@ -361,9 +361,9 @@ export default function CatalogPage() {
                     Packaging
                   </span>
                   {packagingOpen ? (
-                    <ChevronUp className="h-4 w-4 text-gray-400" />
+                    <ChevronUp className="h-4 w-4 text-gray-400 cursor-pointer" />
                   ) : (
-                    <ChevronDown className="h-4 w-4 text-gray-400" />
+                    <ChevronDown className="h-4 w-4 text-gray-400 cursor-pointer" />
                   )}
                 </button>
                 {packagingOpen && (
@@ -394,23 +394,24 @@ export default function CatalogPage() {
               </div>
 
               {/* Filter Actions */}
-              <div className="space-y-3 pt-2 border-t border-white/10 mt-4">
+              <div className="w-full pt-2 mt-4 border-t border-white/10 flex flex-row items-center justify-center space-x-3">
                 <Button
-                  className="w-full btn-liquid btn-primary py-3 text-[10px] font-bold uppercase tracking-widest"
+                  className="w-[100px] btn-liquid btn-primary p-3 text-[10px] font-bold uppercase tracking-widest"
                   onClick={() => {
                     // Apply filters logic
                   }}
                 >
-                  Apply Filters
+                  Apply
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full btn-liquid py-3 text-[10px] font-bold uppercase tracking-widest bg-transparent border-white/20 text-gray-200 hover:text-white"
+                  className="w-[100px] btn-liquid py-3 text-[10px] font-bold uppercase tracking-widest bg-transparent border-white/20 text-gray-200 hover:text-white"
                   onClick={clearFilters}
                 >
-                  Clear Filters
+                  Clear
                 </Button>
               </div>
+
             </div>
           </aside>}
 
@@ -487,12 +488,12 @@ export default function CatalogPage() {
             )}
 
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl md:text-3xl font-serif" style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>Products</h2>
+              <h2 className="text-2xl md:text-3xl font-serif" style={{ textShadow: "0 0 5px rgba(255,255,255,0.6)" }}>Products</h2>
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-[180px] glass-panel !bg-black/40 border-white/10 text-white px-3 py-2 h-10">
+                <SelectTrigger className="w-45 btn-glass-panel bg-blue-100 border-white/10 text-white px-3 py-2 h-10">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#132135] border-white/10 text-white">
+                <SelectContent className="bg-blue-900 border-white/10 text-white">
                   <SelectItem value="featured">Featured</SelectItem>
                   <SelectItem value="price-low">Price: Low to High</SelectItem>
                   <SelectItem value="price-high">Price: High to Low</SelectItem>
@@ -517,10 +518,10 @@ export default function CatalogPage() {
                         height={250}
                         className="object-contain drop-shadow-2xl group-hover:scale-110 transition duration-700"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 flex items-end p-6">
+                      <div className="absolute inset-0 bg-gradient-to-t flex justify-center from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 flex items-end p-6">
                         <Button
                           onClick={() => handleAddToCart(product)}
-                          className="w-full btn-liquid btn-primary py-3 text-[10px] font-bold uppercase tracking-widest"
+                          className="w-25 btn-liquid active btn-primary py-3 text-[10px] font-bold uppercase tracking-widest"
                         >
                           Add
                         </Button>

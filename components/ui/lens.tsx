@@ -99,7 +99,7 @@ export const Lens: React.FC<LensProps> = ({
                     mousePosition.x
                   }px ${mousePosition.y}px, black 100%, transparent 100%)`,
                   WebkitMaskImage: `radial-gradient(circle ${
-                    lensSize / 2
+                    lensSize / 3
                   }px at ${mousePosition.x}px ${
                     mousePosition.y
                   }px, black 100%, transparent 100%)`,

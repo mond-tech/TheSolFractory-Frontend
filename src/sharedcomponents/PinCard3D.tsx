@@ -23,22 +23,21 @@ export function AnimatedPinCard({ title, description, image }: AnimatedPinCardPr
             alt={title}
             width={400}
             height={300}
-            className="w-[20rem] h-[21rem] object-cover transition duration-300 ease-out group-hover:blur-[3px]"
+            className="w-[20rem] h-84 object-cover transition duration-300 ease-out group-hover:blur-[3px]"
           />
         </div>
 
         {/* Glass overlay (appears on hover, slightly wider than the image) */}
-        <div
-          className="pointer-events-none absolute opacity-0 group-hover:opacity-100 transition duration-300 ease-out
-                     backdrop-blur-xl bg-white/8 border-2 border-white/20 shadow-[0_18px_60px_rgba(0,0,0,0.55)]
-                     rounded-2xl px-8 py-6
-                     w-[23rem] max-w-none"
+        <div className="pointer-events-none absolute opacity-0 group-hover:opacity-100 transition duration-300 ease-out
+                    backdrop-blur-xl bg-blue-950/80 border border-white shadow-[0_18px_60px_rgba(0,0,0,0.55)]
+                    rounded-2xl px-8 py-6
+                    w-92 max-w-none"
         >
-          <h3 className="text-lg font-semibold text-white text-center mb-2">
+          <h3 className="text-lg font-semibold text-white drop-shadow-md text-center mb-2">
             {title}
           </h3>
           {description && (
-            <p className="text-sm text-white/75 text-center leading-relaxed">
+            <p className="text-sm text-white/80 drop-shadow-sm text-center leading-relaxed">
               {description}
             </p>
           )}

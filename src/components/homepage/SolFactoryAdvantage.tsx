@@ -19,7 +19,7 @@ export default function SolFactoryAdvantage() {
     <section className="w-full py-14 px-6 flex flex-col items-center">
 
       {/* TITLE */}
-      <h2 className="text-white text-3xl md:text-4xl font-bold text-center mb-10" style={{ textShadow: "0 0 8px rgba(255,255,255,0.6)" }}>
+      <h2 className="text-white text-3xl md:text-4xl font-bold text-center mb-10" style={{ textShadow: "0 0 5px rgba(255,255,255,0.6)" }}>
         The SOL Factory Advantage
       </h2>
 
@@ -28,7 +28,7 @@ export default function SolFactoryAdvantage() {
         <div className="w-full rounded-2xl aspect-22/5 flex items-center justify-center">
           <video
             controls
-            className="w-full h-full rounded-2xl object-cover"
+            className="w-full h-111 rounded-2xl object-cover"
             src="https://ja3zeotcy2kd52jg.public.blob.vercel-storage.com/SOL%20Video%28Compressed%29.mp4"
           />
         </div>

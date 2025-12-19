@@ -12,7 +12,7 @@ export default function MergedCards() {
   return (
     <div>
 
-    <h1 className="text-center text-white mb-11 mt-18 px-6">
+    <h1 className="text-center text-white mt-11 px-6" style={{ textShadow: "0 0 5px rgba(255,255,255,0.6)" }}>
       <span className="block text-3xl md:text-4xl font-serif">
         Create Your Perfect Cone:
       </span>
@@ -74,20 +74,21 @@ export default function MergedCards() {
       />
 
       {/* 4 — Another paper style section */}
-    {/* {isMobile? null : <InfoCard
+    {isMobile? null : <InfoCard
             bgColor="#040E1C"
-            title="Premium Rolling Papers"
-            subtitle="Select from our range of premium rolling paper materials:"
+            title="Packaging That Tells Tour Story"
+            subtitle="Your product’s presentation matters. Choose from:"
             description=""
             bullets={[
-              "Ultra-thin refined white paper",
-              "Slow-burning natural paper",
-              "Eco-certified sustainable blends",
+              "Custom boxes (retail or wholesale)",
+              "Branded tubes or doob tubes",
+              "Custom printed cartons",
+              "Eco-friendly packaging options",
             ]}
-            footer="Every paper is precision tested for airflow, burn rate, and structural consistency."
-            image="/homepage/sizechart.png"
+            footer="Designed to protect your cones during transit and elevate your brand at first glance"
+            image="/homepage/packaging.png"
             imageOnRight={true}
-          />} */}
+          />}
 
     </div>
   );

@@ -23,7 +23,7 @@ export default function LoginPage() {
       </div>
 
       <div className="glass-panel p-8 md:p-10 w-full max-w-md relative z-10 mb-7 mt-1">
-        <h2 className="text-3xl font-serif text-center mb-2" style={{ textShadow: "0 0 5px rgba(255,255,255,0.6)" }}>Login</h2>
+        <h2 className="text-3xl font-serif text-center mb-2" style={{ textShadow: "0 0 4px rgba(255,255,255,0.6)" }}>Login</h2>
 
         <form className="space-y-5 mt-6" onSubmit={handleSubmit}>
           <input

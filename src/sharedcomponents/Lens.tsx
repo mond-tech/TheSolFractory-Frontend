@@ -28,7 +28,7 @@ export function LensImage({
         alt={alt}
         width={width}
         height={height}
-        className={className}
+        className={`${className}`}
       />
     </Lens>
   );

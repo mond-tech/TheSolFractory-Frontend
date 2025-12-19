@@ -129,7 +129,7 @@ export default function Navbar() {
                 <span
                   className="absolute -top-1.5 -right-1.5
                              w-4 h-4 md:w-5 md:h-5
-                             bg-red-600 rounded-full
+                             bg-blue-600 rounded-full
                              text-white text-[10px] md:text-xs
                              flex items-center justify-center
                              font-bold z-10"
