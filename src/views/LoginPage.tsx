@@ -36,7 +36,7 @@ export default function LoginPage() {
             placeholder="Email"
             value={form.email}
             onChange={handleChange}
-            className="w-full bg-black/40 border placeholder:text-white border-white/10 rounded-lg p-4 text-sm text-white focus:border-blue-500 outline-none transition focus:bg-black/60"
+            className="w-full bg-black/40 border placeholder:text-white/50 border-white/10 rounded-lg p-4 text-sm text-white focus:border-blue-500 outline-none transition focus:bg-black/60"
           />
           <div className="relative">
             <input
@@ -45,7 +45,7 @@ export default function LoginPage() {
               placeholder="Password"
               value={form.password}
               onChange={handleChange}
-              className="w-full bg-black/40 border placeholder:text-white border-white/10 rounded-lg p-4 pr-12 text-sm text-white focus:border-blue-500 outline-none transition focus:bg-black/60"
+              className="w-full bg-black/40 border placeholder:text-white/50 border-white/10 rounded-lg p-4 pr-12 text-sm text-white focus:border-blue-500 outline-none transition focus:bg-black/60"
             />
             <button
               type="button"
@@ -68,7 +68,7 @@ export default function LoginPage() {
                 id="remember-me"
                 checked={rememberMe}
                 onCheckedChange={(checked) => setRememberMe(checked === true)}
-                className="border-white/50 ml-0.5 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
+                className="border-white/50 ml-2 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
               />
               <Label
                 htmlFor="remember-me"

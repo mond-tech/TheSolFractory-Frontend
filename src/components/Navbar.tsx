@@ -39,14 +39,14 @@ export default function Navbar() {
               <Image
                 src="/logo.png"
                 alt=""
-                width={80}
-                height={50}
-                className="md:mt-1.5"
+                width={100}
+                height={60}
+                className="md:mt-0.5"
               />
             </Link>
             
             {/* Burning Cigarette Animation */}
-            <BurningCigarette />
+            {/* <BurningCigarette /> */}
           </div>
 
           <nav className="hidden lg:flex gap-4 ml-30">
@@ -113,7 +113,7 @@ export default function Navbar() {
 
             <button
               onClick={() => setCartOpen(true)}
-              className="relative group ml-1
+              className="relative group ml-0 
                          w-8 h-8 md:w-10 md:h-10
                          flex items-center justify-center
                          rounded-full"

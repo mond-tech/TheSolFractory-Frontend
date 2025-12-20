@@ -36,7 +36,7 @@ export default function SignupPage() {
       </div>
 
       {/* Card */}
-      <div className="glass-panel w-full max-w-lg p-6 sm:p-8 md:p-10 relative z-10 mb-8">
+      <div className="glass-panel w-full max-w-lg p-6 sm:p-8 md:p-10 relative z-10 mb-13">
         {/* Heading */}
         <h2
           className="text-3xl font-serif text-center mb-8 w-full max-w-[450px] mx-auto"
@@ -55,7 +55,7 @@ export default function SignupPage() {
               placeholder="First Name"
               value={form.firstName}
               onChange={handleChange}
-              className="bg-black/40 border border-white/10 placeholder:text-white rounded-lg p-4 text-sm text-white outline-none focus:border-blue-500 transition"
+              className="bg-black/40 border border-white/10 placeholder:text-white/50 rounded-lg p-4 text-sm text-white outline-none focus:border-blue-500 transition"
             />
             <input
               type="text"
@@ -63,7 +63,7 @@ export default function SignupPage() {
               placeholder="Last Name"
               value={form.lastName}
               onChange={handleChange}
-              className="bg-black/40 border border-white/10 placeholder:text-white rounded-lg p-4 text-sm text-white outline-none focus:border-blue-500 transition"
+              className="bg-black/40 border border-white/10 placeholder:text-white/50 rounded-lg p-4 text-sm text-white outline-none focus:border-blue-500 transition"
             />
           </div>
 
@@ -74,7 +74,7 @@ export default function SignupPage() {
             placeholder="Email"
             value={form.email}
             onChange={handleChange}
-            className="w-full bg-black/40 border border-white/10 placeholder:text-white rounded-lg p-4 text-sm text-white outline-none focus:border-blue-500 transition"
+            className="w-full bg-black/40 border border-white/10 placeholder:text-white/50 rounded-lg p-4 text-sm text-white outline-none focus:border-blue-500 transition"
           />
 
           {/* Company */}
@@ -84,7 +84,7 @@ export default function SignupPage() {
             placeholder="Company"
             value={form.company}
             onChange={handleChange}
-            className="w-full bg-black/40 border border-white/10 placeholder:text-white rounded-lg p-4 text-sm text-white outline-none focus:border-blue-500 transition"
+            className="w-full bg-black/40 border border-white/10 placeholder:text-white/50 rounded-lg p-4 text-sm text-white outline-none focus:border-blue-500 transition"
           />
 
           {/* Password */}
@@ -95,7 +95,7 @@ export default function SignupPage() {
               placeholder="Password"
               value={form.password}
               onChange={handleChange}
-              className="bg-black/40 border border-white/10 placeholder:text-white rounded-lg p-4 text-sm text-white outline-none focus:border-blue-500 transition"
+              className="bg-black/40 border border-white/10 placeholder:text-white/50 rounded-lg p-4 text-sm text-white outline-none focus:border-blue-500 transition"
             />
             <input
               type="password"
@@ -103,7 +103,7 @@ export default function SignupPage() {
               placeholder="Confirm Password"
               value={form.confirmPassword}
               onChange={handleChange}
-              className="bg-black/40 border border-white/10 placeholder:text-white rounded-lg p-4 text-sm text-white outline-none focus:border-blue-500 transition"
+              className="bg-black/40 border border-white/10 placeholder:text-white/50 rounded-lg p-4 text-sm text-white outline-none focus:border-blue-500 transition"
             />
           </div>
 
@@ -113,7 +113,7 @@ export default function SignupPage() {
               id="terms"
               checked={agreeTerms}
               onCheckedChange={(checked) => setAgreeTerms(checked === true)}
-              className="border-white/20 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
+              className="border-white/20 ml-3 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
             />
 
             <Label

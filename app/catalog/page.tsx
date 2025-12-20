@@ -196,7 +196,7 @@ export default function CatalogPage() {
 
           {/* Full-width hero image slider (one image at a time, reduced height) */}
           {isMobile ? null : (
-            <div className="w-full h-48 md:h-64 relative rounded-2xl overflow-hidden backdrop-blur-lg">
+            <div className="w-full h-48 md:h-100 relative rounded-2xl overflow-hidden backdrop-blur-lg">
               {/* Slider Track */}
               <div
                 className="flex h-full"
