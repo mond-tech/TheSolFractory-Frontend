@@ -184,7 +184,7 @@ export default function CatalogPage() {
         <div className="max-w-400 mx-auto px-0 md:px-6 mb-12">
           <div className="px-4 md:px-0">
             <div className="text-center mb-[55px]">
-              <h1 className="text-4xl md:text-5xl font-serif mb-3"
+              <h1 className="text-4xl md:text-5xl font-serif mb-3 not-md:mt-11"
               style={{ textShadow: "0 0 3px rgba(255,255,255,0.6)" }}>
                 Wholesale <span className="text-blue-400">Inventory</span>
               </h1>
@@ -243,7 +243,7 @@ export default function CatalogPage() {
           {isMobile ? (null) : <aside className="w-full lg:w-1/5">
             <div className="glass-panel p-6 rounded-xl lg:sticky lg:top-24 mt-22 max-h-[80vh] overflow-y-auto scrollbar-hide">
               <div className="flex justify-between items-center mb-6 pb-4 border-b border-white/10">
-                <h2 className="font-serif text-lg" style={{ textShadow: "0 0 2px rgba(255,255,255,0.6)" }}>Filters</h2>
+                <h2 className="font-serif text-lg" style={{ textShadow: "0 0 1px rgba(255,255,255,0.6)" }}>Filters</h2>
                 {/* <button
                   onClick={clearFilters}
                   className="text-xs text-blue-400 hover:text-white transition-colors"
@@ -501,7 +501,7 @@ export default function CatalogPage() {
             )}
 
             <div className="flex items-center justify-between mb-11 mt-1">
-              <h2 className="text-2xl md:text-3xl font-serif" style={{ textShadow: "0 0 5px rgba(255,255,255,0.6)" }}>Products</h2>
+              <h2 className="text-2xl md:text-3xl font-serif" style={{ textShadow: "0 0 2px rgba(255,255,255,0.6)" }}>Products</h2>
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-45 btn-glass-panel bg-blue-100 border-white/10 text-white px-3 py-2 h-10">
                   <SelectValue placeholder="Sort by" />
@@ -523,13 +523,13 @@ export default function CatalogPage() {
                     key={product.id}
                     className="glass-panel rounded-xl overflow-hidden group hover:-translate-y-2 transition-all duration-300"
                   >
-                    <div className="aspect-[4/5] bg-white/5 p-6 flex items-center justify-center relative overflow-hidden">
+                    <div className="aspect-4/5 not-md:aspect-4/3 bg-white/5 p-6 flex items-center justify-center relative overflow-hidden">
                       <Image
                         src={product.image}
                         alt={product.name}
                         width={200}
                         height={250}
-                        className="object-contain drop-shadow-2xl group-hover:scale-110 transition duration-700"
+                        className="object-contain rounded-xl drop-shadow-2xl group-hover:scale-110 transition duration-700"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t flex justify-center from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 flex items-end p-6">
                         <Button

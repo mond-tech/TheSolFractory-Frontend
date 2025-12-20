@@ -137,9 +137,9 @@ export default function TrustConesSection() {
         {/* Heading Box */}
         <div className="
             backdrop-blur-lg 
-            px-10 py-8 text-center mb-10
+            px-10 py-8 text-center mb-15
         ">
-          <h2 className="text-3xl md:text-4xl font-semibold text-white mb-3" style={{ textShadow: "0 0 3px rgba(255,255,255,0.6)" }}>
+          <h2 className="text-3xl md:text-4xl font-semibold text-white mb-3" style={{ textShadow: "0 0 2px rgba(255,255,255,0.6)" }}>
             Why Brands Trust Our Cones
           </h2>
 

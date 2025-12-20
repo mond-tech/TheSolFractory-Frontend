@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { ShoppingCartDialog } from "@/components/ShoppingCartDialog";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useCart } from "@/src/contexts/CartContext";
+import BurningCigarette from "./BurningCigarette";
 
 const navLinks = [
   { id: "home", label: "Home", href: "/" },
@@ -33,22 +34,27 @@ export default function Navbar() {
     <>
       <header className="fixed w-full z-50 border-b border-white/5 bg-[#132135]/80 backdrop-blur-xl transition-all duration-300">
         <div className="max-w-350 mx-auto px-4 md:px-6 h-20 flex justify-between items-center relative z-50">
-          <Link href="/" className="h-10 md:h-14 block group cursor-pointer ml-3">
-            <Image
-              src="/logo.png"
-              alt=""
-              width={80}
-              height={50}
-              className="mt-1.5"
-            />
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link href="/" className="h-10 md:h-14 block group cursor-pointer ml-3">
+              <Image
+                src="/logo.png"
+                alt=""
+                width={80}
+                height={50}
+                className="md:mt-1.5"
+              />
+            </Link>
+            
+            {/* Burning Cigarette Animation */}
+            <BurningCigarette />
+          </div>
 
           <nav className="hidden lg:flex gap-4 ml-41">
             {navLinks.map((link) => (
               <Link
                 key={link.id}
                 href={link.href}
-                className={`nav-btn btn-liquid px-6 py-2 w-30 text-center text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white hover:active ${
+                className={`nav-btn btn-liquid px-6 py-2 w-[120px] text-center text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white hover:active ${
                   isActive(link.href) ? "active" : ""
                 }`}
                 onMouseEnter={
@@ -70,7 +76,7 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <Link
               href="/login"
-              className={`lg:block auth-btn w-[120px] text-center items-center btn-liquid px-5 py-2 text-[12px] font-bold uppercase tracking-widest text-gray-300 hover:text-white ${
+              className={`hidden lg:block auth-btn w-25 text-center items-center btn-liquid px-5 py-2 text-[12px] font-bold uppercase tracking-widest text-gray-300 hover:text-white ${
                 isActive("/login") ? "active" : ""
               }`}
                 onMouseEnter={
@@ -88,7 +94,7 @@ export default function Navbar() {
             </Link>
             <Link
               href="/signup"
-              className={`hidden lg:block auth-btn btn-liquid w-30 text-center px-5 py-2 text-[12px] font-bold uppercase tracking-widest text-white ${
+              className={`hidden lg:block auth-btn btn-liquid w-25 text-center px-5 py-2 text-[12px] font-bold uppercase tracking-widest text-white ${
                 isActive("/signup") ? "active" : ""
               }`}
               onMouseEnter={

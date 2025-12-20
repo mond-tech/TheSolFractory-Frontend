@@ -512,3 +512,327 @@ body {
   box-shadow: 0 0 20px rgba(138, 180, 248, 0.5), inset 0 3px 5px rgba(255, 255, 255, 0.4);
   transform: translateY(-3px);
 }
+
+/* Burning Cigarette Animation */
+@keyframes ember-outer-glow {
+  0%, 100% { 
+    opacity: 0.3; 
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.6; 
+    transform: scale(1.3);
+  }
+}
+
+@keyframes ember-glow-pulse {
+  0%, 100% { 
+    opacity: 0.7; 
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1; 
+    transform: scale(1.15);
+  }
+}
+
+@keyframes ember-flicker {
+  0%, 100% { 
+    opacity: 0.9; 
+    transform: scale(1);
+  }
+  20% { 
+    opacity: 1; 
+    transform: scale(1.08);
+  }
+  40% { 
+    opacity: 0.85; 
+    transform: scale(0.98);
+  }
+  60% { 
+    opacity: 0.95; 
+    transform: scale(1.05);
+  }
+  80% { 
+    opacity: 0.88; 
+    transform: scale(1.02);
+  }
+}
+
+@keyframes ember-hot {
+  0%, 100% { 
+    opacity: 1; 
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.85; 
+    transform: scale(1.1);
+  }
+}
+
+@keyframes ember-bright {
+  0%, 100% { 
+    opacity: 1; 
+    transform: scale(1);
+  }
+  25% { 
+    opacity: 0.9; 
+    transform: scale(1.05);
+  }
+  50% { 
+    opacity: 0.95; 
+    transform: scale(0.98);
+  }
+  75% { 
+    opacity: 0.92; 
+    transform: scale(1.03);
+  }
+}
+
+@keyframes ember-white-hot {
+  0%, 100% { 
+    opacity: 0.95; 
+    transform: scale(1);
+  }
+  33% { 
+    opacity: 0.85; 
+    transform: scale(1.1);
+  }
+  66% { 
+    opacity: 0.9; 
+    transform: scale(0.95);
+  }
+}
+
+@keyframes ember-core {
+  0%, 100% { 
+    opacity: 1; 
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.8; 
+    transform: scale(1.15);
+  }
+}
+
+/* Smoke animations */
+@keyframes smoke-rise-1 {
+  0% { 
+    opacity: 0.6; 
+    transform: translateY(0) translateX(0) scale(1);
+  }
+  100% { 
+    opacity: 0; 
+    transform: translateY(-20px) translateX(2px) scale(1.5);
+  }
+}
+
+@keyframes smoke-rise-2 {
+  0% { 
+    opacity: 0.5; 
+    transform: translateY(0) translateX(0) scale(1);
+  }
+  100% { 
+    opacity: 0; 
+    transform: translateY(-25px) translateX(-3px) scale(1.8);
+  }
+}
+
+@keyframes smoke-rise-3 {
+  0% { 
+    opacity: 0.4; 
+    transform: translateY(0) translateX(0) scale(1);
+  }
+  100% { 
+    opacity: 0; 
+    transform: translateY(-30px) translateX(4px) scale(2);
+  }
+}
+
+@keyframes smoke-cloud-rise-1 {
+  0% { 
+    opacity: 0.4; 
+    transform: translateY(0) translateX(0) scale(1);
+  }
+  100% { 
+    opacity: 0; 
+    transform: translateY(-35px) translateX(-2px) scale(1.8);
+  }
+}
+
+@keyframes smoke-cloud-rise-2 {
+  0% { 
+    opacity: 0.3; 
+    transform: translateY(0) translateX(0) scale(1);
+  }
+  100% { 
+    opacity: 0; 
+    transform: translateY(-40px) translateX(3px) scale(2);
+  }
+}
+
+@keyframes smoke-cloud-rise-3 {
+  0% { 
+    opacity: 0.25; 
+    transform: translateY(0) translateX(0) scale(1);
+  }
+  100% { 
+    opacity: 0; 
+    transform: translateY(-45px) translateX(-4px) scale(2.2);
+  }
+}
+
+@keyframes smoke-cloud-rise-4 {
+  0% { 
+    opacity: 0.2; 
+    transform: translateY(0) translateX(0) scale(1);
+  }
+  100% { 
+    opacity: 0; 
+    transform: translateY(-50px) translateX(2px) scale(2.5);
+  }
+}
+
+@keyframes smoke-cloud-rise-5 {
+  0% { 
+    opacity: 0.15; 
+    transform: translateY(0) translateX(0) scale(1);
+  }
+  100% { 
+    opacity: 0; 
+    transform: translateY(-55px) translateX(-3px) scale(2.8);
+  }
+}
+
+@keyframes smoke-cloud-rise-6 {
+  0% { 
+    opacity: 0.12; 
+    transform: translateY(0) translateX(0) scale(1);
+  }
+  100% { 
+    opacity: 0; 
+    transform: translateY(-60px) translateX(4px) scale(3);
+  }
+}
+
+@keyframes smoke-cloud-rise-7 {
+  0% { 
+    opacity: 0.15; 
+    transform: translateY(0) translateX(0) scale(1);
+  }
+  100% { 
+    opacity: 0; 
+    transform: translateY(-65px) translateX(-2px) scale(3.2);
+  }
+}
+
+@keyframes smoke-cloud-rise-8 {
+  0% { 
+    opacity: 0.12; 
+    transform: translateY(0) translateX(0) scale(1);
+  }
+  100% { 
+    opacity: 0; 
+    transform: translateY(-70px) translateX(3px) scale(3.5);
+  }
+}
+
+/* Burning ember styles */
+.burning-ember-group {
+  transform-origin: 48px 24px;
+}
+
+.ember-outer-glow {
+  animation: ember-outer-glow 2s ease-in-out infinite;
+}
+
+.ember-glow-pulse {
+  animation: ember-glow-pulse 1.8s ease-in-out infinite;
+}
+
+.ember-flicker {
+  animation: ember-flicker 1.2s ease-in-out infinite;
+}
+
+.ember-hot {
+  animation: ember-hot 1.5s ease-in-out infinite;
+}
+
+.ember-bright {
+  animation: ember-bright 1s ease-in-out infinite;
+}
+
+.ember-white-hot {
+  animation: ember-white-hot 0.8s ease-in-out infinite;
+}
+
+.ember-core {
+  animation: ember-core 0.7s ease-in-out infinite;
+}
+
+/* Smoke styles */
+.smoke-container {
+  transform-origin: 48px 24px;
+}
+
+.smoke-particle {
+  transform-origin: center;
+}
+
+.smoke-1 {
+  animation: smoke-rise-1 3s ease-out infinite;
+}
+
+.smoke-2 {
+  animation: smoke-rise-2 3.5s ease-out infinite;
+  animation-delay: 0.5s;
+}
+
+.smoke-3 {
+  animation: smoke-rise-3 4s ease-out infinite;
+  animation-delay: 1s;
+}
+
+.smoke-cloud {
+  transform-origin: center;
+}
+
+.smoke-cloud-1 {
+  animation: smoke-cloud-rise-1 4s ease-out infinite;
+  animation-delay: 0.3s;
+}
+
+.smoke-cloud-2 {
+  animation: smoke-cloud-rise-2 4.5s ease-out infinite;
+  animation-delay: 0.8s;
+}
+
+.smoke-cloud-3 {
+  animation: smoke-cloud-rise-3 5s ease-out infinite;
+  animation-delay: 1.3s;
+}
+
+.smoke-cloud-4 {
+  animation: smoke-cloud-rise-4 5.5s ease-out infinite;
+  animation-delay: 1.8s;
+}
+
+.smoke-cloud-5 {
+  animation: smoke-cloud-rise-5 6s ease-out infinite;
+  animation-delay: 2.3s;
+}
+
+.smoke-cloud-6 {
+  animation: smoke-cloud-rise-6 6.5s ease-out infinite;
+  animation-delay: 2.8s;
+}
+
+.smoke-cloud-7 {
+  animation: smoke-cloud-rise-7 7s ease-out infinite;
+  animation-delay: 3.3s;
+}
+
+.smoke-cloud-8 {
+  animation: smoke-cloud-rise-8 7.5s ease-out infinite;
+  animation-delay: 3.8s;
+}

@@ -4,7 +4,7 @@ import { SparkleText } from "@/src/sharedcomponents/SparkleText";
 
 const MobileHeroSection: React.FC = () => {
   return (
-    <section className="text-white pt-30 pb-16 px-6 text-center">
+    <section className="text-white pt-27 pb-16 px-6 text-center">
 
       {/* Heading */}
 
@@ -73,7 +73,7 @@ const MobileHeroSection: React.FC = () => {
           href="/build"
           className="
             w-[75%]
-            max-w-[260px]
+            max-w-57.5
             py-2
             text-sm font-medium
             bg-[#132135] text-white
@@ -91,7 +91,7 @@ const MobileHeroSection: React.FC = () => {
           href="/contact"
           className="
             w-[75%]
-            max-w-65
+            max-w-57.5
             py-2
             text-sm font-medium
             rounded-full
