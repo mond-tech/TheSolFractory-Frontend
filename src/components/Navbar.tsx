@@ -49,7 +49,7 @@ export default function Navbar() {
             <BurningCigarette />
           </div>
 
-          <nav className="hidden lg:flex gap-4 ml-41">
+          <nav className="hidden lg:flex gap-4 ml-30">
             {navLinks.map((link) => (
               <Link
                 key={link.id}
