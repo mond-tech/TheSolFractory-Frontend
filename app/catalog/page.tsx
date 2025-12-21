@@ -503,10 +503,10 @@ export default function CatalogPage() {
             <div className="flex items-center justify-between mb-11 mt-1">
               <h2 className="text-2xl md:text-3xl font-serif" style={{ textShadow: "0 0 2px rgba(255,255,255,0.6)" }}>Products</h2>
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-45 btn-glass-panel bg-blue-100 border-white/10 text-white px-3 py-2 h-10">
+                <SelectTrigger className="w-45 btn-glass-panel rounded-xl bg-blue-100 border-white/10 text-white px-3 py-2 h-10">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
-                <SelectContent className="bg-blue-900 border-white/10 text-white">
+                <SelectContent className="btn-glass-panel border-white/10 text-white">
                   <SelectItem value="featured">Featured</SelectItem>
                   <SelectItem value="price-low">Price: Low to High</SelectItem>
                   <SelectItem value="price-high">Price: High to Low</SelectItem>

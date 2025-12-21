@@ -141,6 +141,7 @@ export default function TrustConesSection() {
         ">
           <h2 className="text-3xl md:text-4xl font-w-[400px] text-white mb-3" style={{ textShadow: "0 0 2px rgba(255,255,255,0.6)" }}>
             Why Brands Trust Our Cones
+            <span className="block mx-auto mt-3 w-17 h-0.5 bg-white"></span>
           </h2>
 
           <p className="text-white/70 leading-relaxed">
