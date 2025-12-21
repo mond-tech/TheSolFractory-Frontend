@@ -5,8 +5,13 @@ import { useState } from "react";
 import { IconBrandGoogle, IconEye, IconEyeOff } from '@tabler/icons-react';
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { AuthService } from "@/services/auth.service";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+
+  const router = useRouter();
+
   const [form, setForm] = useState({ email: "", password: "" });
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -15,8 +20,25 @@ export default function LoginPage() {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    try {
+      await AuthService.login({
+        userName: form.email,
+        password: form.password,
+      });
+
+      router.push("/");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        alert(err.message);
+        console.error(err.message);
+      } else {
+        alert("Something went wrong");
+        console.error(err);
+      }
+    }
   };
 
   return (

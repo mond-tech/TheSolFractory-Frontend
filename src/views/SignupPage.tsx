@@ -4,9 +4,14 @@ import Link from "next/link";
 import { useState } from "react";
 import { IconBrandGoogle, IconEye, IconEyeOff } from '@tabler/icons-react';
 import { Checkbox } from "@/components/ui/checkbox";
+import { AuthService } from "@/services/auth.service";
 import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
+
+  const router = useRouter();
+
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -24,9 +29,41 @@ export default function SignupPage() {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!agreeTerms) return;
+
+    if (!agreeTerms) {
+      alert("Please accept terms & conditions");
+      return;
+    }
+
+    if (form.password !== form.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    try {
+      await AuthService.register({
+        email: form.email,
+        name: `${form.firstName} ${form.lastName}`,
+        phoneNumber: "", // backend requires it → adjust later if needed
+        password: form.password,
+        role: "User",
+      });
+
+      // Success UX
+      router.push("/");
+    } 
+    catch (err: unknown) {
+        if (err instanceof Error) {
+          alert(err.message);
+          console.error(err.message);
+        } 
+        else {
+          alert("Something went wrong");
+          console.error(err);
+       }
+    }
   };
 
   return (
