@@ -7,10 +7,16 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { AuthService } from "@/services/auth.service";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
+import type { CredentialResponse } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode, type JwtPayload } from "jwt-decode";
+import GoogleButtonLink from "../sharedcomponents/GoogleButton";
+import { useUser } from "@/src/contexts/UserContext";
 
 export default function SignupPage() {
 
   const router = useRouter();
+  const { login } = useUser();
 
   const [form, setForm] = useState({
     firstName: "",
@@ -24,6 +30,14 @@ export default function SignupPage() {
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  interface GoogleIdTokenPayload extends JwtPayload {
+    email?: string;
+    name?: string;
+    picture?: string;
+    given_name?: string;
+    family_name?: string;
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -43,7 +57,7 @@ export default function SignupPage() {
     }
 
     try {
-      await AuthService.register({
+      const response = await AuthService.register({
         email: form.email,
         name: `${form.firstName} ${form.lastName}`,
         phoneNumber: "", // backend requires it → adjust later if needed
@@ -51,8 +65,34 @@ export default function SignupPage() {
         role: "User",
       });
 
-      // Success UX
-      router.push("/");
+      console.log("Register response:", response);
+      
+      // Check if response indicates success
+      const isSuccess = response.isSuccess !== false && response.success !== false;
+      
+      if (isSuccess && response.result) {
+        // Extract token and userId from the actual API structure
+        // Structure: { result: { token: "...", user: { id: "..." } } }
+        const token = response.result.token || response.result.accessToken;
+        const userId = response.result.user?.id || response.result.userId || response.result.id;
+        
+        console.log("Extracted token:", token ? "Present" : "Missing");
+        console.log("Extracted userId:", userId || "Missing");
+        
+        if (!token || !userId) {
+          console.error("Response structure:", JSON.stringify(response, null, 2));
+          throw new Error("Token or user ID not received from server. Please check the API response structure.");
+        }
+
+        // Login using UserContext
+        await login(token, userId);
+
+        // Success UX
+        router.push("/");
+      } else {
+        console.error("Registration failed - response:", JSON.stringify(response, null, 2));
+        throw new Error(response.message || "Registration failed");
+      }
     } 
     catch (err: unknown) {
         if (err instanceof Error) {
@@ -65,6 +105,79 @@ export default function SignupPage() {
        }
     }
   };
+
+  const handleGoogleSignup = async (credentialResponse: CredentialResponse) => {
+    try {
+      const idToken = credentialResponse?.credential;
+      if (!idToken) throw new Error("Google ID token not received");
+
+      // Decode ID token to get user info
+      const user = jwtDecode<GoogleIdTokenPayload>(idToken);
+      console.log("Google user data:", user);
+
+      const response = await AuthService.googleAuth(idToken); // send to backend
+      
+      console.log("Google auth response:", response);
+      
+      // Google auth returns: { token: "..." } at root level (different from regular login)
+      let token: string | undefined;
+      let userId: string | undefined;
+      
+      // Try root level token first (Google auth structure)
+      if (response.token) {
+        token = response.token;
+        // Decode JWT token to extract user ID from 'sub' field
+        try {
+          const decodedToken = jwtDecode<{ sub?: string }>(token);
+          userId = decodedToken.sub;
+          console.log("Decoded user ID from token:", userId);
+        } catch (decodeError) {
+          console.error("Failed to decode token:", decodeError);
+        }
+      }
+      
+      // Fallback to regular login structure (result object)
+      if (!token && response.result) {
+        token = response.result.token || response.result.accessToken;
+        userId = response.result.user?.id || response.result.userId || response.result.id;
+      }
+      
+      // Try data object as fallback
+      if (!token && response.data) {
+        token = response.data.token;
+        userId = response.data.userId || response.data.id;
+      }
+      
+      console.log("Extracted token:", token ? "Present" : "Missing");
+      console.log("Extracted userId:", userId || "Missing");
+      
+      if (!token) {
+        console.error("Response structure:", JSON.stringify(response, null, 2));
+        throw new Error("Token not received from server. Please check the API response structure.");
+      }
+      
+      if (!userId) {
+        console.error("Could not extract user ID. Response structure:", JSON.stringify(response, null, 2));
+        throw new Error("User ID not found in token or response. Please check the API response structure.");
+      }
+
+      // Login using UserContext
+      await login(token, userId);
+
+      router.push("/");
+    } catch (err: unknown) {
+      console.error("Google signup error:", err);
+      if (err instanceof Error) {
+        alert(err.message);
+        console.error("Error details:", err.message);
+      } else {
+        const errorMessage = typeof err === "string" ? err : "Google signup failed. Please check the console for details.";
+        alert(errorMessage);
+        console.error("Unknown error:", err);
+      }
+    }
+  };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 pt-28 md:pt-32 relative">
@@ -220,14 +333,9 @@ export default function SignupPage() {
           <p className="text-[11px] text-center uppercase tracking-widest text-gray-400 mb-5">
             Or continue with
           </p>
-          <Link
-            href="#"
-            className="btn-liquid flex items-center justify-center gap-2 px-4 py-3 text-sm w-full max-w-72 mx-auto
-              font-semibold text-gray-300 hover:text-white border-gray-500 rounded-3xl hover:bg-gray-800 transition border-2"
-          >
-            <IconBrandGoogle className="w-5 h-5" />
-            Continue with Google
-          </Link>
+
+          <GoogleButtonLink onSuccess={handleGoogleSignup} />
+
         </div>
 
         {/* Login */}

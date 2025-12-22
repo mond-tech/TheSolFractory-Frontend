@@ -82,22 +82,18 @@ export default function PaginationControls({
           const pageNumber = page as number;
           const isActive = currentPage === pageNumber;
 
+          if (!isActive) return null;
+
           return (
-            <>
-            {!isActive ? null : <Button
+            <Button
               key={pageNumber}
-              variant={isActive ? "default" : "outline"}
+              variant="default"
               size="sm"
               onClick={() => onPageChange(pageNumber)}
-              className={
-                isActive
-                  ? "btn-liquid btn-primary text-white"
-                  : "btn-glass-panel bg-black/40 border-white/10 text-gray-300 hover:text-white"
-              }
+              className="btn-liquid btn-primary text-white"
             >
               {pageNumber}
-            </Button>}
-            </>
+            </Button>
           );
         })}
       </div>

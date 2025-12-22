@@ -7,29 +7,144 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { AuthService } from "@/services/auth.service";
 import { useRouter } from "next/navigation";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import { jwtDecode, type JwtPayload } from "jwt-decode";
+import GoogleButtonLink from "../sharedcomponents/GoogleButton";
+import { useUser } from "@/src/contexts/UserContext";
 
 export default function LoginPage() {
 
   const router = useRouter();
+  const { login } = useUser();
 
   const [form, setForm] = useState({ email: "", password: "" });
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  interface GoogleIdTokenPayload extends JwtPayload {
+    email?: string;
+    name?: string;
+    picture?: string;
+    given_name?: string;
+    family_name?: string;
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
+
+  const handleGoogleLogin = async (credentialResponse: CredentialResponse) => {
+    try {
+      const idToken = credentialResponse?.credential;
+      if (!idToken) throw new Error("Google ID token not received");
+
+      // Decode token if you want to show user info immediately
+      const user = jwtDecode<GoogleIdTokenPayload>(idToken);
+      console.log("Google user info:", user);
+
+      // Send token to backend for verification and login
+      const response = await AuthService.googleAuth(idToken);
+      
+      console.log("Google auth response:", response);
+      
+      // Google auth returns: { token: "..." } at root level (different from regular login)
+      let token: string | undefined;
+      let userId: string | undefined;
+      
+      // Try root level token first (Google auth structure)
+      if (response.token) {
+        token = response.token;
+        // Decode JWT token to extract user ID from 'sub' field
+        try {
+          const decodedToken = jwtDecode<{ sub?: string }>(token);
+          userId = decodedToken.sub;
+          console.log("Decoded user ID from token:", userId);
+        } catch (decodeError) {
+          console.error("Failed to decode token:", decodeError);
+        }
+      }
+      
+      // Fallback to regular login structure (result object)
+      if (!token && response.result) {
+        token = response.result.token || response.result.accessToken;
+        userId = response.result.user?.id || response.result.userId || response.result.id;
+      }
+      
+      // Try data object as fallback
+      if (!token && response.data) {
+        token = response.data.token;
+        userId = response.data.userId || response.data.id;
+      }
+      
+      console.log("Extracted token:", token ? "Present" : "Missing");
+      console.log("Extracted userId:", userId || "Missing");
+      
+      if (!token) {
+        console.error("Response structure:", JSON.stringify(response, null, 2));
+        throw new Error("Token not received from server. Please check the API response structure.");
+      }
+      
+      if (!userId) {
+        console.error("Could not extract user ID. Response structure:", JSON.stringify(response, null, 2));
+        throw new Error("User ID not found in token or response. Please check the API response structure.");
+      }
+
+      // Login using UserContext
+      await login(token, userId);
+
+      // Redirect to home
+      router.push("/");
+    } catch (err: unknown) {
+      console.error("Google login error:", err);
+      if (err instanceof Error) {
+        alert(err.message);
+        console.error("Error details:", err.message);
+      } else {
+        const errorMessage = typeof err === "string" ? err : "Google login failed. Please check the console for details.";
+        alert(errorMessage);
+        console.error("Unknown error:", err);
+      }
+    }
+  };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      await AuthService.login({
+      const response = await AuthService.login({
         userName: form.email,
         password: form.password,
       });
 
-      router.push("/");
+      console.log("Login response:", response);
+      
+      // Check if response indicates success
+      const isSuccess = response.isSuccess !== false && response.success !== false;
+      
+      if (isSuccess && response.result) {
+        // Extract token and userId from the actual API structure
+        // Structure: { result: { token: "...", user: { id: "..." } } }
+        const token = response.result.token || response.result.accessToken;
+        const userId = response.result.user?.id || response.result.userId || response.result.id;
+        
+        console.log("Extracted token:", token ? "Present" : "Missing");
+        console.log("Extracted userId:", userId || "Missing");
+        
+        if (!token || !userId) {
+          console.error("Response structure:", JSON.stringify(response, null, 2));
+          throw new Error("Token or user ID not received from server. Please check the API response structure.");
+        }
+
+        // Login using UserContext
+        await login(token, userId);
+
+        // Redirect to home
+        router.push("/");
+      } else {
+        console.error("Login failed - response:", JSON.stringify(response, null, 2));
+        throw new Error(response.message || "Login failed");
+      }
     } catch (err: unknown) {
       if (err instanceof Error) {
         alert(err.message);
@@ -132,7 +247,7 @@ export default function LoginPage() {
           <p className="text-[11px] uppercase tracking-widest text-gray-400 mb-[25px]">
             Or continue with
           </p>
-          <div className="flex justify-center gap-4">
+          {/* <div className="flex justify-center gap-4">
             <a
               href="#"
               className="btn-liquid flex items-center justify-center gap-2 px-3 py-2 text-sm w-full max-w-70
@@ -147,8 +262,10 @@ export default function LoginPage() {
               <IconBrandGoogle className="w-5 h-6" />
               Continue with Google
             </a>
-          </div>
+          </div> */}
         </div>
+
+        <GoogleButtonLink onSuccess={handleGoogleLogin} />
 
         <div className="text-center mt-9">
           <span className="text-xs text-gray-400 mr-1">Don’t have an account?</span>
@@ -164,7 +281,6 @@ export default function LoginPage() {
           >
             SignUp
           </Link>
-
         </div>
       </div>
     </div>

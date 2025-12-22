@@ -7,6 +7,8 @@ import { usePathname } from "next/navigation";
 import { ShoppingCartDialog } from "@/components/ShoppingCartDialog";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useCart } from "@/src/contexts/CartContext";
+import { useUser } from "@/src/contexts/UserContext";
+import { UserProfileDialog } from "@/src/components/UserProfileDialog";
 
 const navLinks = [
   { id: "home", label: "Home", href: "/" },
@@ -21,6 +23,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const { getItemCount } = useCart();
+  const { isAuthenticated, isLoading } = useUser();
 
   const itemCount = getItemCount();
 
@@ -73,42 +76,50 @@ export default function Navbar() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <Link
-              href="/login"
-              className={`hidden lg:block auth-btn w-25 text-center items-center btn-liquid px-5 py-2 text-[12px] font-bold uppercase tracking-widest text-gray-300 hover:text-white ${
-                isActive("/login") ? "active" : ""
-              }`}
-                onMouseEnter={
-                  !isActive("/login")
-                    ? (e) => e.currentTarget.classList.add("active")
-                    : undefined
-                }
-                onMouseLeave={
-                  !isActive("/login")
-                    ? (e) => e.currentTarget.classList.remove("active")
-                    : undefined
-                }
-            >
-              Login
-            </Link>
-            <Link
-              href="/signup"
-              className={`hidden lg:block auth-btn btn-liquid w-25 text-center px-5 py-2 text-[12px] font-bold uppercase tracking-widest text-white ${
-                isActive("/signup") ? "active" : ""
-              }`}
-              onMouseEnter={
-                !isActive("/signup")
-                  ? (e) => e.currentTarget.classList.add("active")
-                  : undefined
-              }
-              onMouseLeave={
-                !isActive("/signup")
-                  ? (e) => e.currentTarget.classList.remove("active")
-                  : undefined
-              }
-            >
-              Sign Up
-            </Link>
+            {!isLoading && ( isAuthenticated ? (
+              <div className="hidden lg:block mr-5">
+                <UserProfileDialog />
+              </div>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className={`hidden lg:block auth-btn w-25 text-center items-center btn-liquid px-5 py-2 text-[12px] font-bold uppercase tracking-widest text-gray-300 hover:text-white ${
+                    isActive("/login") ? "active" : ""
+                  }`}
+                  onMouseEnter={
+                    !isActive("/login")
+                      ? (e) => e.currentTarget.classList.add("active")
+                      : undefined
+                  }
+                  onMouseLeave={
+                    !isActive("/login")
+                      ? (e) => e.currentTarget.classList.remove("active")
+                      : undefined
+                  }
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/signup"
+                  className={`hidden lg:block auth-btn btn-liquid w-25 text-center px-5 py-2 text-[12px] font-bold uppercase tracking-widest text-white ${
+                    isActive("/signup") ? "active" : ""
+                  }`}
+                  onMouseEnter={
+                    !isActive("/signup")
+                      ? (e) => e.currentTarget.classList.add("active")
+                      : undefined
+                  }
+                  onMouseLeave={
+                    !isActive("/signup")
+                      ? (e) => e.currentTarget.classList.remove("active")
+                      : undefined
+                  }
+                >
+                  Sign Up
+                </Link>
+              </>
+            ))}
 
             <button
               onClick={() => setCartOpen(true)}
@@ -185,26 +196,35 @@ export default function Navbar() {
           {/* <h3 className="text-xs font-bold uppercase tracking-widest text-blue-400 mt-6 mb-2">
             Account
           </h3> */}
-          <div className="flex gap-4 mt-25">
-            <Link
-              href="/login"
-              onClick={() => setMobileOpen(false)}
-              className={`flex-1 btn-liquid py-4 text-center text-sm font-bold uppercase tracking-widest ${
-                isActive("/login") ? "active" : ""
-              }`}
-            >
-              Login
-            </Link>
-            <Link
-              href="/signup"
-              onClick={() => setMobileOpen(false)}
-              className={`flex-1 btn-liquid btn-primary py-4 text-center text-sm font-bold uppercase tracking-widest ${
-                isActive("/signup") ? "active" : ""
-              }`}
-            >
-              Sign Up
-            </Link>
-          </div>
+          {!isAuthenticated && (
+            <div className="flex gap-4 mt-25">
+              <Link
+                href="/login"
+                onClick={() => setMobileOpen(false)}
+                className={`flex-1 btn-liquid py-4 text-center text-sm font-bold uppercase tracking-widest ${
+                  isActive("/login") ? "active" : ""
+                }`}
+              >
+                Login
+              </Link>
+              <Link
+                href="/signup"
+                onClick={() => setMobileOpen(false)}
+                className={`flex-1 btn-liquid btn-primary py-4 text-center text-sm font-bold uppercase tracking-widest ${
+                  isActive("/signup") ? "active" : ""
+                }`}
+              >
+                Sign Up
+              </Link>
+            </div>
+          )}
+          {isAuthenticated && (
+            <div className="mt-25 flex items-center justify-center">
+              <div className="w-full">
+                <UserProfileDialog />
+              </div>
+            </div>
+          )}
 
           {/* <div className="mt-8 flex justify-center gap-6">
             <a href="#" className="social-btn">

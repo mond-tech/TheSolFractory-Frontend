@@ -1,5 +1,7 @@
 import "./globals.css";
 import { CartProvider } from "@/src/contexts/CartContext";
+import { UserProvider } from "@/src/contexts/UserContext";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Toaster } from "@/components/ui/sonner";
 import { Manrope } from "next/font/google";
 
@@ -23,17 +25,22 @@ export default function RootLayout({
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         />
       </head>
-      <body className={`${manrope.className} antialiased selection:bg-blue-600 selection:text-white`}>
+      <body
+        className={`${manrope.className} antialiased selection:bg-blue-600 selection:text-white`}
+      >
         {/* Global liquid glass background – shared across all pages */}
-        <div className="liquid-canvas">
-          <div className="orb orb-1" />
-          <div className="orb orb-2" />
-        </div>
-
-        <CartProvider>
-          {children}
-          <Toaster />
-        </CartProvider>
+        <GoogleOAuthProvider clientId="167922906734-n8dvtole8nc4m3sqia14qdqvth6oqv2m.apps.googleusercontent.com">
+            <div className="liquid-canvas">
+              <div className="orb orb-1" />
+              <div className="orb orb-2" />
+            </div>        
+          <UserProvider>
+            <CartProvider>
+              {children}
+              <Toaster />
+            </CartProvider>
+          </UserProvider>
+        </GoogleOAuthProvider>
       </body>
     </html>
   );
