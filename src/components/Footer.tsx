@@ -8,7 +8,7 @@ export default function Footer() {
 
   return (
     <footer className="w-full">
-      <div className="w-full bg-[#0D1624] text-white py-7 px-6">
+      <div className="w-full bg-[#001535] text-white py-7 px-6">
         <div
           className={`
             max-w-7xl mx-auto
@@ -64,17 +64,8 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="md:col-span-3 bg-zinc-300 text-center text-[#132135] text-sm py-4">
-        © {new Date().getFullYear()} SolFractory · Powered by{" "}
-        <Link
-          href="https://mondtech.in"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-medium text-blue-800 underline underline-offset-2 hover:opacity-80 transition"
-        >
-          mondtech.in
-        </Link>
-        . All rights reserved.
+      <div className="md:col-span-3 bg-gray-950 text-center text-white/65 text-sm py-4">
+        © {new Date().getFullYear()} SolFractory. {" "}All rights reserved.
       </div>
 
     </footer>

@@ -124,7 +124,7 @@ export default function ContactPage() {
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="block w-full md:w-[260px] mx-auto btn-liquid py-3 text-[11px] font-bold uppercase tracking-[0.2em]"
+                      className="block w-full mt-2.75 mb-1 md:w-[260px] mx-auto btn-liquid py-3 text-[11px] font-bold uppercase tracking-[0.2em]"
                       onMouseEnter={(e) => e.currentTarget.classList.add("active")}
                       onMouseLeave={(e) => e.currentTarget.classList.remove("active")}
                     >

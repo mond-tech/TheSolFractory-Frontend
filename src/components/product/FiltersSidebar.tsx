@@ -50,7 +50,7 @@ export default function FiltersSidebar({
 }: FiltersSidebarProps) {
   return (
     <aside className="w-full lg:w-1/5">
-      <div className="glass-panel p-6 rounded-xl lg:sticky lg:top-24 mb-16 mt-22 max-h-[80vh] overflow-y-auto scrollbar-hide">
+      <div className="glass-panel p-6 rounded-xl lg:sticky lg:top-24 mb-26 mt-22 max-h-[80vh] overflow-y-auto scrollbar-hide">
         <div className="flex justify-between items-center mb-6 pb-4 border-b border-white/10">
           <h2 className="font-serif text-lg" style={{ textShadow: "0 0 1px rgba(255,255,255,0.6)" }}>Filters</h2>
           {/* <button

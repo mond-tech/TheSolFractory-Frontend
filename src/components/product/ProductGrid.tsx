@@ -52,7 +52,7 @@ export default function ProductGrid({
               key={product.id}
               className="glass-panel rounded-xl overflow-hidden group hover:-translate-y-2 transition-all duration-300"
             >
-              <div className="aspect-4/5 not-md:aspect-4/3 bg-white/5 p-6 flex items-center justify-center relative overflow-hidden">
+              <div className="aspect-5/5 not-md:aspect-4/3 bg-white/5 p-6 flex items-center justify-center relative overflow-hidden">
                 <Image
                   src={product.image}
                   alt={product.name}
