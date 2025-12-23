@@ -43,7 +43,7 @@ export default function Carousel() {
   }
 
   return (
-    <section className="w-full flex flex-col items-center py-10">
+    <section className="w-full flex flex-col items-center py-1 mt-7.5">
       <div className="relative mt-5 w-full max-w-5xl h-112.5 flex justify-center items-center overflow-visible">
         {[0, 1, 2, 3, 4].map((pos) => {
           const index = wrap(active + (pos - 2));

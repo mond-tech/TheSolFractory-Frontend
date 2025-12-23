@@ -12,7 +12,7 @@ export default function MergedCards() {
   return (
     <div>
 
-    <h1 className="text-center text-white mt-11 mb-8.5 px-6" style={{ textShadow: "0 0 3px rgba(255,255,255,0.6)" }}>
+    <h1 className="text-center text-white mt-8.5 mb-7 px-6" style={{ textShadow: "0 0 3px rgba(255,255,255,0.6)" }}>
       <span className="block text-3xl md:text-4xl font-serif">
         Create Your Perfect Cone:
       </span>
@@ -29,9 +29,9 @@ export default function MergedCards() {
       <InfoCard
         bgColor=""
         title="Size That Fits Your Product Line:"
-        description="We manufacture cones in all industry-standard sizes — fully custom dimensions for brands that want something unique. Whether you’re creating:"
+        description="We manufacture cones in all industry-standard sizes, with fully custom dimensions for brands that want something unique. Whether you’re creating:"
         bullets={["Minis", "Mid-sizes", "Oversized cones"]}
-        footer="Each one is engineered for filling machine compatibility and consistent performance."
+        footer="Each is engineered for filling machine compatibility and consistent performance."
         image="/homepage/sizechart.png"
         imageOnRight={false}
         imageEffect={{
@@ -76,7 +76,7 @@ export default function MergedCards() {
       {/* 4 — Another paper style section */}
     {isMobile? null : <InfoCard
             bgColor=""
-            title="Packaging That Tells Tour Story"
+            title="Packaging That Tells your Story"
             subtitle="Your product’s presentation matters. Choose from:"
             description=""
             bullets={[

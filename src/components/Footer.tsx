@@ -66,8 +66,18 @@ export default function Footer() {
         </div>
       </div>
       <div className="md:col-span-3 bg-white/80 text-center text-[#132135] text-sm py-4">
-        &copy; {new Date().getFullYear()} SolFractory. All rights reserved.
+        © {new Date().getFullYear()} SolFractory · Powered by{" "}
+        <Link
+          href="https://mondtech.in"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-medium text-blue-800 underline underline-offset-2 hover:opacity-80 transition"
+        >
+          mondtech.in
+        </Link>
+        . All rights reserved.
       </div>
+
     </footer>
   );
 }

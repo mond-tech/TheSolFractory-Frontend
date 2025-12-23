@@ -132,7 +132,7 @@ function TextBlock({
         </p>
       )}
 
-      <ul className="space-y-2 text-gray-200">
+      <ul className="space-y-[6px] text-gray-200">
         {bullets.map((b, idx) => (
           <li key={idx} className="flex items-start gap-3 text-[15px]">
             <Check className="h-5 w-5 mt-0.5 shrink-0" />
@@ -204,7 +204,7 @@ function AnimatedImage({
       );
 
     case "marquee":
-      return <Marquee3D width={width} height={height} />;
+      return <Marquee3D width={width} height={730} />;
 
     case "lens":
       return (

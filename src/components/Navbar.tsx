@@ -77,7 +77,7 @@ export default function Navbar() {
 
           <div className="flex items-center gap-3">
             {!isLoading && ( isAuthenticated ? (
-              <div className="hidden lg:block mr-5">
+              <div className="hidden lg:block ml-21 mr-5">
                 <UserProfileDialog />
               </div>
             ) : (
