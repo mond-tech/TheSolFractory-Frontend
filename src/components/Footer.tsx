@@ -22,7 +22,7 @@ export default function Footer() {
             <Link href="/" className="h-10 md:h-14 block group cursor-pointer ml-1">
               <Image src="/logo.png" alt="" width={80} height={50} />
             </Link>
-
+npm 
             <p className="text-sm text-white/70 mt-3 leading-relaxed max-w-sm">
               Exceptional quality. Endless customization. True scalability.
             </p>

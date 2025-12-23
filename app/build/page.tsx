@@ -6,6 +6,7 @@ import Footer from "@/src/components/Footer";
 import { useCart } from "@/src/contexts/CartContext";
 import { toast } from "sonner";
 import Header from "@/src/components/build/Header";
+import Step0 from "@/src/components/build/Step0";
 import Step1 from "@/src/components/build/Step1";
 import Step2 from "@/src/components/build/Step2";
 import Step3 from "@/src/components/build/Step3";
@@ -24,7 +25,7 @@ import {
 
 export default function BuildPage() {
   const { addItem } = useCart();
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
   const [state, setState] = useState<CustomizationState>({
     paperType: "hemp", // Default to Hemp Paper as shown in image
     filterType: null,
@@ -51,7 +52,7 @@ export default function BuildPage() {
   };
 
   const prevStep = () => {
-    if (step > 1) setStep(step - 1);
+    if (step > 0) setStep(step - 1);
   };
 
   const handleAddToCart = () => {
@@ -104,6 +105,9 @@ export default function BuildPage() {
       <Navbar />
       <main className="pt-16 pb-10 px-6">
         <div className="max-w-6xl mx-auto">
+          {/* Step 0: Intro / Overview */}
+          {step === 0 && <Step0 step={step} nextStep={nextStep} />}
+
           {/* Step 1: Paper Type Selection */}
           {step === 1 && (
             <Step1

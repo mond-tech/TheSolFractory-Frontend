@@ -6,7 +6,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ step }) => {
   return (
-    <div className="flex items-center justify-center mb-12 mt-8">
+    <div className="flex items-center justify-center mb-12 mt-12">
       <div className="flex items-center gap-6 max-w-5xl w-full px-4">
         {/* Step 1 */}
         <div className="flex flex-col items-center flex-1">

@@ -25,20 +25,6 @@ const Step2: React.FC<Step2Props> = ({
 }) => {
   return (
     <div className="space-y-8">
-      {/* Hero */}
-      <div className="text-center mt-14 mb-12">
-        <h1
-          className="text-3xl md:text-4xl font-semibold text-white mb-3"
-          style={{ textShadow: "0 0 1px rgba(255,255,255,0.6)" }}
-        >
-          Create your cone exactly the way you{" "}
-          <span className="text-blue-400">want it.</span>
-        </h1>
-        <p className="text-gray-300 text-center mb-6 md:mb-8 max-w-[620px] mx-auto md:text-base leading-relaxed">
-          Select the perfect paper for your custom cones and begin crafting your
-          unique smoking experience.
-        </p>
-      </div>
 
       {/* Step indicator */}
       <Header step={step} />
