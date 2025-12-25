@@ -8,14 +8,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { AlertCircle, ArrowLeft } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import {
   type CustomizationState,
   getPaperTypeName,
   getFilterTypeName,
   getConeSizeName,
   getLotSizeName,
-  getQuantity,
+  // getQuantity,
   getTotalPrice,
 } from "./types";
 
@@ -32,7 +32,7 @@ const Checkout: React.FC<CheckoutProps> = ({
   prevStep,
   handleAddToCart,
 }) => {
-  const quantity = getQuantity(state);
+  // const quantity = getQuantity(state);
   const totalPrice = getTotalPrice(state);
 
   return (

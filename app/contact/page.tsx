@@ -41,7 +41,7 @@ export default function ContactPage() {
           {/* items-stretch makes children match height when in a row (desktop) */}
           <div className="flex flex-col lg:flex-row justify-center items-stretch gap-8 md:gap-12 w-full">
             {/* Left column wrapper: give a consistent min-height so both sides match */}
-            <div className="w-full max-w-[500px] h-full min-h-[520px]">
+            <div className="w-full max-w-125 h-full min-h-130">
               {/* Contact Form */}
               {/* overflow-hidden contains any button/glow that uses pseudo elements */}
               <section className="glass-panel p-6 md:p-7 rounded-2xl border border-white/10 w-full h-full relative overflow-hidden flex flex-col">
@@ -124,7 +124,7 @@ export default function ContactPage() {
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="block w-full mt-2.75 mb-1 md:w-[260px] mx-auto btn-liquid py-3 text-[11px] font-bold uppercase tracking-[0.2em]"
+                      className="block w-full mt-2.75 mb-1 md:w-65 mx-auto btn-liquid py-3 text-[11px] font-bold uppercase tracking-[0.2em]"
                       onMouseEnter={(e) => e.currentTarget.classList.add("active")}
                       onMouseLeave={(e) => e.currentTarget.classList.remove("active")}
                     >
@@ -136,9 +136,9 @@ export default function ContactPage() {
             </div>
 
             {/* Right column wrapper: same min-height so totals match. */}
-            <div className="w-full lg:max-w-[300px] h-full min-h-[50px]">
+            <div className="w-full lg:max-w-75 h-full min-h-12.5">
               <div className="grid grid-cols-2 grid-rows-2 auto-rows-fr gap-4 lg:flex lg:flex-col lg:justify-between lg:gap-6 h-full">
-                <div className="glass-panel p-5 md:p-6 rounded-2xl border flex justify-center flex-col items-center text-center border-white/10 min-h-[145px]">
+                <div className="glass-panel p-5 md:p-6 rounded-2xl border flex justify-center flex-col items-center text-center border-white/10 min-h-36.25">
                   <h3 className="text-xs font-bold uppercase tracking-[0.22em] text-blue-400 mb-2">
                     Support
                   </h3>
@@ -148,7 +148,7 @@ export default function ContactPage() {
                   </p>
                 </div>
 
-                <div className="glass-panel p-5 md:p-6 rounded-2xl border flex justify-center flex-col items-center text-center border-white/10 min-h-[145px]">
+                <div className="glass-panel p-5 md:p-6 rounded-2xl border flex justify-center flex-col items-center text-center border-white/10 min-h-36.25">
                   <h3 className="text-xs font-bold uppercase tracking-[0.22em] text-blue-400 mb-1">
                     Global Sales
                   </h3>
@@ -159,11 +159,11 @@ export default function ContactPage() {
                 </div>
 
                 {/* Third card spans both columns on small screens */}
-                <div className="glass-panel p-5 md:p-6 rounded-2xl border flex flex-col justify-center items-center text-center border-white/10 col-span-2 lg:col-span-1 min-h-[145px]">
+                <div className="glass-panel p-5 md:p-6 rounded-2xl border flex flex-col justify-center items-center text-center border-white/10 col-span-2 lg:col-span-1 min-h-36.35">
                   <h3 className="text-xs font-bold uppercase tracking-[0.22em] text-blue-400 mb-1">
                     Headquarters
                   </h3>
-                  <p className="text-gray-300 w-[270px] text-sm leading-relaxed">
+                  <p className="text-gray-300 w-67.5 text-sm leading-relaxed">
                     Solitude Flame Pvt Ltd
                     {/* <br /> */}
                     <p className="text-xs text-gray-400 mt-1">

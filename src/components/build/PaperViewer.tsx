@@ -128,6 +128,8 @@ const AnimatedPaper: React.FC<PaperViewerProps> = ({
           roughness={0.85}
           metalness={0.03}
           map={texture ?? null}
+          transparent={true}   // enable transparency
+          opacity={0.5}        // 0 = fully invisible, 1 = fully opaque
           side={THREE.DoubleSide}
         />
       </mesh>

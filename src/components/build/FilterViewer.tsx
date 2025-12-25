@@ -139,7 +139,7 @@ const AnimatedFilterPaper: React.FC<FilterViewerProps> = ({
         roughness={roughness}
         metalness={filterType === "glass" ? 0.6 : 0.18}
         transparent={filterType === "glass"}
-        opacity={filterType === "glass" ? 0.65 : 1}
+        opacity={filterType === "glass" ? 0.70 : 1}
         envMapIntensity={filterType === "glass" ? 1.2 : 0.4}
         map={texture ?? null}
         side={THREE.DoubleSide}
@@ -156,17 +156,12 @@ const AnimatedFilterPaper: React.FC<FilterViewerProps> = ({
           {/* Thick cylindrical roll made from multiple shells */}
           {Array.from({ length: 5 }).map((_, i) => {
             const layerRatio = i / 5;
-            const radius = 0.28 + layerRatio * 0.2 * foldProgress; // grows as it rolls
-            const height = 0.55 + layerRatio * 0.1;
+            const radiusTop = 0.22 + layerRatio * 0.15 * foldProgress; // top smaller
+            const radiusBottom = 0.45 + layerRatio * 0.2 * foldProgress; // bottom bigger
+            const height = 1.80 + layerRatio * 0.12; // extra height
             return (
-              <mesh
-                key={i}
-                position={[0.7, 0.1, 0]}
-                rotation={[-Math.PI / 2.1, 0, 0]}
-              >
-                <cylinderGeometry
-                  args={[radius, radius, height, 72, 1, true]}
-                />
+              <mesh key={i} position={[0.7, 0.1, 0]} rotation={[-Math.PI / 2.1, 0, 0]}>
+                <cylinderGeometry args={[radiusTop, radiusBottom, height, 72, 1, true]} />
                 {commonMaterial}
               </mesh>
             );
@@ -178,24 +173,19 @@ const AnimatedFilterPaper: React.FC<FilterViewerProps> = ({
       {filterType === "spiral" && (
         <group>
           {/* Main spiral-style roll built from multiple cylindrical shells */}
-          {Array.from({ length: 6 }).map((_, i) => {
-            const layerRatio = i / 6;
-            const radius = 0.22 + layerRatio * 0.22 * foldProgress;
-            const height = 0.95 + layerRatio * 0.1;
-            const twist = layerRatio * Math.PI * 0.3 * foldProgress;
-            return (
-              <mesh
-                key={i}
-                position={[0.4, 0.05, 0]}
-                rotation={[-Math.PI / 2.1, twist, 0]}
-              >
-                <cylinderGeometry
-                  args={[radius, radius, height, 100, 1, true]}
-                />
-                {commonMaterial}
-              </mesh>
-            );
-          })}
+        {Array.from({ length: 6 }).map((_, i) => {
+          const layerRatio = i / 6;
+          const radiusTop = 0.18 + layerRatio * 0.18 * foldProgress;
+          const radiusBottom = 0.45 + layerRatio * 0.22 * foldProgress;
+          const height = 1.8 + layerRatio * 0.12; // extra height
+          const twist = layerRatio * Math.PI * 0.3 * foldProgress;
+          return (
+            <mesh key={i} position={[0.4, 0.05, 0]} rotation={[-Math.PI / 2.1, twist, 0]}>
+              <cylinderGeometry args={[radiusTop, radiusBottom, height, 100, 1, true]} />
+              {commonMaterial}
+            </mesh>
+          );
+        })}
 
           {/* Zig-zag strips running across the hollow inner gap of the roll */}
           {Array.from({ length: 6 }).map((_, i) => {
@@ -224,27 +214,52 @@ const AnimatedFilterPaper: React.FC<FilterViewerProps> = ({
       )}
 
       {filterType === "ceramic" && (
-        <group>
-          <mesh rotation={[-Math.PI / 2.2, 0, 0]}>
+        <group rotation={[-Math.PI / 2.2, 0, 0]}>
+          {/* Main ceramic cylinder */}
+          <mesh>
             <cylinderGeometry
-              args={[0.3 * foldProgress, 0.3 * foldProgress, 0.7, 64, 1, true]}
+              args={[
+                0.28 * foldProgress,
+                0.28 * foldProgress,
+                0.9,
+                64,
+                1,
+                false,
+              ]}
             />
-            <meshStandardMaterial
-              color={baseColor}
-              roughness={0.25}
-              metalness={0.65}
-              map={texture ?? null}
+            <meshPhysicalMaterial
+              color="#f7f7f5"
+              roughness={0.55}
+              metalness={0}
+              clearcoat={0.35}
+              clearcoatRoughness={0.25}
             />
           </mesh>
+
+          {/* Holes on FLAT TOP FACE */}
+          {Array.from({ length: 5 }).map((_, i) => {
+            const angle = (i / 5) * Math.PI * 2;
+            const ringRadius = 0.11;
+
+            const x = Math.cos(angle) * ringRadius;
+            const z = Math.sin(angle) * ringRadius;
+
+            return (
+              <mesh key={i} position={[x, 0.45, z]}>
+                {/* vertical hole */}
+                <cylinderGeometry args={[0.025, 0.025, 0.08, 24]} />
+                <meshStandardMaterial color="#020617" />
+              </mesh>
+            );
+          })}
         </group>
       )}
 
       {filterType === "glass" && (
         <group>
+          {/* Glass filter */}
           <mesh rotation={[-Math.PI / 2.2, 0, 0]}>
-            <cylinderGeometry
-              args={[0.28 * foldProgress, 0.28 * foldProgress, 0.7, 64, 1, true]}
-            />
+            <cylinderGeometry args={[0.22 * foldProgress, 0.12 * foldProgress, 0.85, 64, 1, true]} />
             {commonMaterial}
           </mesh>
         </group>

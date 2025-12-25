@@ -132,6 +132,7 @@ const OpenConfigMesh: React.FC<OpenConfigViewerProps> = ({ state }) => {
       <mesh rotation={[-Math.PI / 2.4, 0, 0]} position={[0, 0.05, 0]} ref={paperRef}>
         <planeGeometry args={[3.1, 2.0, 24, 4]} />
         <meshStandardMaterial
+          key={`paper-material-${state.paperTextureUrl || 'default'}-${paperColor}`}
           color={paperColor}
           roughness={paperTexture ? 0.6 : 0.75}
           metalness={0.03}
@@ -146,6 +147,7 @@ const OpenConfigMesh: React.FC<OpenConfigViewerProps> = ({ state }) => {
           args={[0.22, 0.22, 2.6, 64, 1, true]} // open cylinder to look like rolled strip
         />
         <meshStandardMaterial
+          key={`filter-material-${state.filterTextureUrl || 'default'}-${filterColor}`}
           color={filterColor}
           roughness={filterTexture ? 0.45 : 0.55}
           metalness={0.15}

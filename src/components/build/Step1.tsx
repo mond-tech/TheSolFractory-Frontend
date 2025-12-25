@@ -67,9 +67,17 @@ const Step1: React.FC<Step1Props> = ({
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="w-9 h-9 rounded-full bg-black/60 border border-white/20 flex items-center justify-center hover:border-blue-400 hover:bg-blue-500/40 transition"
+                className={`w-9 h-9 rounded-full bg-black/60 border flex items-center justify-center hover:border-blue-400 hover:bg-blue-500/40 transition relative ${
+                  state.paperTextureUrl 
+                    ? "border-green-400 bg-green-500/40" 
+                    : "border-white/20"
+                }`}
+                title={state.paperTextureUrl ? "Image uploaded - Click to change" : "Upload image"}
               >
                 <ImageIcon className="w-4 h-4 text-white" />
+                {state.paperTextureUrl && (
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-black" />
+                )}
               </button>
             </div>
             <input
@@ -85,6 +93,7 @@ const Step1: React.FC<Step1Props> = ({
               accept="image/*"
               className="hidden"
               onChange={handleFileChange}
+              key={state.paperTextureUrl ? "has-texture" : "no-texture"}
             />
           </div>
         </div>

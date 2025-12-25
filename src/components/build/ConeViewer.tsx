@@ -122,6 +122,7 @@ const ConeMesh: React.FC<ConeViewerProps> = ({ state, focusStep }) => {
           args={[0.32 * sizeScale, 0.12 * sizeScale, 1.9 * sizeScale, 80, 1, true]}
         />
         <meshStandardMaterial
+          key={`cone-paper-material-${state.paperTextureUrl || 'default'}-${paperColor}`}
           color={paperColor}
           roughness={paperTexture ? 0.55 : 0.62}
           metalness={0}
@@ -137,6 +138,7 @@ const ConeMesh: React.FC<ConeViewerProps> = ({ state, focusStep }) => {
           args={[0.14 * sizeScale, 0.14 * sizeScale, 0.36 * sizeScale, 48]}
         />
         <meshStandardMaterial
+          key={`cone-filter-material-${state.filterTextureUrl || 'default'}-${filterColor}`}
           color={filterColor}
           roughness={filterTexture ? 0.28 : 0.32}
           metalness={0.12}
