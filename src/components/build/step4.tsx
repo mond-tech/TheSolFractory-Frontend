@@ -1,14 +1,11 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Check, Palette, Download } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Download, Palette } from "lucide-react";
 import ConeViewer from "./ConeViewer";
 import StepIndicator from "./StepIndicator";
-import BottomPreview from "./BottomPreview";
 import {
   LOT_SIZES,
   type CustomizationState,
-  getLotSizeName,
-  getQuantity,
 } from "./types";
 
 interface Step4Props {
@@ -27,123 +24,128 @@ const Step4: React.FC<Step4Props> = ({
   nextStep,
 }) => {
 
+  const handleDownload = async () => {
+    try {
+      const { exportConeToPDF } = await import("@/src/utils/pdfExportClient");
+      const canvas = document.querySelector(".w-full.h-full canvas") as HTMLCanvasElement;
 
-const handleDownload = async () => {
-  try {
-    const { exportConeToPDF } = await import("@/src/utils/pdfExportClient");
-    
-    // Get the canvas from the ConeViewer specifically
-    const coneViewerCanvas = document.querySelector(".w-full.h-full canvas") as HTMLCanvasElement;
-    
-    if (coneViewerCanvas) {
-      await exportConeToPDF(state, coneViewerCanvas);
-    } else {
-      console.error("Canvas not found");
-      alert("Failed to find canvas. Please try again.");
+      if (!canvas) {
+        alert("Canvas not found");
+        return;
+      }
+
+      await exportConeToPDF(state, canvas);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to export PDF");
     }
-  } catch (error) {
-    console.error("Failed to export PDF:", error);
-    alert("Failed to export PDF. Please try again.");
-  }
-};
+  };
+
+  // Ensure exactly 6 cards
+  const lotOptions = [...LOT_SIZES].slice(0, 6);
 
   return (
     <div className="space-y-8">
 
-      {/* Step indicator */}
-      {/* <Header step={step} /> */}
+      {/* Header */}
       <div className="mt-11 mb-10 flex justify-center items-center">
         <div className="flex flex-col items-start bg-blue-900/40 border-2 border-blue-400 rounded-4xl px-6 py-3 max-w-md w-[90%] shadow-2xl">
           <div className="flex items-center space-x-2 mb-1">
-            <Palette className="text-white w-4.5 h-4.5" />
+            <Palette className="text-white w-5 h-5" />
             <h3 className="text-white font-semibold text-lg">
               Select your Lot Size.
             </h3>
           </div>
           <p className="text-gray-300 text-[12px] w-full truncate whitespace-nowrap overflow-hidden">
-            Choose ideal paper option for your perfect cone from the gallery below.
+            Choose the quantity that fits your order.
           </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_1fr] gap-7 items-start">
-        {/* Visual Preview - Full Cone */}
-        <div className="space-y-4">
+      {/* Main layout — SAME AS STEP 1 */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+
+        {/* Left: Preview */}
+        <div className="flex flex-col space-y-4">
           <div className="relative">
             <StepIndicator currentStep={4} />
             <ConeViewer state={state} focusStep="lot" />
+
+            {/* Download button */}
             <button
               onClick={handleDownload}
-              className="absolute bottom-5 right-4 w-12 h-12 rounded-full bg-blue-500/80 hover:bg-blue-500 border-2 border-blue-400 flex items-center justify-center shadow-lg transition-all hover:scale-110 z-10"
-              title="Download Preview as PDF"
+              className="absolute top-0 right-3 w-9 h-9 rounded-full bg-black/60 border border-white/20 flex items-center justify-center hover:border-blue-400 hover:bg-blue-500/40 transition z-10"
+              title="Download PDF"
             >
-              <Download className="w-5 h-5 text-white" />
+              <Download className="w-4 h-4 text-white" />
             </button>
-            {/* Bottom Preview Squares inside canvas */}
-            {/* <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-3 items-center z-10">
-              <BottomPreview state={state} type="paper" />
-              <BottomPreview state={state} type="filter" />
-            </div> */}
           </div>
         </div>
 
-        {/* Lot Size Options & Your Selection */}
-        <div className="grid grid-cols-2 gap-3 mt-2 w-xl lg:ml-auto">
-          <div className="col-span-2  mb-0.5">
-            <h4 className="text-sm text-gray-300 font-medium tracking-wide">
+        {/* Right: Cards */}
+        <div className="grid grid-cols-2 gap-4 min-h-[16vh] content-start">
+
+          <div className="col-span-2 mb-0.5">
+            <h4 className="text-[110%] text-gray-300 font-medium tracking-wide">
               Available Options
             </h4>
             <div className="h-px w-36 bg-gradient-to-r from-gray-400/40 to-transparent" />
           </div>
-          {/* Lot Size Options */}
-          {LOT_SIZES.map((lot) => {
+
+          {lotOptions.map((lot) => {
             const isSelected = state.lotSize === lot.id;
+
             return (
               <button
                 key={lot.id}
                 onClick={() => updateState({ lotSize: lot.id })}
-                className={`relative rounded-lg p-5 pl-10 border transition-all text-left bg-black/40 backdrop-blur-xl glass-panel ${
+                className={`relative h-[115px] rounded-lg p-2.5 border transition-all text-left bg-black/40 backdrop-blur-xl glass-panel ${
                   isSelected
                     ? "active border-blue-400 shadow-[0_0_18px_rgba(59,130,246,0.45)]"
                     : "border-gray-700 hover:border-gray-600"
                 }`}
               >
                 {isSelected && (
-                  <div className="absolute top-2 right-2 w-6 h-6 tick-3d flex items-center justify-center">
-                    <Check className="h-3 w-3 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" />
+                  <div className="absolute top-3 right-3 w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center shadow-lg">
+                    <Check className="h-5 w-5 text-white" strokeWidth={3} />
                   </div>
                 )}
-                <div className="space-y-2">
-                  <h3 className="text-white font-semibold text-sm md:text-base">
+
+                <div className="flex flex-col justify-center h-full text-center space-y-1">
+                  <h3 className="font-semibold text-base text-white">
                     {lot.name}
                   </h3>
-                  <p className="text-gray-400 text-xs">{lot.quantity}</p>
-                  <p className="text-gray-400 text-xs">{lot.leadTime}</p>
-                  <p className="text-gray-300 text-xs font-medium">
-                    {lot.price}
-                  </p>
+                  <p className="text-xs text-gray-400">{lot.quantity}</p>
+                  <p className="text-xs text-gray-400">{lot.leadTime}</p>
+                  <p className="text-xs font-medium text-gray-300">{lot.price}</p>
                 </div>
               </button>
             );
           })}
-          {/* Navigation */}
-          <div className="flex justify-between items-center mt-3">
-            <Button
-              variant="outline"
-              onClick={prevStep}
-              className="btn-glass-panel ml-3 cursor-pointer w-30 text-gray-300 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <ArrowLeft className="mr-1 h-4 w-4" />
-              Previous
-            </Button>
-            <Button
-              onClick={nextStep}
-              disabled={!state.paperType}
-              className="btn-glass-panel ml-75 cursor-pointer w-30 text-gray-300 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              NEXT
-              <ArrowRight className="ml-1 h-4 w-4" />
-            </Button>
+
+          {/* Divider + Buttons */}
+          <div className="col-span-2 mt-1">
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-gray-500/40 to-transparent mb-2" />
+
+            <div className="flex justify-between items-center">
+              <Button
+                variant="outline"
+                onClick={prevStep}
+                className="btn-glass-panel ml-[2%] w-30 text-gray-300 hover:text-white"
+              >
+                <ArrowLeft className="mr-1 h-4 w-4" />
+                Previous
+              </Button>
+
+              <Button
+                onClick={nextStep}
+                disabled={!state.lotSize}
+                className="btn-glass-panel ml-[2%] w-30 text-gray-300 hover:text-white disabled:opacity-50"
+              >
+                NEXT
+                <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>

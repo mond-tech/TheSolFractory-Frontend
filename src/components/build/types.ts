@@ -167,6 +167,20 @@ export const LOT_SIZES = [
     leadTime: "5-7 Business Days",
     price: "$0.40 - $0.75 per cone",
   },
+  {
+    id: "sample7" as LotSize,
+    name: "Sample Batch",
+    quantity: "50-200 cones",
+    leadTime: "5-7 Business Days",
+    price: "$0.40 - $0.75 per cone",
+  },
+  {
+    id: "small1" as LotSize,
+    name: "Small Batch",
+    quantity: "3,000-10,000 cones",
+    leadTime: "5-7 Business Days",
+    price: "$0.40 - $0.75 per cone",
+  },
 ];
 
 export const getPaperTypeName = (paperType: PaperType | null): string => {
