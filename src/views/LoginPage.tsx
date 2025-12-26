@@ -215,7 +215,7 @@ export default function LoginPage() {
               </Label>
             </div>
             <Link
-              href="/forgot-password"
+              href="/"
               className="text-sm text-blue-400 transition mr-0.5"
               onMouseEnter={(e) =>
                 (e.currentTarget.style.textShadow = "0 0 8px rgba(59,130,246,0.6)")

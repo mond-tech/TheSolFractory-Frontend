@@ -28,6 +28,7 @@
     "clsx": "^2.1.1",
     "core-js": "^3.47.0",
     "embla-carousel-react": "^8.6.0",
+    "env": "^0.0.2",
     "framer-motion": "^12.23.26",
     "jspdf": "^2.5.2",
     "jwt-decode": "^4.0.0",
