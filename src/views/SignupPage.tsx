@@ -43,68 +43,43 @@ export default function SignupPage() {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    if (!agreeTerms) {
-      alert("Please accept terms & conditions");
+  if (!agreeTerms) {
+    alert("Please accept terms & conditions");
+    return;
+  }
+
+  if (form.password !== form.confirmPassword) {
+    alert("Passwords do not match");
+    return;
+  }
+
+  try {
+    const response = await AuthService.register({
+      email: form.email,
+      name: `${form.firstName} ${form.lastName}`,
+      phoneNumber: "",
+      password: form.password,
+      role: "User",
+    });
+
+    console.log("Register response:", response);
+
+    if (response.isSuccess) {
+      alert("Registration successful. Please login.");
+      router.push("/login");
       return;
     }
 
-    if (form.password !== form.confirmPassword) {
-      alert("Passwords do not match");
-      return;
-    }
+    throw new Error(response.message || "Registration failed");
+  } catch (err) {
+    alert(err instanceof Error ? err.message : "Something went wrong");
+    console.error(err);
+  }
+};
 
-    try {
-      const response = await AuthService.register({
-        email: form.email,
-        name: `${form.firstName} ${form.lastName}`,
-        phoneNumber: "", // backend requires it → adjust later if needed
-        password: form.password,
-        role: "User",
-      });
-
-      console.log("Register response:", response);
-      
-      // Check if response indicates success
-      const isSuccess = response.isSuccess !== false && response.success !== false;
-      
-      if (isSuccess && response.result) {
-        // Extract token and userId from the actual API structure
-        // Structure: { result: { token: "...", user: { id: "..." } } }
-        const token = response.result.token || response.result.accessToken;
-        const userId = response.result.user?.id || response.result.userId || response.result.id;
-        
-        console.log("Extracted token:", token ? "Present" : "Missing");
-        console.log("Extracted userId:", userId || "Missing");
-        
-        if (!token || !userId) {
-          console.error("Response structure:", JSON.stringify(response, null, 2));
-          throw new Error("Token or user ID not received from server. Please check the API response structure.");
-        }
-
-        // Login using UserContext
-        await login(token, userId);
-
-        // Success UX
-        router.push("/");
-      } else {
-        console.error("Registration failed - response:", JSON.stringify(response, null, 2));
-        throw new Error(response.message || "Registration failed");
-      }
-    } 
-    catch (err: unknown) {
-        if (err instanceof Error) {
-          alert(err.message);
-          console.error(err.message);
-        } 
-        else {
-          alert("Something went wrong");
-          console.error(err);
-       }
-    }
-  };
 
   const handleGoogleSignup = async (credentialResponse: CredentialResponse) => {
     try {
