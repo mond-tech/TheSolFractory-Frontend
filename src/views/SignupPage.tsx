@@ -68,8 +68,8 @@ export default function SignupPage() {
       console.log("Register response:", response);
 
       if (response.isSuccess) {
-        alert("Registration successful. Please login.");
-        router.push("/login");
+        router.push(`/verify-email-pending?email=${encodeURIComponent(form.email)}`);
+
         return;
       }
 

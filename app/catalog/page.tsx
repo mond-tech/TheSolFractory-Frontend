@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import Footer from "@/src/components/Footer";
 import Navbar from "@/src/components/Navbar";
-import { products } from "@/sampledata/products"; // sanple data
 import { useCart } from "@/src/contexts/CartContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import CatalogPageSkeleton from "@/src/components/skeletons/CatalogPageSkeleton";
@@ -14,6 +13,8 @@ import FiltersSidebar from "@/src/components/product/FiltersSidebar";
 import MobileFilterBar from "@/src/components/product/MobileFilterBar";
 import ProductGrid from "@/src/components/product/ProductGrid";
 import PaginationControls from "@/src/components/product/PaginationControls";
+import { ProductService } from "@/services/product.service";
+import type { Product } from "@/src/types/product";
 
 // Mock product data
 
@@ -33,6 +34,11 @@ export default function CatalogPage() {
   const { addItem } = useCart();
   const isMobile = useIsMobile();
 
+  // Products state
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   // Filter states
   const [selectedPaperTypes, setSelectedPaperTypes] = useState<string[]>(["Blunt", "Hemp", "Natural", "Organic", "Rice"]);
   const [selectedPackaging, setSelectedPackaging] = useState<string[]>(["Tube"]);
@@ -47,6 +53,20 @@ export default function CatalogPage() {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12;
+
+  // Fetch products from backend
+  useEffect(() => {
+    ProductService.getAll()
+      .then((data) => {
+        console.log("Products API response:", data);
+        setProducts(data);
+      })
+      .catch((err) => {
+        console.error("Products API error:", err);
+        setError(err.message);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   // Collapsible filter states
   const [paperTypeOpen, setPaperTypeOpen] = useState(false);
@@ -105,36 +125,82 @@ export default function CatalogPage() {
   }, [activeSlide, heroSlides.length, isMobile]);
 
 
-  const handleAddToCart = (product: typeof products[0]) => {
+  const handleAddToCart = (product: Product) => {
     addItem({
-      id: product.id,
+      id: product.productId.toString(),
       name: product.name,
-      paperType: product.paperType,
+      paperType: product.categoryName,
       quantity: 1, // Add 1 item at a time
       price: product.price,
-      image: product.image,
+      image: product.imageUrl,
     });
 
     toast.success("Added to cart", {
-      description: `${product.name} (${product.paperType})`,
+      description: `${product.name}`,
     });
   };
+
+  // Helper function to extract numeric size from string (e.g., "100mm" -> 100)
+  const parseSize = (sizeString: string): number => {
+    if (!sizeString) return 0;
+    // Extract numbers from the string (handles formats like "100mm", "140mm", etc.)
+    const match = sizeString.match(/(\d+)/);
+    return match ? parseInt(match[1], 10) : 0;
+  };
+
+  // Calculate dynamic size range from products
+  const sizeRangeBounds = React.useMemo(() => {
+    if (products.length === 0) return { min: 0, max: 500 };
+    
+    const sizes = products
+      .map((p) => parseSize(p.size))
+      .filter((size) => size > 0);
+    
+    if (sizes.length === 0) return { min: 0, max: 500 };
+    
+    const minSize = Math.min(...sizes);
+    const maxSize = Math.max(...sizes);
+    // Add some padding (10%) for better UX
+    const padding = Math.max(10, (maxSize - minSize) * 0.1);
+    return {
+      min: Math.max(0, Math.floor(minSize - padding)),
+      max: Math.ceil(maxSize + padding),
+    };
+  }, [products]);
+
+  // Initialize size range when products are loaded (only if still at default)
+  useEffect(() => {
+    if (products.length > 0 && sizeRange[0] === 0 && sizeRange[1] === 500 && sizeRangeBounds.min !== 0 && sizeRangeBounds.max !== 500) {
+      setSizeRange([sizeRangeBounds.min, sizeRangeBounds.max]);
+    }
+  }, [products, sizeRangeBounds, sizeRange]);
 
   const clearFilters = () => {
     setSelectedPaperTypes([]);
     setSelectedPackaging([]);
-    setSizeRange([0, 500]);
+    // Reset to dynamic range bounds
+    setSizeRange([sizeRangeBounds.min, sizeRangeBounds.max]);
     setLotSize([1000, 5000]);
   };
 
   // Filter products based on selected filters
   const filteredProducts = products.filter((product) => {
+    // Paper type filter
     if (
       selectedPaperTypes.length > 0 &&
-      !selectedPaperTypes.includes(product.paperType)
+      !selectedPaperTypes.includes(product.categoryName)
     ) {
       return false;
     }
+
+    // Size range filter
+    const productSize = parseSize(product.size);
+    if (productSize > 0) {
+      if (productSize < sizeRange[0] || productSize > sizeRange[1]) {
+        return false;
+      }
+    }
+
     // Add more filter logic as needed
     return true;
   });
@@ -163,7 +229,7 @@ export default function CatalogPage() {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedPaperTypes, selectedPackaging, sortBy]);
+  }, [selectedPaperTypes, selectedPackaging, sortBy, sizeRange]);
 
   // Handle page change
   const handlePageChange = (page: number) => {
@@ -201,6 +267,8 @@ export default function CatalogPage() {
               selectedPaperTypes={selectedPaperTypes}
               selectedPackaging={selectedPackaging}
               sizeRange={sizeRange}
+              sizeRangeMin={sizeRangeBounds.min}
+              sizeRangeMax={sizeRangeBounds.max}
               lotSize={lotSize}
               paperTypeOpen={paperTypeOpen}
               sizeRangeOpen={sizeRangeOpen}
@@ -240,6 +308,8 @@ export default function CatalogPage() {
               sortBy={sortBy}
               onSortChange={setSortBy}
               onAddToCart={handleAddToCart}
+              loading={loading}
+              error={error}
             />
 
             {/* Pagination */}

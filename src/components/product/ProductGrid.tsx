@@ -1,26 +1,18 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import type { Product as Productt } from "@/src/types/product";
-import { ProductService } from "@/services/product.service";
+import type { Product } from "@/src/types/product";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
-interface Product {
-  id: string;
-  name: string;
-  paperType: string;
-  size: string;
-  price: number;
-  image: string;
-}
 
 interface ProductGridProps {
   products: Product[];
   sortBy: string;
   onSortChange: (value: string) => void;
   onAddToCart: (product: Product) => void;
+  loading?: boolean;
+  error?: string | null;
 }
 
 export default function ProductGrid({
@@ -28,25 +20,26 @@ export default function ProductGrid({
   sortBy,
   onSortChange,
   onAddToCart,
+  loading = false,
+  error = null,
 }: ProductGridProps) {
 
-  const [productss, setProducts] = useState<Productt[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-useEffect(() => {
-  ProductService.getAll()
-    .then((data) => {
-      console.log("Products API response:", data);
-      setProducts(data);
-    })
-    .catch((err) => {
-      console.error("Products API error:", err);
-      setError(err.message);
-    })
-    .finally(() => setLoading(false));
-}, []);
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <div className="text-white">Loading products...</div>
+      </div>
+    );
+  }
 
+  if (error) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <div className="text-red-400">Error: {error}</div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -66,8 +59,7 @@ useEffect(() => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {productss.map((product) => {
-          const description = `${product.name} • ${product.name}`;
+        {products.map((product) => {
           return (
             <div
               key={product.productId}
@@ -83,7 +75,7 @@ useEffect(() => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t flex justify-center from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 flex items-end p-6">
                   <Button
-                    // onClick={() => onAddToCart(product)}
+                    onClick={() => onAddToCart(product)}
                     className="w-25 btn-liquid active btn-primary py-3 text-[10px] font-bold uppercase tracking-widest"
                   >
                     Add
@@ -95,7 +87,10 @@ useEffect(() => {
                   {product.name}
                 </h3>
                 <p className="text-[10px] text-gray-400 mt-1 mb-2">
-                  {description}
+                  {product.categoryName}
+                </p>
+                <p className="text-[10px] text-gray-400 mt-1 mb-2">
+                  {product.size}
                 </p>
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-light">

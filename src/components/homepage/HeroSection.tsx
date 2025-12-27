@@ -1,6 +1,5 @@
 'use client'
 import React from 'react';
-import Link from 'next/link';
 import MobileHeroSection from './MobileHeroSection';
 import { useIsMobile } from "@/hooks/use-mobile";
 import FullPageLoader from "@/src/components/FullPageLoader";
@@ -14,7 +13,7 @@ const HeroSection: React.FC = () => {
   if(isMobile) return <MobileHeroSection />
 
   return (
-    <section className="hero-section text-white py-20 px-6 text-center">
+    <section className="hero-section text-white py-23 px-6 text-center">
       <h1 className="text-4xl md:text-5xl font-w-[400px] leading-[1.35] md:leading-[1.4]">
         <span>
           We Don’t Just <span className="text-[#98BFF5]">Make Cones</span>
@@ -25,13 +24,13 @@ const HeroSection: React.FC = () => {
         </span>
       </h1>
       <p
-        className="text-lg md:text-xl text-gray-300 mb-8"
+        className="text-lg md:text-[20px] text-gray-300 mb-8"
         style={{ textShadow: "0 0 1px rgba(255,255,255,0.6)" }}
       >
         Exceptional quality. Endless customization. True scalability.
       </p>
 
-      <div className="flex justify-center gap-4 flex-wrap">
+      {/* <div className="flex justify-center gap-4 flex-wrap">
         <Link
           href="/contact"
           className="btn-liquid w-60 px-6 py-2 font-bold uppercase tracking-widest text-[11px]
@@ -48,7 +47,7 @@ const HeroSection: React.FC = () => {
         >
           Request a Quote
         </Link>
-      </div>
+      </div> */}
     </section>
   );
 };

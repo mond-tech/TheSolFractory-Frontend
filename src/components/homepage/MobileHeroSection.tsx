@@ -4,7 +4,7 @@ import { SparkleText } from "@/src/sharedcomponents/SparkleText";
 
 const MobileHeroSection: React.FC = () => {
   return (
-    <section className="text-white pt-27 pb-16 px-6 text-center">
+    <section className="text-white pt-27 pb-8 px-6 text-center">
 
       {/* Heading */}
 
@@ -68,7 +68,7 @@ const MobileHeroSection: React.FC = () => {
       </p>
 
       {/* Buttons */}
-      <div className="flex flex-col items-center gap-3">
+      {/* <div className="flex flex-col items-center gap-3">
         <Link
           href="/build"
           className="
@@ -104,7 +104,7 @@ const MobileHeroSection: React.FC = () => {
         >
           Get a Quote
         </Link>
-      </div>
+      </div> */}
     </section>
   );
 };

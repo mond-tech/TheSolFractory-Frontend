@@ -11,6 +11,8 @@ interface FiltersSidebarProps {
   selectedPaperTypes: string[];
   selectedPackaging: string[];
   sizeRange: [number, number];
+  sizeRangeMin: number;
+  sizeRangeMax: number;
   lotSize: [number, number];
   paperTypeOpen: boolean;
   sizeRangeOpen: boolean;
@@ -33,6 +35,8 @@ export default function FiltersSidebar({
   selectedPaperTypes,
   selectedPackaging,
   sizeRange,
+  sizeRangeMin,
+  sizeRangeMax,
   lotSize,
   paperTypeOpen,
   sizeRangeOpen,
@@ -125,8 +129,8 @@ export default function FiltersSidebar({
                 onValueChange={(value) =>
                   onSizeRangeChange(value as [number, number])
                 }
-                min={0}
-                max={500}
+                min={sizeRangeMin}
+                max={sizeRangeMax}
                 step={10}
                 className="w-full"
               />
