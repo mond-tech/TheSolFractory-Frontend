@@ -78,7 +78,15 @@ export function PrivacyPolicyPage() {
               <h2 className="text-xl font-medium text-slate-200 mb-2">7. Contact Us</h2>
               <p>
                 If you have any questions about this Privacy Policy, please contact us at
-                <span className="text-blue-400"> support@example.com</span>.
+                <span className="text-blue-400">        
+                <a
+                  href="https://mail.google.com/mail/?view=cm&to=braj@thesolfactory.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-indigo-400 hover:underline"
+                >
+                  braj@thesolfactory.com
+                </a></span>.
               </p>
             </section>
           </div>
@@ -159,7 +167,16 @@ export function TermsOfServicePage() {
               <h2 className="text-xl font-medium text-slate-200 mb-2">8. Contact Information</h2>
               <p>
                 If you have any questions regarding these Terms of Service, please contact us at
-                <span className="text-blue-400"> support@example.com</span>.
+                <span className="text-blue-400">
+                  <a
+                  href="https://mail.google.com/mail/?view=cm&to=braj@thesolfactory.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-indigo-400 hover:underline"
+                >
+                  braj@thesolfactory.com
+                </a>
+                </span>.
               </p>
             </section>
           </div>
