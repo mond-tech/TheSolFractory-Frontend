@@ -18,15 +18,32 @@ export async function http<T>(
   options: RequestInit = {}
 ): Promise<T> {
   const token = getAuthToken();
-  
+  const isFormData = options.body instanceof FormData;
+
   const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-    ...(options.headers as Record<string, string>),
+    ...(options.headers as Record<string, string> || {}),
   };
 
-  // Add authorization header if token exists
+  if (!isFormData && !headers["Content-Type"]) {
+    headers["Content-Type"] = "application/json";
+  }
+
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  console.log("🚀 HTTP REQUEST");
+  console.log("URL:", `${BASE_URL}${url}`);
+  console.log("Method:", options.method || "GET");
+  console.log("Headers:", headers);
+
+  if (options.body instanceof FormData) {
+    console.log("Body: FormData");
+    for (const pair of options.body.entries()) {
+      console.log(`FD → ${pair[0]}:`, pair[1]);
+    }
+  } else {
+    console.log("Body:", options.body);
   }
 
   const res = await fetch(`${BASE_URL}${url}`, {
@@ -34,23 +51,21 @@ export async function http<T>(
     headers,
   });
 
+  const rawText = await res.text();
+
+  console.log("⬅️ HTTP RESPONSE");
+  console.log("Status:", res.status);
+  // console.log("Raw Response:", rawText);
+
   if (!res.ok) {
-    let errorMessage = "Something went wrong";
-    try {
-      const errorText = await res.text();
-      // Try to parse as JSON first
-      try {
-        const errorJson = JSON.parse(errorText);
-        errorMessage = errorJson.message || errorJson.error || errorText;
-      } catch {
-        // If not JSON, use the text as is
-        errorMessage = errorText || `HTTP ${res.status}: ${res.statusText}`;
-      }
-    } catch (e) {
-      errorMessage = `HTTP ${res.status}: ${res.statusText}`;
-    }
-    throw new Error(errorMessage);
+    throw new Error(rawText || `HTTP ${res.status}`);
   }
 
-  return res.json();
+  try {
+    return JSON.parse(rawText);
+  } catch {
+    throw new Error("Response is not JSON: " + rawText);
+  }
 }
+
+

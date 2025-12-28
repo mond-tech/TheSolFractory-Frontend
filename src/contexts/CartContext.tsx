@@ -7,89 +7,160 @@ import { useUser } from "./UserContext";
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+const CART_STORAGE_KEY = "shopping_cart_items";
+const CART_HEADER_ID_KEY = "shopping_cart_header_id";
+
+// Helper functions for localStorage
+const loadCartFromStorage = (): CartItem[] => {
+  if (typeof window === "undefined") return [];
+  try {
+    const stored = localStorage.getItem(CART_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch (error) {
+    console.error("Failed to load cart from localStorage:", error);
+    return [];
+  }
+};
+
+const saveCartToStorage = (items: CartItem[]) => {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+  } catch (error) {
+    console.error("Failed to save cart to localStorage:", error);
+  }
+};
+
+const loadCartHeaderIdFromStorage = (): number => {
+  if (typeof window === "undefined") return 0;
+  try {
+    const stored = localStorage.getItem(CART_HEADER_ID_KEY);
+    return stored ? parseInt(stored, 10) : 0;
+  } catch (error) {
+    console.error("Failed to load cart header ID from localStorage:", error);
+    return 0;
+  }
+};
+
+const saveCartHeaderIdToStorage = (cartHeaderId: number) => {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(CART_HEADER_ID_KEY, cartHeaderId.toString());
+  } catch (error) {
+    console.error("Failed to save cart header ID to localStorage:", error);
+  }
+};
+
+const clearCartStorage = () => {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.removeItem(CART_STORAGE_KEY);
+    localStorage.removeItem(CART_HEADER_ID_KEY);
+  } catch (error) {
+    console.error("Failed to clear cart from localStorage:", error);
+  }
+};
+
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([]);
-  const [cartHeaderId, setCartHeaderId] = useState<number>(0);
+  // Initialize from localStorage first (for immediate display on page refresh)
+  const [items, setItems] = useState<CartItem[]>(() => loadCartFromStorage());
+  const [cartHeaderId, setCartHeaderId] = useState<number>(() => loadCartHeaderIdFromStorage());
   const [isLoading, setIsLoading] = useState(false);
   const { user, isAuthenticated } = useUser();
+
+  // Save to localStorage whenever items change
+  useEffect(() => {
+    saveCartToStorage(items);
+  }, [items]);
+
+  // Save cartHeaderId to localStorage whenever it changes
+  useEffect(() => {
+    saveCartHeaderIdToStorage(cartHeaderId);
+  }, [cartHeaderId]);
 
   // Load cart from API when user is authenticated
   useEffect(() => {
     const loadCart = async () => {
       if (!isAuthenticated || !user?.id) {
-        // Keep local cart items when not authenticated
+        // When not authenticated, keep localStorage items (already loaded on mount)
         return;
       }
 
       setIsLoading(true);
       try {
         const cart = await CartService.getCart(user.id);
+        console.log('CART KA DATA', cart);
         const serverItems = cart ? mapCartToItems(cart) : [];
+        // console.log('mapCartToItems ka DATA', mapCartToItems)
+        // Get current local items from localStorage (most up-to-date)
+        const localItems = loadCartFromStorage();
+        const localCartHeaderId = loadCartHeaderIdFromStorage();
         
-        // Get current local items
-        setItems((localItems) => {
-          let mergedItems: CartItem[];
+        let mergedItems: CartItem[];
+        
+        if (localItems.length === 0 || serverItems.length === 0) {
+          // No local items, use server cart
+          mergedItems = serverItems;
+        } 
+        // else if (serverItems.length === 0) {
+        //   // No server items, keep local items and sync them to server
+        //   mergedItems = localItems;
+        // } 
+        else {
+          // Merge: prefer server cart as source of truth, but merge quantities intelligently
+          mergedItems = [...serverItems];
           
-          if (localItems.length === 0) {
-            // No local items, use server cart
-            mergedItems = serverItems;
-          } else {
-            // Merge: combine quantities for same products, add new items
-            mergedItems = [...localItems];
-            
-            serverItems.forEach((serverItem) => {
-              const localIndex = mergedItems.findIndex(
-                (item) => item.productId === serverItem.productId
-              );
-              
-              if (localIndex >= 0) {
-                // Item exists in both, use the larger quantity (or sum them)
-                mergedItems[localIndex] = {
-                  ...mergedItems[localIndex],
-                  quantity: Math.max(
-                    mergedItems[localIndex].quantity,
-                    serverItem.quantity
-                  ),
-                };
-              } else {
-                // Item only in server cart, add it
-                mergedItems.push(serverItem);
-              }
-            });
-          }
-
-          // Sync merged cart to server if there are items
-          if (mergedItems.length > 0) {
-            const cartRequest = mapItemsToCart(
-              mergedItems,
-              user.id,
-              cart?.cartHeaderId || 0
+          // For items only in local storage, add them (they might be newer)
+          localItems.forEach((localItem) => {
+            const serverIndex = mergedItems.findIndex(
+              (item) => item.productId === localItem.productId
             );
-            CartService.upsertCart(cartRequest)
-              .then((cartResponse) => {
-                if (cartResponse) {
-                  setCartHeaderId(cartResponse.cartHeaderId);
-                }
-              })
-              .catch((error) => {
-                console.error("Failed to sync merged cart:", error);
-              });
-          } else if (cart) {
-            setCartHeaderId(cart.cartHeaderId);
+            
+            if (serverIndex >= 0) {
+              // Item exists in both, use the larger quantity (user might have added more)
+              mergedItems[serverIndex] = {
+                ...mergedItems[serverIndex],
+                quantity: Math.max(
+                  mergedItems[serverIndex].quantity,
+                  localItem.quantity
+                ),
+              };
+            } else {
+              // Item only in local storage, add it
+              mergedItems.push(localItem);
+            }
+          });
+        }
+
+        // Update state with merged items
+        setItems(mergedItems);
+
+        // Sync merged cart to server if there are items
+        if (mergedItems.length > 0) {
+          const cartRequestWrapper = mapItemsToCart(
+            mergedItems,
+            user.id,
+            cart?.cartHeaderId || localCartHeaderId || 0
+          );
+          const cartResponse = await CartService.upsertCart(cartRequestWrapper.cartHeaderDto);
+          if (cartResponse) {
+            setCartHeaderId(cartResponse.cartHeaderId);
           }
-          
-          return mergedItems;
-        });
+        } else if (cart) {
+          setCartHeaderId(cart.cartHeaderId);
+        } else {
+          setCartHeaderId(0);
+        }
       } catch (error) {
         console.error("Failed to load cart:", error);
-        // Keep local items on error
+        // Keep local items on error (already in state from localStorage)
       } finally {
         setIsLoading(false);
       }
     };
 
     loadCart();
-  }, [isAuthenticated, user?.id]);
+  }, [isAuthenticated, user?.id]); // Removed items and cartHeaderId from dependencies to avoid loops
 
   // Sync cart to API
   const syncCart = useCallback(
@@ -99,8 +170,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
 
       try {
-        const cartRequest = mapItemsToCart(newItems, user.id, cartHeaderId);
-        const cartResponse = await CartService.upsertCart(cartRequest);
+        const cartRequestWrapper = mapItemsToCart(newItems, user.id, cartHeaderId);
+        const cartResponse = await CartService.upsertCart(cartRequestWrapper.cartHeaderDto);
         if (cartResponse) {
           setCartHeaderId(cartResponse.cartHeaderId);
         }
@@ -147,12 +218,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
         if (isAuthenticated && user?.id && newItems.length > 0) {
           syncCart(newItems);
         } else if (isAuthenticated && user?.id && newItems.length === 0) {
-          // If cart is empty, remove from API
-          const emptyCart = mapItemsToCart([], user.id, cartHeaderId);
-          CartService.removeCart(emptyCart).catch((error) => {
-            console.error("Failed to remove cart:", error);
-          });
-          setCartHeaderId(0);
+          // If cart is empty, clear from API by sending empty cart
+          const emptyCartWrapper = mapItemsToCart([], user.id, cartHeaderId);
+          CartService.upsertCart(emptyCartWrapper.cartHeaderDto)
+            .then((cartResponse) => {
+              if (cartResponse) {
+                setCartHeaderId(cartResponse.cartHeaderId);
+              } else {
+                setCartHeaderId(0);
+              }
+            })
+            .catch((error) => {
+              console.error("Failed to remove cart:", error);
+            });
         }
         
         return newItems;
@@ -182,11 +260,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const clearCart = useCallback(() => {
     setItems([]);
+    clearCartStorage();
     if (isAuthenticated && user?.id) {
-      const emptyCart = mapItemsToCart([], user.id, cartHeaderId);
-      CartService.removeCart(emptyCart).catch((error) => {
-        console.error("Failed to clear cart:", error);
-      });
+      // Clear cart on backend by sending empty cart
+      const emptyCartWrapper = mapItemsToCart([], user.id, cartHeaderId);
+      CartService.upsertCart(emptyCartWrapper.cartHeaderDto)
+        .then((cartResponse) => {
+          if (cartResponse) {
+            setCartHeaderId(cartResponse.cartHeaderId);
+          } else {
+            setCartHeaderId(0);
+          }
+        })
+        .catch((error) => {
+          console.error("Failed to clear cart:", error);
+        });
+    } else {
       setCartHeaderId(0);
     }
   }, [isAuthenticated, user?.id, cartHeaderId]);
@@ -211,6 +300,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         // Clear cart after successful checkout
         setItems([]);
         setCartHeaderId(0);
+        clearCartStorage();
       }
       return success;
     } catch (error) {

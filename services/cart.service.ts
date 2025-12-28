@@ -10,7 +10,7 @@ interface CartProduct {
   categoryName: string;
   imageUrl: string;
   imageLocalPath: string;
-  image: string;
+  image?: string; // Optional - file upload field, not sent in JSON
   size: string;
 }
 
@@ -33,6 +33,10 @@ export interface CartUpsertRequest {
     product: CartProduct;
     count: number;
   }[];
+}
+
+export interface CartUpsertRequestWrapper {
+  cartHeaderDto: CartUpsertRequest;
 }
 
 export interface CartResponse {
@@ -61,31 +65,40 @@ interface CheckoutResponse {
 }
 
 // Helper function to convert API cart to frontend CartItem[]
-export function mapCartToItems(cart: CartResponse): CartItem[] {
-  return cart.cartDetailsList.map((detail) => ({
-    productId: detail.productId,
-    name: detail.product.name,
-    price: detail.product.price,
-    description: detail.product.description,
-    categoryName: detail.product.categoryName,
-    imageUrl: detail.product.imageUrl,
-    size: detail.product.size,
-    quantity: detail.count,
-  }));
-}
+export const mapCartToItems = (cart: any): CartItem[] => {
+  const details =
+    cart?.CartDetailsList?.$values || // GET cart
+    cart?.cartDetailsList ||          // UPSERT cart
+    [];
+
+  return details.map((cd: any) => {
+    const product = cd.Product || cd.product;
+
+    return {
+      productId: product.ProductId ?? product.productId,
+      name: product.Name ?? product.name,
+      price: product.Price ?? product.price,
+      imageUrl: product.ImageUrl ?? product.imageUrl,
+      quantity: cd.Count ?? cd.count,
+      size: product.Size ?? product.size,
+    };
+  });
+};
+
+
 
 // Helper function to convert frontend CartItem[] to API format
 export function mapItemsToCart(
   items: CartItem[],
   userId: string,
   cartHeaderId: number = 0
-): CartUpsertRequest {
+): CartUpsertRequestWrapper {
   const cartTotal = items.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
 
-  return {
+  const cartHeaderDto: CartUpsertRequest = {
     cartHeaderId,
     userId,
     cartTotal,
@@ -98,14 +111,18 @@ export function mapItemsToCart(
         name: item.name,
         price: item.price,
         description: item.description || "",
-        categoryName: item.categoryName,
+        categoryName: item.categoryName ?? "Hemp",
         imageUrl: item.imageUrl,
         imageLocalPath: "",
-        image: "",
+        // Don't include image field - it's a file upload field, not JSON
         size: item.size,
       },
       count: item.quantity,
     })),
+  };
+
+  return {
+    cartHeaderDto,
   };
 }
 
@@ -113,32 +130,37 @@ export const CartService = {
   // GET /api/cart/GetCart/{userId}
   async getCart(userId: string): Promise<CartResponse | null> {
     try {
-      const res = await http<ApiResponse<CartResponse>>(
+      const res = await http<CartResponse>(
         `/api/cart/GetCart/${userId}`,
         {
           method: "GET",
         }
       );
-      if (res.isSuccess && res.result) {
-        return res.result;
-      }
-      return null;
+      return res ?? null;
     } catch (error) {
       console.error("Failed to get cart:", error);
       return null;
     }
   },
 
-  // POST /api/cart/CartUpset
+  // POST /api/cart/CartUpsert
   async upsertCart(cart: CartUpsertRequest): Promise<CartResponse | null> {
     try {
-      const res = await http<ApiResponse<CartResponse>>("/api/cart/CartUpset", {
-        method: "POST",
-        body: JSON.stringify(cart),
-      });
+      const res = await http<ApiResponse<CartResponse>>(
+        "/api/cart/CartUpsert",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(cart)
+        }
+      );
+
       if (res.isSuccess && res.result) {
         return res.result;
       }
+
       return null;
     } catch (error) {
       console.error("Failed to upsert cart:", error);
@@ -147,11 +169,11 @@ export const CartService = {
   },
 
   // POST /api/cart/removecart
-  async removeCart(cart: CartUpsertRequest): Promise<boolean> {
+  async removeCart(cartDetailsId: number): Promise<boolean> {
     try {
-      const res = await http<RemoveCartResponse>("/api/cart/removecart", {
+      const res = await http<RemoveCartResponse>("/api/cart/RemoveCart", {
         method: "POST",
-        body: JSON.stringify(cart),
+        body: JSON.stringify(cartDetailsId),
       });
       return res.isSuccess;
     } catch (error) {

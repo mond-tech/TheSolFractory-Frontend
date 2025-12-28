@@ -54,6 +54,16 @@ export const AuthService = {
     );
   },
 
+  resendConfirmEmail: async (email: string) => {
+    return http<{ isSuccess: boolean; message: string }>(
+      "/api/auth/resend-email-confirmation",
+      {
+        method: "POST",
+        body: JSON.stringify({ email }),
+      }
+    );
+  },
+
   register: async (payload: RegisterPayload): Promise<AuthResponse> => {
     return http<AuthResponse>("/api/auth/register", {
       method: "POST",

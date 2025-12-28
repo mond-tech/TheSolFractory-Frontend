@@ -47,6 +47,8 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 const TOKEN_KEY = "auth_token";
 const USER_ID_KEY = "user_id";
+const CART_KEY = "shopping_cart_items";
+const CART_HEADER = "shopping_cart_header_id";
 
 // ------------------------
 // Provider
@@ -59,6 +61,8 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_ID_KEY);
+    localStorage.removeItem(CART_KEY);
+    localStorage.removeItem(CART_HEADER);
 
     if (typeof window !== "undefined") {
       (window as any).__authToken = null;

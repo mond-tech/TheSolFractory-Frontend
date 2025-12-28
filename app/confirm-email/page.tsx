@@ -10,6 +10,9 @@ export default function ConfirmEmailPage() {
   const userId = params.get("userId");
   const token = params.get("token");
 
+  const [resendEmailValue, setResendEmailValue] = useState("");
+  const [resendStatus, setResendStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState<string | null>(null);
   const [debug, setDebug] = useState<any>(null);
@@ -46,6 +49,25 @@ export default function ConfirmEmailPage() {
 
       // Optional: show full error for dev
       setDebug(err);
+    }
+  };
+
+  const resendEmail = async () => {
+    if (!resendEmailValue) return;
+
+    setResendStatus("loading");
+    try {
+      const res = await AuthService.resendConfirmEmail(resendEmailValue);
+      if (res.isSuccess) {
+        setResendStatus("success");
+        setMessage("Confirmation email resent successfully.");
+      } else {
+        setResendStatus("error");
+        setMessage(res.message);
+      }
+    } catch (err: any) {
+      setResendStatus("error");
+      setMessage(err.message || "Failed to resend email");
     }
   };
 
@@ -113,9 +135,28 @@ export default function ConfirmEmailPage() {
               )}
             </div>
 
-            <div className="mt-4 text-center text-xs text-gray-400">
-              Didn’t receive an email? <a href="/resend-confirmation" className="text-indigo-600 hover:underline">Resend confirmation</a> or check your spam folder.
+            <div className="mt-4 border-t border-white/10 pt-4">
+              <p className="text-xs text-gray-400 mb-2">Didn’t receive the email?</p>
+
+              <div className="flex gap-2">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={resendEmailValue}
+                  onChange={(e) => setResendEmailValue(e.target.value)}
+                  className="flex-1 px-3 py-2 rounded-md bg-black text-white border border-white/20 text-sm outline-none"
+                />
+
+                <button
+                  onClick={resendEmail}
+                  disabled={resendStatus === "loading"}
+                  className="px-4 py-2 rounded-md bg-indigo-600 text-white text-sm disabled:opacity-60"
+                >
+                  {resendStatus === "loading" ? "Sending..." : "Resend"}
+                </button>
+              </div>
             </div>
+
           </div>
         </div>
 
