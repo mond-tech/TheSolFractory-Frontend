@@ -1,6 +1,7 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
 import Footer from "@/src/components/Footer";
+import Link from "next/link";
 
 export default function VerifyEmailPendingPage() {
   const params = useSearchParams();
@@ -19,17 +20,15 @@ export default function VerifyEmailPendingPage() {
 
           <div className="flex-1">
             <h1 className="text-2xl font-semibold text-white">Verify your email</h1>
-<p className="mt-1 text-sm text-gray-300">
-  We sent a verification link to
-</p>
+            <p className="mt-1 text-sm text-gray-300">
+              We sent a verification link to
+            </p>
 
-{email && (
-  <p className="mt-1 text-sm font-medium text-white break-all">
-    {email}
-  </p>
-)}
-
-
+            {email && (
+              <p className="mt-1 text-sm font-medium text-white break-all">
+                {email}
+              </p>
+            )}
 
             {/* messages */}
             <div className="mt-4">
@@ -40,7 +39,7 @@ export default function VerifyEmailPendingPage() {
             </div>
 
             <div className="mt-4 text-sm text-gray-400">
-              Need help? <a href="/support" className="text-indigo-400 hover:underline">Contact support</a>
+              Need help? <Link href="mailto:braj@thesolfactory.com" className="text-indigo-400 hover:underline">Contact support</Link>
             </div>
           </div>
         </div>
