@@ -64,7 +64,16 @@ export default function BuildPage() {
     const totalPrice = getTotalPriceNumber(state); // Total price for the lot
 
     // Generate unique ID based on customization
-    const itemId = `custom-${state.paperType}-${state.filterType}-${state.coneSize}-${state.lotSize}-${crypto.randomUUID()}`;
+    const itemIdString = `custom-${state.paperType}-${state.filterType}-${state.coneSize}-${state.lotSize}-${crypto.randomUUID()}`;
+    
+    // Convert string ID to numeric ID (using hash for custom items)
+    // Use negative number to indicate custom items
+    const itemId = -Math.abs(
+      itemIdString.split('').reduce((acc, char) => {
+        const hash = ((acc << 5) - acc) + char.charCodeAt(0);
+        return hash & hash;
+      }, 0)
+    );
 
     // Create descriptive name with all customization details
     const itemName = `Custom Cone - ${getPaperTypeName(state.paperType)}, ${getFilterTypeName(
@@ -76,12 +85,13 @@ export default function BuildPage() {
 
     // Create cart item
     const cartItem = {
-      id: itemId,
+      productId: itemId,
       name: itemName,
-      paperType: getPaperTypeName(state.paperType),
+      categoryName: getPaperTypeName(state.paperType),
       quantity: 1, // This represents 1 "lot" in the cart
       price: totalPrice, // Total price for this lot
-      image: "/homepage/conestack.png", // Default image
+      imageUrl: "/homepage/conestack.png", // Default image
+      size: state.coneSize || "", // Add required size property
     };
 
     addItem(cartItem);
@@ -98,7 +108,7 @@ export default function BuildPage() {
   };
 
   // Show bottom preview for steps 1-4
-  const showBottomPreview = step >= 1 && step <= 4;
+  // const showBottomPreview = step >= 1 && step <= 4;
 
   return (
     <div className="min-h-screen font-[Manrope]">

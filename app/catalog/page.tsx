@@ -127,12 +127,13 @@ export default function CatalogPage() {
 
   const handleAddToCart = (product: Product) => {
     addItem({
-      id: product.productId.toString(),
+      productId: product.productId,
       name: product.name,
-      paperType: product.categoryName,
+      categoryName: product.categoryName,
       quantity: 1, // Add 1 item at a time
       price: product.price,
-      image: product.imageUrl,
+      imageUrl: product.imageUrl.toString(),
+      size: product.size
     });
 
     toast.success("Added to cart", {

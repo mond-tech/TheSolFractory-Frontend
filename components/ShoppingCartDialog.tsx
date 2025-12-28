@@ -22,7 +22,7 @@ export function ShoppingCartDialog({
   open,
   onOpenChange,
 }: ShoppingCartDialogProps) {
-  const { items, removeItem, getTotal } = useCart();
+  const { items, updateQuantity, removeItem, getTotal } = useCart();
   const total = getTotal();
 
   // Prevent body scroll when cart is open
@@ -38,6 +38,24 @@ export function ShoppingCartDialog({
   }, [open]);
 
   const router = useRouter();
+
+  const increaseQty = (productId: number) => {
+    const item = items.find((i) => i.productId === productId);
+    if (item) {
+      updateQuantity(productId.toString(), item.quantity + 1);
+    }
+  };
+
+  const decreaseQty = (productId: number) => {
+    const item = items.find((i) => i.productId === productId);
+    if (item && item.quantity > 1) {
+      updateQuantity(productId.toString(), item.quantity - 1);
+    } else if (item && item.quantity === 1) {
+      // Remove item if quantity would be 0
+      removeItem(productId.toString());
+    }
+  };
+
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -69,14 +87,14 @@ export function ShoppingCartDialog({
             <div className="space-y-4">
               {items.map((item) => (
                 <div
-                  key={item.id}
+                  key={item.productId}
                   className="bg-gray-800/50 rounded-lg p-4 flex items-start gap-4 border border-gray-700"
                 >
                   {/* Product Image Placeholder */}
                   <div className="w-16 h-16 bg-gray-600 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden">
-                    {item.image ? (
+                    {item.imageUrl ? (
                       <Image
-                        src={item.image}
+                        src={item.imageUrl}
                         alt={item.name}
                         className="w-full h-full object-cover rounded-lg"
                         width={64}
@@ -97,15 +115,35 @@ export function ShoppingCartDialog({
                     <p className="text-sm text-gray-400 mb-1">
                       Paper Type
                     </p>
-                    <p className="text-sm text-gray-400">
-                      Qty: {item.quantity.toLocaleString()}
-                    </p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <button
+                        onClick={() => decreaseQty(item.productId)}
+                        className="w-8 h-8 flex items-center justify-center rounded-md
+                                  bg-gray-700 hover:bg-gray-600 text-white"
+                        aria-label="Decrease quantity"
+                      >
+                        −
+                      </button>
+
+                      <span className="min-w-[32px] text-center text-white font-medium">
+                        {item.quantity}
+                      </span>
+
+                      <button
+                        onClick={() => increaseQty(item.productId)}
+                        className="w-8 h-8 flex items-center justify-center rounded-md
+                                  bg-gray-700 hover:bg-gray-600 text-white"
+                        aria-label="Increase quantity"
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
 
                   {/* Price and Delete */}
                   <div className="flex flex-col items-end gap-2">
                     <button
-                      onClick={() => removeItem(item.id)}
+                      onClick={() => removeItem(item.productId.toString())}
                       className="text-red-500 hover:text-red-400 transition-colors p-1"
                       aria-label="Remove item"
                     >
