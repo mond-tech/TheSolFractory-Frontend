@@ -39,7 +39,16 @@ export default function VerifyEmailPendingPage() {
               </div>
 
               <div className="mt-4 text-sm text-gray-400">
-                Need help? <Link href="mailto:braj@thesolfactory.com" className="text-indigo-400 hover:underline">Contact support</Link>
+                Need help? 
+                <a
+                  href="https://mail.google.com/mail/?view=cm&to=braj@thesolfactory.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-indigo-400 hover:underline"
+                >
+                  Contact support
+                </a>
+
               </div>
             </div>
           </div>
