@@ -1,6 +1,6 @@
 "use client";
 
-import { IconBrandWhatsapp, IconBrandInstagram, IconBrandLinkedin } from '@tabler/icons-react';
+import { IconBrandWhatsapp, IconBrandInstagram, IconBrandLinkedin, IconBrandTwitter } from '@tabler/icons-react';
 import Image from "next/image";
 import Link from "next/link";
 
@@ -28,16 +28,16 @@ export default function Footer() {
 
             {/* Social Icons */}
             <div className="flex gap-5 mt-8">
-              <Link href="/" className="h-12 w-12 flex items-center justify-center rounded-full border border-white/20 hover:bg-white/10 transition">
-                <IconBrandInstagram size={26} stroke={1.5} />
+              <Link href="https://www.instagram.com/thesolfactory?igshid=MzRlODBiNWFlZA%3D%3D" className="h-12 w-12 flex items-center justify-center rounded-full border border-white/20 hover:bg-white/10 transition">
+                <IconBrandInstagram size={26} stroke={1.5} target='_blank' />
               </Link>
 
-              <Link href="/" className="h-12 w-12 flex items-center justify-center rounded-full border border-white/20 hover:bg-white/10 transition">
+              <Link href="https://www.linkedin.com/in/prerolledcones" className="h-12 w-12 flex items-center justify-center rounded-full border border-white/20 hover:bg-white/10 transition">
                 <IconBrandLinkedin size={26} stroke={1.5} />
               </Link>
 
-              <Link href="/" className="h-12 w-12 flex items-center justify-center rounded-full border border-white/20 hover:bg-white/10 transition">
-                <IconBrandWhatsapp size={26} stroke={1.5} /> {/* WhatsApp */}
+              <Link href="https://x.com/Thesolfrance" className="h-12 w-12 flex items-center justify-center rounded-full border border-white/20 hover:bg-white/10 transition">
+                <IconBrandTwitter size={26} stroke={1.5} /> {/* WhatsApp */}
               </Link>
             </div>
           </div>
