@@ -25,9 +25,9 @@ const loadCartFromStorage = (): CartItem[] => {
 const saveCartToStorage = (items: CartItem[]) => {
   if (typeof window === "undefined") return;
   try {
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+    //localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
   } catch (error) {
-    console.error("Failed to save cart to localStorage:", error);
+    //console.error("Failed to save cart to localStorage:", error);
   }
 };
 
@@ -165,83 +165,125 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // Sync cart to API
   const syncCart = useCallback(
     async (newItems: CartItem[]) => {
-      if (!isAuthenticated || !user?.id) {
-        return;
-      }
+      if (!isAuthenticated || !user?.id) return;
 
       try {
-        const cartRequestWrapper = mapItemsToCart(newItems, user.id, cartHeaderId);
-        const cartResponse = await CartService.upsertCart(cartRequestWrapper.cartHeaderDto);
-        if (cartResponse) {
-          setCartHeaderId(cartResponse.cartHeaderId);
+        const wrapper = mapItemsToCart(newItems, user.id, cartHeaderId);
+        const response = await CartService.upsertCart(wrapper.cartHeaderDto);
+
+        if (response) {
+          setCartHeaderId(response.cartHeaderId);
+
+          // 🚑 this line saves your cart from corruption
+          setItems(mapCartToItems(response));
         }
       } catch (error) {
         console.error("Failed to sync cart:", error);
-        // Don't throw - allow local state to update even if sync fails
       }
     },
     [isAuthenticated, user?.id, cartHeaderId]
   );
 
+
   const addItem = useCallback(
-    (item: CartItem) => {
-      setItems((prev) => {
-        const existing = prev.find((i) => i.productId === item.productId);
-        let newItems: CartItem[];
-        
+    async (item: CartItem) => {
+      const newItems = (() => {
+        const existing = items.find(i => i.productId === item.productId);
         if (existing) {
-          // If item exists, increment by the quantity being added (usually 1)
-          newItems = prev.map((i) =>
+          return items.map(i =>
             i.productId === item.productId
               ? { ...i, quantity: i.quantity + item.quantity }
               : i
           );
-        } else {
-          // If item doesn't exist, add it with the specified quantity
-          newItems = [...prev, item];
         }
+        return [...items, item];
+      })();
 
-        // Sync to API
-        syncCart(newItems);
-        return newItems;
-      });
+      setItems(newItems);
+      await syncCart(newItems);
     },
-    [syncCart]
+    [items, syncCart]
   );
 
+
+  // add `items` to dependency list of useCallback below
   const removeItem = useCallback(
-    (id: string) => {
-      setItems((prev) => {
-        const newItems = prev.filter((item) => String(item.productId) !== id);
-        
-        // If user is authenticated, sync to API
-        if (isAuthenticated && user?.id && newItems.length > 0) {
-          syncCart(newItems);
-        } else if (isAuthenticated && user?.id && newItems.length === 0) {
-          // If cart is empty, clear from API by sending empty cart
-          const emptyCartWrapper = mapItemsToCart([], user.id, cartHeaderId);
-          CartService.upsertCart(emptyCartWrapper.cartHeaderDto)
-            .then((cartResponse) => {
-              if (cartResponse) {
-                setCartHeaderId(cartResponse.cartHeaderId);
+    async (id: string) => {
+      // id is productId stringified in your call sites
+      const prodId = Number(id);
+
+      // find the item being removed from current state
+      const removedItem = items.find((item) => item.productId === prodId);
+
+      // compute new items array
+      const newItems = items.filter((item) => item.productId !== prodId);
+
+      // update local state immediately for snappy UI
+      setItems(newItems);
+
+      // If user is authenticated, prefer removing the specific cart detail on backend.
+      try {
+        if (isAuthenticated && user?.id) {
+          // if the removedItem has a cartDetailsId, call RemoveCart endpoint
+          if (removedItem?.cartDetailsId && removedItem.cartDetailsId > 0) {
+            try {
+              const success = await CartService.removeCart(
+                removedItem.cartDetailsId
+              );
+              if (!success) {
+                console.warn(
+                  "RemoveCart endpoint responded with failure. Falling back to upsert sync."
+                );
+                // fallback: sync the new items (server may require full upsert)
+                await syncCart(newItems);
               } else {
-                setCartHeaderId(0);
+                // optionally: if newItems is empty, reset cartHeaderId
+                if (newItems.length === 0) {
+                  setCartHeaderId(0);
+                } else {
+                  // After deletion, optionally refresh cart header from server by upserting or fetching
+                  // We'll upsert to make sure server cart totals and header are consistent
+                  await syncCart(newItems);
+                }
               }
-            })
-            .catch((error) => {
-              console.error("Failed to remove cart:", error);
-            });
+            } catch (err) {
+              console.error("Failed to call RemoveCart:", err);
+              // fallback to upsert
+              await syncCart(newItems);
+            }
+          } else {
+            // No cartDetailsId available (maybe local-only item). Just sync full cart to API
+            if (newItems.length > 0) {
+              await syncCart(newItems);
+            } else {
+              // cart empty => clear backend by upserting empty cart (backend sets header to 0)
+              const emptyCartWrapper = mapItemsToCart([], user.id, cartHeaderId);
+              try {
+                const cartResponse = await CartService.upsertCart(
+                  emptyCartWrapper.cartHeaderDto
+                );
+                if (cartResponse) setCartHeaderId(cartResponse.cartHeaderId);
+                else setCartHeaderId(0);
+              } catch (err) {
+                console.error("Failed to clear cart on backend:", err);
+              }
+            }
+          }
+        } else {
+          // not authenticated => local-only, nothing to call
         }
-        
-        return newItems;
-      });
+      } catch (error) {
+        console.error("removeItem error:", error);
+      }
     },
-    [syncCart, isAuthenticated, user?.id, cartHeaderId]
+    [items, isAuthenticated, user?.id, cartHeaderId, syncCart]
   );
+
 
   const updateQuantity = useCallback(
     (id: string, quantity: number) => {
       if (quantity <= 0) {
+        // call removeItem (non-blocking)
         removeItem(id);
         return;
       }
@@ -249,7 +291,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         const newItems = prev.map((item) =>
           String(item.productId) === id ? { ...item, quantity } : item
         );
-        
+
         // Sync to API
         syncCart(newItems);
         return newItems;
@@ -257,6 +299,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     },
     [syncCart, removeItem]
   );
+
 
   const clearCart = useCallback(() => {
     setItems([]);
@@ -268,6 +311,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
         .then((cartResponse) => {
           if (cartResponse) {
             setCartHeaderId(cartResponse.cartHeaderId);
+            // IMPORTANT: re-sync items WITH cartDetailsId from backend
+            const syncedItems = mapCartToItems(cartResponse);
+            setItems(syncedItems);
           } else {
             setCartHeaderId(0);
           }
@@ -334,4 +380,3 @@ export function useCart() {
   }
   return context;
 }
-

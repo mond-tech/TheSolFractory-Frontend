@@ -64,29 +64,33 @@ interface CheckoutResponse {
   message: string;
 }
 
+// map API cart -> frontend CartItem[] (preserve cartDetailsId)
 // Helper function to convert API cart to frontend CartItem[]
 export const mapCartToItems = (cart: any): CartItem[] => {
   const details =
-    cart?.CartDetailsList?.$values || // GET cart
-    cart?.cartDetailsList ||          // UPSERT cart
+    cart?.CartDetailsList?.$values || // GET cart style
+    cart?.cartDetailsList ||          // UPSERT cart style
     [];
 
   return details.map((cd: any) => {
     const product = cd.Product || cd.product;
 
     return {
+      // keep the cartDetailsId so we can delete specific detail on backend
+      cartDetailsId: cd.CartDetailsId ?? cd.cartDetailsId ?? 0,
       productId: product.ProductId ?? product.productId,
       name: product.Name ?? product.name,
       price: product.Price ?? product.price,
       imageUrl: product.ImageUrl ?? product.imageUrl,
       quantity: cd.Count ?? cd.count,
       size: product.Size ?? product.size,
-    };
+      description: product.Description ?? product.description,
+      categoryName: product.CategoryName ?? product.categoryName,
+    } as CartItem;
   });
 };
 
-
-
+// map frontend CartItem[] -> API request (preserve cartDetailsId if present)
 // Helper function to convert frontend CartItem[] to API format
 export function mapItemsToCart(
   items: CartItem[],
@@ -103,8 +107,9 @@ export function mapItemsToCart(
     userId,
     cartTotal,
     cartDetailsList: items.map((item) => ({
-      cartDetailsId: 0, // Will be set by backend if updating existing
-      cartHeaderId: 0, // Will be set by backend
+      // if the item already had a cartDetailsId, include it so backend can update
+      cartDetailsId: item.cartDetailsId ?? 0,
+      cartHeaderId: cartHeaderId,
       productId: item.productId,
       product: {
         productId: item.productId,
@@ -114,7 +119,6 @@ export function mapItemsToCart(
         categoryName: item.categoryName ?? "Hemp",
         imageUrl: item.imageUrl,
         imageLocalPath: "",
-        // Don't include image field - it's a file upload field, not JSON
         size: item.size,
       },
       count: item.quantity,
@@ -173,11 +177,12 @@ export const CartService = {
     try {
       const res = await http<RemoveCartResponse>("/api/cart/RemoveCart", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(cartDetailsId),
       });
       return res.isSuccess;
     } catch (error) {
-      console.error("Failed to remove cart:", error);
+      console.error("Failed to remove cart item:", error);
       throw error;
     }
   },

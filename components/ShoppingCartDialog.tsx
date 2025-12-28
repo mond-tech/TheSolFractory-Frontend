@@ -192,7 +192,7 @@ export function ShoppingCartDialog({
                     text-gray-300 hover:text-white border-gray-500 rounded-3xl hover:bg-gray-800 transition border-2 mr-1.5"
               onClick={() => {
                 // Handle request quote
-                console.log("Request quote");
+                router.push('/request-quote')
               }}
             >
               REQUEST QUOTE
