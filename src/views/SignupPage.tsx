@@ -166,7 +166,7 @@ export default function SignupPage() {
       <div className="glass-panel w-full max-w-lg p-6 sm:p-8 md:p-10 relative z-10 mb-13">
         {/* Heading */}
         <h2
-          className="text-3xl font-serif text-center mb-8 mt-8 w-full max-w-112.5 mx-auto"
+          className="text-3xl font-serif text-center mb-9 mt-2 w-full max-w-112.5 mx-auto"
           style={{ textShadow: "0 0 2px rgba(255,255,255,0.6)" }}
         >
           Sign Up to <span className="text-blue-400">SOL Factory</span>
