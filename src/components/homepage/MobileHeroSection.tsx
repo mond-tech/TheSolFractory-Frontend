@@ -4,7 +4,7 @@ import { SparkleText } from "@/src/sharedcomponents/SparkleText";
 
 const MobileHeroSection: React.FC = () => {
   return (
-    <section className="text-white pt-27 pb-8 px-6 text-center">
+    <section className="text-white pt-[2%] pb-8 px-6 text-center">
 
       {/* Heading */}
 

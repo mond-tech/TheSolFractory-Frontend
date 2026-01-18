@@ -105,14 +105,14 @@ export default function FaqComponent() {
   return (
 <>
 <Navbar />
-    <section className="min-h-screen text-slate-100 pt-34 pb-4">
+    <section className="min-h-screen text-slate-100 pt-10 pb-4">
 
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           {/* Left header + search */}
           <div className="lg:col-span-2">
             <nav className="text-sm text-slate-400 mb-3">Home / Support / FAQ</nav>
-            <h1 className="text-3xl md:text-4xl font-semibold leading-tight">Frequently Asked Questions</h1>
+            <h1 className="text-3xl md:text-4xl font-semibold leading-tight mb-10 mt-10">Frequently Asked Questions</h1>
             <p className="mt-3 text-slate-400 max-w-2xl">Find answers to common inquiries about Cone products and services, from ordering to sustainability practices.</p>
 
             <div className="mt-6">

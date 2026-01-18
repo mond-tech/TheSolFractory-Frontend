@@ -244,7 +244,7 @@ export default function CatalogPage() {
   return (
     <div className="min-h-screen h-screen overflow-y-scroll scrollbar-hide">
       <Navbar />
-      <main className="pt-24 md:pt-32 pb-20">
+      <main className="pt-3 pb-20">
         {/* Header Section */}
         <div className="max-w-400 mx-auto px-0 md:px-6 mb-12">
           <CatalogHeader />

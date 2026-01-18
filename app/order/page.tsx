@@ -27,9 +27,9 @@ export default function OrderPage() {
   return (
     <div className="min-h-screen bg-[#0c1727] text-white">
       <Navbar />
-      <main className="pt-28 pb-16 px-4 md:px-8">
+      <main className="pt-8 pb-16 px-4 md:px-8">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-center text-2xl md:text-3xl font-serif mb-8">
+          <h1 className="text-center text-2xl md:text-3xl font-serif mb-12 mt-1">
             Place Wholesale <span className="text-blue-300">Order</span>
           </h1>
 

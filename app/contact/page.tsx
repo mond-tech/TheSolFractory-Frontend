@@ -26,10 +26,10 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen text-white relative">
       <Navbar />
-      <main className="min-h-screen pt-24 md:pt-28 pb-16 relative z-10">
-      <div className="text-center mt-1">
+      <main className="min-h-screen pt-4 md:pt-12 pb-17 relative z-10">
+      <div className="text-center">
         <h1
-          className="text-3xl md:text-4xl font-semibold text-white mb-10 md:mb-14"
+          className="text-3xl md:text-4xl font-semibold text-white mb-10 md:mb-14 mt-10 md:mt-1"
           style={{ textShadow: "0 0 2px rgba(255,255,255,0.6)" }}
         >
           Contact{" "}

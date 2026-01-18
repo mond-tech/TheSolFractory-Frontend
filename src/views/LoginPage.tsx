@@ -157,14 +157,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 pt-28 md:pt-32 relative">
+    <div className="min-h-screen flex items-center justify-center p-4 pt-10 md:pt-10 relative">
       <div className="liquid-canvas">
         <div className="orb orb-1" />
         <div className="orb orb-2" />
       </div>
 
-      <div className="glass-panel p-8 md:p-10 w-full max-w-md relative z-10 mb-7 mt-1">
-        <h2 className="text-3xl font-serif text-center mb-10" style={{ textShadow: "0 0 4px rgba(255,255,255,0.6)" }}>Login</h2>
+      <div className="glass-panel p-8 md:p-10 w-full max-w-md relative z-10 mb-7">
+        <h2 className="text-3xl font-serif text-center mb-10 mt-10" style={{ textShadow: "0 0 4px rgba(255,255,255,0.6)" }}>Login</h2>
 
         <form className="space-y-5 mt-6" onSubmit={handleSubmit}>
           <input

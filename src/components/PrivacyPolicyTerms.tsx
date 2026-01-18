@@ -15,9 +15,9 @@ export function PrivacyPolicyPage() {
   return (
     <>
       <Navbar />
-      <section className="min-h-screen text-slate-100 pt-24 pb-16">
+      <section className="min-h-screen text-slate-100 pt-10 pb-16">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
-          <h1 className="text-3xl md:text-4xl font-semibold">Privacy Policy</h1>
+          <h1 className="text-3xl md:text-4xl font-semibold mb-10 mt-10">Privacy Policy</h1>
           <p className="mt-2 text-slate-400 text-sm">Last updated: {new Date().toLocaleDateString()}</p>
 
           <div className="mt-10 space-y-8 text-slate-300 leading-relaxed">
@@ -101,9 +101,9 @@ export function TermsOfServicePage() {
   return (
     <>
       <Navbar />
-      <section className="min-h-screen text-slate-100 pt-24 pb-16">
+      <section className="min-h-screen text-slate-100 pt-10 pb-16">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
-          <h1 className="text-3xl md:text-4xl font-semibold">Terms of Service</h1>
+          <h1 className="text-3xl md:text-4xl font-semibold mb-10 mt-10">Terms of Service</h1>
           <p className="mt-2 text-slate-400 text-sm">Last updated: {new Date().toLocaleDateString()}</p>
 
           <div className="mt-10 space-y-8 text-slate-300 leading-relaxed">

@@ -12,10 +12,10 @@ interface Step0Props {
 const Step0: React.FC<Step0Props> = ({ step, nextStep }) => {
   return (
     <section className="w-full flex justify-center">
-      <div className="w-[90%] max-w-[1200px] mt-[5%] mb-[1%]">
+      <div className="w-[90%] max-w-[1200px] mt-[1%] mb-[1%]">
         {/* Hero */}
         <div className="text-center space-y-4 mb-[8%]">
-          <h1 className="text-2xl sm:text-3xl font-semibold text-white">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-white mt-[3%]">
             Create your cone exactly the way you{" "}
             <span className="text-blue-400">want it.</span>
           </h1>

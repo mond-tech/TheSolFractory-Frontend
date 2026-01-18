@@ -11,7 +11,6 @@ import { MergeAnimationViewer } from '../components/build/ConeMergeAnimtaion'
 import FullScreenSmoke from '../FullScreenSmoke'
 import SmokeOverlayText from '../SmokeOverlayText'
 import { Mac3D } from '../Mac3D'
-import Scene from '../Spline'
 
 export default function HomePage() {
   return (
@@ -19,7 +18,6 @@ export default function HomePage() {
         {/* Hero Section */}
         <HeroSection />
         <Carousel />
-        <Scene />
         {/* <BlenderAnimation /> */}
         <SolFactoryAdvantage />
         <Mac3D />
@@ -29,11 +27,11 @@ export default function HomePage() {
           heading="Enter the Unknown"
           paragraph="A cinematic, immersive experience powered by Three.js smoke particles."
         /> */}
-        <SmokeSection />
-        <FullScreenSmoke
+        {/* <SmokeSection /> */}
+        {/* <FullScreenSmoke
         heading="Enter the Unknown"
         paragraph="A cinematic, immersive experience powered by Three.js smoke particles."
-      />
+      /> */}
     </div>
   )
 }

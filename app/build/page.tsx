@@ -113,7 +113,7 @@ export default function BuildPage() {
   return (
     <div className="min-h-screen font-[Manrope]">
       <Navbar />
-      <main className="pt-16 pb-10 px-6">
+      <main className="pt-0 pb-10 px-6">
         <div className="max-w-6xl mx-auto">
           {/* Step 0: Intro / Overview */}
           {step === 0 && <Step0 step={step} nextStep={nextStep} />}
