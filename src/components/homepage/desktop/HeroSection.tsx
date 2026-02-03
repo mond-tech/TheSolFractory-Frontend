@@ -1,6 +1,6 @@
 'use client'
 import React from 'react';
-import MobileHeroSection from './MobileHeroSection';
+import MobileHeroSection from '../mobile/MobileHeroSection';
 import { useIsMobile } from "@/hooks/use-mobile";
 import FullPageLoader from "@/src/components/FullPageLoader";
 

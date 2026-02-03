@@ -1,16 +1,15 @@
 import React from 'react'
-import HeroSection from '@/src/components/homepage/HeroSection'
-import SolFactoryAdvantage from '@/src/components/homepage/SolFactoryAdvantage'
-import MergedCards from '@/src/components/homepage/ConeShowCase'
-import TrustConesSection from '@/src/components/homepage/TrustConesSection'
-import Carousel from '@/src/components/homepage/Carousel'
+import HeroSection from '@/src/components/homepage/desktop/HeroSection'
+import SolFactoryAdvantage from '@/src/components/homepage/desktop/SolFactoryAdvantage'
+import MergedCards from '@/src/components/homepage/desktop/ConeShowCase'
+import TrustConesSection from '@/src/components/homepage/desktop/TrustConesSection'
+import Carousel from '@/src/components/homepage/desktop/Carousel'
 import BlenderAnimation from "@/components/BlenderAnimation"
-// import dynamic from 'next/dynamic';
-import SmokeSection from '../../src/SmokeSection'
+import dynamic from 'next/dynamic';
+import SmokeSection from '../testcomponents/SmokeSection'
 import { MergeAnimationViewer } from '../components/build/ConeMergeAnimtaion'
-import FullScreenSmoke from '../FullScreenSmoke'
-import SmokeOverlayText from '../SmokeOverlayText'
-import { Mac3D } from '../Mac3D'
+import FullScreenSmoke from '../testcomponents/FullScreenSmoke'
+import SmokeOverlayText from '../testcomponents/SmokeOverlayText'
 
 export default function HomePage() {
   return (
@@ -20,15 +19,14 @@ export default function HomePage() {
         <Carousel />
         {/* <BlenderAnimation /> */}
         <SolFactoryAdvantage />
-        <Mac3D />
         <MergedCards />
         <TrustConesSection />
         {/* <SmokeOverlayText
           heading="Enter the Unknown"
           paragraph="A cinematic, immersive experience powered by Three.js smoke particles."
         /> */}
-        {/* <SmokeSection /> */}
-        {/* <FullScreenSmoke
+        {/* <SmokeSection />
+        <FullScreenSmoke
         heading="Enter the Unknown"
         paragraph="A cinematic, immersive experience powered by Three.js smoke particles."
       /> */}

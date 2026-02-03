@@ -2,7 +2,7 @@
 
 import React from "react";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
-import MobileSolFactoryAdvantage from "./MobileSolFactoryAdvantage";
+import MobileSolFactoryAdvantage from "../mobile/MobileSolFactoryAdvantage";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { IconLeaf, IconBrain, IconBuilding, IconHeartHandshake  } from '@tabler/icons-react';
 import FullPageLoader from "@/src/components/FullPageLoader";
@@ -92,7 +92,7 @@ export default function SolFactoryAdvantage() {
 }
 
 
-/* ⭐ Reusable Glow Wrapper */
+/* Reusable Glow Wrapper */
 const CardGlowWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <div

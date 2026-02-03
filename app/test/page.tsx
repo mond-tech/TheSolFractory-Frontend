@@ -7,7 +7,7 @@
 // app/page.jsx
 'use client'
 import dynamic from "next/dynamic";
-const SmokeSection = dynamic(() => import("../../src/SmokeSection"), { ssr: false });
+const SmokeSection = dynamic(() => import("../../src/testcomponents/SmokeSection"), { ssr: false });
 
 export default function Page() {
   return (

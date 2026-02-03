@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
-import MobileCarousel from "./MobileCarousel";
+import MobileCarousel from "../mobile/MobileCarousel";
 import FullPageLoader from "@/src/components/FullPageLoader";
 
 interface CardItem {
