@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -52,6 +52,12 @@ export default function FiltersSidebar({
   setPackagingOpen,
   onClearFilters,
 }: FiltersSidebarProps) {
+
+
+  useEffect(() => {
+    onClearFilters();
+  }, []);
+
   return (
     <aside className="w-full lg:w-1/5">
       <div className="glass-panel p-6 rounded-xl lg:sticky lg:top-24 mb-26 mt-22 max-h-[80vh] overflow-y-auto scrollbar-hide">
