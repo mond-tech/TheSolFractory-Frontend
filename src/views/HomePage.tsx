@@ -4,6 +4,7 @@ import SolFactoryAdvantage from '@/src/components/homepage/desktop/SolFactoryAdv
 import MergedCards from '@/src/components/homepage/desktop/ConeShowCase'
 import TrustConesSection from '@/src/components/homepage/desktop/TrustConesSection'
 import Carousel from '@/src/components/homepage/desktop/Carousel'
+import VideoHero from '../components/homepage/desktop/VideoHero'
 // import BlenderAnimation from "@/components/BlenderAnimation"
 // import dynamic from 'next/dynamic';
 // import SmokeSection from '../testcomponents/SmokeSection'
@@ -15,6 +16,7 @@ export default function HomePage() {
   return (
     <div>
         {/* Hero Section */}
+        <VideoHero />
         <HeroSection />
         <Carousel />
         {/* <BlenderAnimation /> */}

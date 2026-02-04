@@ -36,7 +36,7 @@
     "jspdf": "^2.5.2",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.560.0",
-    "motion": "^12.23.26",
+    "motion": "^12.31.0",
     "next": "16.0.8",
     "postprocessing": "^6.38.2",
     "react": "19.2.1",

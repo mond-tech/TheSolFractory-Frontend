@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -22,10 +22,34 @@ export default function Navbar() {
   const ismobile = useIsMobile();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
+  const [isOverlappingVideo, setIsOverlappingVideo] = useState(false);
   const { getItemCount } = useCart();
   const { isAuthenticated, isLoading } = useUser();
 
   const itemCount = getItemCount();
+  const isHomePage = pathname === "/";
+
+  useEffect(() => {
+    // Only apply scroll-based logic on HomePage
+    if (!isHomePage) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsOverlappingVideo(false); // Always show classes on other pages
+      return;
+    }
+
+    const handleScroll = () => {
+      // VideoHero is h-screen, so check if scroll is less than viewport height
+      const scrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      setIsOverlappingVideo(scrollY < viewportHeight);
+    };
+
+    // Check initial state
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isHomePage, pathname]);
 
   const isActive = useMemo(
     () => (href: string) => (href === "/" ? pathname === "/" : pathname?.startsWith(href)),
@@ -35,7 +59,9 @@ export default function Navbar() {
   return (
     <>
       {/*border-b bg-[#132135]/80*/} 
-      <header className="sticky top-0 z-1000000 w-full border-white/5 backdrop-blur-xl transition-all duration-300">
+       <header className={`fixed top-0 left-0 right-0 z-50 w-full border-white/5 transition-all duration-300 ${
+         (!isOverlappingVideo || !isHomePage) ? "backdrop-blur-xl" : ""
+       }`}>
 
         <div className="max-w-350 mx-auto px-4 md:px-6 h-20 flex justify-between items-center relative z-50">
           <div className="flex items-center gap-3">
@@ -43,8 +69,8 @@ export default function Navbar() {
               <Image
                 src="/logo.png"
                 alt=""
-                width={100}
-                height={60}
+                width={80}
+                height={20}
                 className="md:mt-0.5"
               />
             </Link>
@@ -58,7 +84,7 @@ export default function Navbar() {
               <Link
                 key={link.id}
                 href={link.href}
-                className={`nav-btn btn-liquid px-6 py-2 w-[120px] text-center text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white hover:active ${
+                className={` ${(!isOverlappingVideo || !isHomePage) ? "nav-btn btn-liquid" : ""} px-6 py-2 w-[120px] text-center text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white hover:active ${
                   isActive(link.href) ? "active" : ""
                 }`}
                 onMouseEnter={
@@ -86,7 +112,7 @@ export default function Navbar() {
               <>
                 <Link
                   href="/login"
-                  className={`hidden lg:block auth-btn w-25 text-center items-center btn-liquid px-5 py-2 text-[12px] font-bold uppercase tracking-widest text-gray-300 hover:text-white ${
+                  className={`hidden lg:block auth-btn w-25 text-center items-center ${(!isOverlappingVideo || !isHomePage) ? "btn-liquid" : ""} px-5 py-2 text-[12px] font-bold uppercase tracking-widest text-gray-300 hover:text-white ${
                     isActive("/login") ? "active" : ""
                   }`}
                   onMouseEnter={
@@ -104,7 +130,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   href="/signup"
-                  className={`hidden lg:block auth-btn btn-liquid w-25 text-center px-5 py-2 text-[12px] font-bold uppercase tracking-widest text-white ${
+                  className={`hidden lg:block auth-btn ${(!isOverlappingVideo || !isHomePage) ? "btn-liquid" : ""} w-25 text-center px-5 py-2 text-[12px] font-bold uppercase tracking-widest text-white ${
                     isActive("/signup") ? "active" : ""
                   }`}
                   onMouseEnter={
@@ -138,7 +164,7 @@ export default function Navbar() {
               // }
             >
               <span
-                className="btn-liquid w-full h-full flex items-center justify-center rounded-full overflow-hidden"
+                className={`${(!isOverlappingVideo || !isHomePage) ? "btn-liquid" : ""} w-full h-full flex items-center justify-center rounded-full overflow-hidden`}
               >
                 <i className="fas fa-shopping-cart text-sm md:text-base text-gray-300 group-hover:text-white transition" />
               </span>
@@ -163,10 +189,10 @@ export default function Navbar() {
 
             {ismobile ? <button
               onClick={() => setMobileOpen((prev) => !prev)}
-              className="relative btn-liquid group ml-1
+              className={`relative ${(!isOverlappingVideo || !isHomePage) ? "btn-liquid" : ""} group ml-1
                         w-8 h-8 md:w-10 md:h-10
                         flex items-center justify-center
-                        rounded-full"
+                        rounded-full`}
               style={{ borderRadius: "50%" }}
               aria-label="Toggle menu"
             >
@@ -187,7 +213,7 @@ export default function Navbar() {
               key={link.id}
               href={link.href}
               onClick={() => setMobileOpen(false)}
-              className={`btn-liquid w-full py-4 text-left px-6 text-sm font-bold uppercase tracking-widest ${
+              className={`${(!isOverlappingVideo || !isHomePage) ? "btn-liquid" : ""} w-full py-4 text-left px-6 text-sm font-bold uppercase tracking-widest ${
                 isActive(link.href) ? "active" : ""
               }`}
             >
@@ -203,7 +229,7 @@ export default function Navbar() {
               <Link
                 href="/login"
                 onClick={() => setMobileOpen(false)}
-                className={`flex-1 btn-liquid py-4 text-center text-sm font-bold uppercase tracking-widest ${
+                className={`flex-1 ${(!isOverlappingVideo || !isHomePage) ? "btn-liquid" : ""} py-4 text-center text-sm font-bold uppercase tracking-widest ${
                   isActive("/login") ? "active" : ""
                 }`}
               >
@@ -212,7 +238,7 @@ export default function Navbar() {
               <Link
                 href="/signup"
                 onClick={() => setMobileOpen(false)}
-                className={`flex-1 btn-liquid btn-primary py-4 text-center text-sm font-bold uppercase tracking-widest ${
+                className={`flex-1 ${(!isOverlappingVideo || !isHomePage) ? "btn-liquid" : ""} btn-primary py-4 text-center text-sm font-bold uppercase tracking-widest ${
                   isActive("/signup") ? "active" : ""
                 }`}
               >
