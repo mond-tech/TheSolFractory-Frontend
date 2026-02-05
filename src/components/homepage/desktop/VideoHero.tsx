@@ -8,9 +8,9 @@ export default function VideoHero() {
     <div className='relative w-full h-screen'>
         <video
         className="absolute inset-0 h-full w-full object-cover"
-        // src="/videos/hero-machinery.mp4"
-        src="https://cdn.prod.website-files.com/669a4a15cba8630cdb7be146%2F67501efec65b03f2a154ff47_altM%20Final-transcode.mp4"
-        poster="https://cdn.prod.website-files.com/669a4a15cba8630cdb7be146%2F67501efec65b03f2a154ff47_altM%20Final-poster-00001.jpg"
+        src="/videos/solvideo.mov"
+        // src="https://cdn.prod.website-files.com/669a4a15cba8630cdb7be146%2F67501efec65b03f2a154ff47_altM%20Final-transcode.mp4"
+        // poster="https://cdn.prod.website-files.com/669a4a15cba8630cdb7be146%2F67501efec65b03f2a154ff47_altM%20Final-poster-00001.jpg"
         autoPlay
         muted
         loop
@@ -19,23 +19,52 @@ export default function VideoHero() {
       />
     <div className="relative z-20 flex h-full items-center justify-center px-6">
         <div className="max-w-5xl text-center">
+          {/* Line 2 */}
+          <svg
+    className="absolute inset-0
+      text-4xl md:text-6xl
+      font-semibold pointer-events-none"
+    viewBox="0 0 1200 160"
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <text
+      x="300"
+      y="120"
+      textAnchor="start"
+      fill="#E5E7EB"
+      stroke="#3E5B6A"
+      strokeWidth="3"
+      paintOrder="stroke"
+    >
+      We Make Your Brand Possible
+    </text>
+  </svg>
+            {/* <span className="
+            text-[#07376e] text-4xl md:text-6xl font-semibold
+            [ text-shadow:
+              1px_0_0_#3E5B6A,
+            -1px_0_0_#3E5B6A,
+              0_1px_0_#3E5B6A,
+              0_-1px_0_#3E5B6A
+            ]">We Make Your Brand Possible</span> */}
+
           {/* Main headline with synced rotating words on both lines */}
-          <h1 className="text-white text-4xl md:text-6xl lg:text-7xl font-semibold leading-tight">
-            {/* Line 1 */}
-            <span className="block">
-              We Don’t Just{""}
-            </span>
-            <motion.span className="relative mx-4 my-4 flex flex-col items-center justify-center gap-4 text-center sm:mx-0 sm:mb-0 sm:flex-row">
+          <span className="
+            text-[#07376e] text-4xl md:text-6xl font-semibold
+            [ text-shadow:
+              1px_0_0_#3E5B6A,
+            -1px_0_0_#3E5B6A,
+              0_1px_0_#3E5B6A,
+              0_-1px_0_#3E5B6A
+            ]">
+            <motion.span className="relative mx-0 my-4 flex flex-col items-center justify-center gap-0 text-center sm:mx-0 sm:mb-0 sm:flex-row">
                 <LayoutTextFlip
-                text="Welcome to "
-                words={["Aceternity UI", "Fight Club", "The Matrix", "The Jungle"]}
+                text="We Make Your"
+                words={["Brand", "Dream", "Goals", "Start", "Shine"]}
+                secondtext="Possible"
                 />
             </motion.span>
-            {/* Line 2 */}
-            <span className="mt-3 block">
-              We Engineer{""}
-            </span>
-          </h1>
+          </span>
         </div>
       </div>
     </div>

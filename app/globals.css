@@ -508,9 +508,9 @@ body.smoke-active header {
   transition: 0.7s;
 }
 /* Slightly more transparent variant for navbar links */
-/* .nav-btn {
+.nav-btn {
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
-} */
+}
 
 .btn-liquid.active,
 .builder-option.active,
@@ -899,4 +899,23 @@ body.smoke-active header {
 .smoke-cloud-8 {
   animation: smoke-cloud-rise-8 7.5s ease-out infinite;
   animation-delay: 3.8s;
+}
+
+.cursor-cone {
+  cursor: url('/homepage/cursorcone64.png') 20 20, auto;
+}
+
+@keyframes smoke-cursor{
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-20px) scale(1.5);
+    opacity: 0;
+  }
+}
+
+.animate-smoke-cursor {
+  animation: smoke-cursor 1s ease-out forwards;
 }

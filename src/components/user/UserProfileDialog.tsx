@@ -9,12 +9,17 @@ export function UserProfileDialog() {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push("/profile");
+    if(!isAuthenticated) {
+      router.push("/login");
+    }
+    else {
+      router.push("/profile");
+    }
   };
 
-  if (!isAuthenticated) {
-    return null;
-  }
+  // if (!isAuthenticated) {
+  //   return null;
+  // }
 
   return (
     <button

@@ -4,7 +4,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import gsap from "gsap";
-import { SmokeMergeAnimationViewer } from "@/src/components/build/SmokeMergeAnimation";
 
 type ParticleUserData = {
   baseX: number;
@@ -400,9 +399,9 @@ export default function SmokeSection({ particleCount = 120 }) {
           }}
         />
         {/* Merge Animation Overlay */}
-        <SmokeMergeAnimationViewer 
+        {/* <SmokeMergeAnimationViewer 
           isVisible={showAnimation}
-        />
+        /> */}
       </section>
       {/* Spacer to ensure footer stays clear even with slower smoke progression */}
       <div style={{ height: "120vh" }} />

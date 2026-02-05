@@ -9,6 +9,8 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useCart } from "@/src/contexts/CartContext";
 import { useUser } from "@/src/contexts/UserContext";
 import { UserProfileDialog } from "@/src/components/user/UserProfileDialog";
+import { IconUserFilled } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 
 const navLinks = [
   { id: "home", label: "Home", href: "/" },
@@ -19,6 +21,7 @@ const navLinks = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const ismobile = useIsMobile();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
@@ -28,6 +31,15 @@ export default function Navbar() {
 
   const itemCount = getItemCount();
   const isHomePage = pathname === "/";
+
+  const handleClick = () => {
+    if(!isAuthenticated) {
+      router.push("/login");
+    }
+    else {
+      router.push("/profile");
+    }
+  };
 
   useEffect(() => {
     // Only apply scroll-based logic on HomePage
@@ -59,7 +71,8 @@ export default function Navbar() {
   return (
     <>
       {/*border-b bg-[#132135]/80*/} 
-       <header className={`fixed top-0 left-0 right-0 z-50 w-full border-white/5 transition-all duration-300 ${
+      {/* fixed */}
+       <header className={`top-0 left-0 right-0 z-50 w-full border-white/5 transition-all duration-300 ${
          (!isOverlappingVideo || !isHomePage) ? "backdrop-blur-xl" : ""
        }`}>
 
@@ -79,12 +92,12 @@ export default function Navbar() {
             {/* <BurningCigarette /> */}
           </div>
 
-          <nav className="hidden lg:flex gap-4 ml-30">
+          <nav className="hidden lg:flex gap-4 ml-10">
             {navLinks.map((link) => (
               <Link
                 key={link.id}
                 href={link.href}
-                className={` ${(!isOverlappingVideo || !isHomePage) ? "nav-btn btn-liquid" : ""} px-6 py-2 w-[120px] text-center text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-white hover:active ${
+                className={` ${(!isOverlappingVideo || !isHomePage) ? "nav-btn btn-liquid" : ""} px-6 py-2 w-[120px] text-center text-xs font-bold uppercase tracking-widest text-[#0F2238] hover:text-white hover:active ${
                   isActive(link.href) ? "active" : ""
                 }`}
                 onMouseEnter={
@@ -103,8 +116,17 @@ export default function Navbar() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-3">
-            {!isLoading && ( isAuthenticated ? (
+          <div className="flex items-center gap-5">
+            <button
+              onClick={handleClick}
+              className={`relative group w-9.75 h-9.75 cursor-pointer flex items-center justify-center rounded-full transition ${
+                (!isOverlappingVideo || !isHomePage) ? "btn-liquid active" : ""
+              }`}
+              aria-label="User profile"
+            >
+              <IconUserFilled className="w-5.5 h-5.5 text-white" />
+            </button>
+            {/* {!isLoading && ( isAuthenticated ? (
               <div className="hidden lg:block ml-21 mr-5">
                 <UserProfileDialog />
               </div>
@@ -147,7 +169,7 @@ export default function Navbar() {
                   Sign Up
                 </Link>
               </>
-            ))}
+            ))} */}
 
             <button
               onClick={() => setCartOpen(true)}
