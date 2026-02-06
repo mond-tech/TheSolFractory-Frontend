@@ -7,7 +7,7 @@ export default function VideoHero() {
     <div className="relative w-full h-screen">
       <video
         className="absolute inset-0 h-full w-full object-cover"
-        src="https://ja3zeotcy2kd52jg.public.blob.vercel-storage.com/solvideo-vmake.mp4"
+        src="https://ja3zeotcy2kd52jg.public.blob.vercel-storage.com/solherovideo.mp4"
         // src="/videos/solvideo.mov"
         // src="https://cdn.prod.website-files.com/669a4a15cba8630cdb7be146%2F67501efec65b03f2a154ff47_altM%20Final-transcode.mp4%22
         // poster="https://cdn.prod.website-files.com/669a4a15cba8630cdb7be146%2F67501efec65b03f2a154ff47_altM%20Final-transcode.mp4%22
