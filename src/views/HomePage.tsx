@@ -29,7 +29,7 @@ export default function HomePage() {
         {/* <HeroSection /> */}
         <main className="relative z-10 bg-[#001534]">
         {/* <main className="relative z-10 bg-[#001534]/80 backdrop-blur-xl border border-white/10 shadow-[0_0_40px_rgba(15,23,42,0.9)]"> */}
-        <ScrollVideo videoSrc="/videos/outrobin2.mp4" />
+        <ScrollVideo videoSrc="https://ja3zeotcy2kd52jg.public.blob.vercel-storage.com/outrobin2.mp4" />
             {/* <Carousel /> */}
             {/* <BlenderAnimation /> */}
             <SolFactoryAdvantage />

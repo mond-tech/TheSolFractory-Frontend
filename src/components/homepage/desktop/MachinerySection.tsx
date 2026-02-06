@@ -89,7 +89,7 @@ export default function MachinerySection() {
 
       {/* ================= CENTER GLASS HERO (VIDEO INSIDE CARD) ================= */}
       <div
-        className="relative z-10 w-full max-w-5xl mx-auto rounded-3xl overflow-hidden px-8 py-24 min-h-[420px]"
+        className="relative z-10 w-full max-w-[1220px] mx-auto rounded-3xl overflow-hidden px-8 py-24 min-h-[420px]"
         style={{
           background:
             "linear-gradient(160deg, rgba(255,255,255,0.35), rgba(19,33,53,0.45))",
