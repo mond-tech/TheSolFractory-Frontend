@@ -5,6 +5,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Toaster } from "@/components/ui/sonner";
 import { Manrope } from "next/font/google";
 import { WhatsappFab } from "@/src/components/global/WhatsappFab";
+import AgeGate from "@/src/components/global/AgeVerificationModal";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -38,6 +39,7 @@ export default function RootLayout({
             </div>        
           <UserProvider>
             <CartProvider>
+              <AgeGate />
               {children}
               <Toaster />
               <WhatsappFab />
