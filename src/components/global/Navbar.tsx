@@ -16,7 +16,7 @@ const navLinks = [
   { id: "home", label: "Home", href: "/" },
   { id: "products", label: "Product", href: "/catalog" },
   // { id: "builder", label: "Build", href: "/build" },
-  { id: "builder", label: "About", href: "/about" },
+  { id: "builder", label: "About Us", href: "/about" },
   { id: "contact", label: "Contact", href: "/contact" },
 ];
 
@@ -54,7 +54,7 @@ export default function Navbar() {
       // VideoHero is h-screen, so check if scroll is less than viewport height
       const scrollY = window.scrollY;
       const viewportHeight = window.innerHeight;
-      setIsOverlappingVideo(scrollY < viewportHeight * 3.7);
+      setIsOverlappingVideo(scrollY < viewportHeight * 7.7);
     };
 
     // Check initial state

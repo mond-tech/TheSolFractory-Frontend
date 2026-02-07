@@ -56,7 +56,7 @@ export const TextGenerateEffect = ({
     <div className={cn("font-bold", className)}>
       <motion.div
         ref={scope}
-        className="text-[#00167a] text-3xl md:text-4xl font-extrabold leading-snug tracking-wide text-center"
+        className=" text-3xl md:text-[48px] leading-snug tracking-wide text-center"
       >
         <div className="flex flex-col items-center">
 
@@ -69,7 +69,7 @@ export const TextGenerateEffect = ({
               return (
                 <div
                   key={lineIndex}
-                  className="flex flex-wrap justify-center md:mr-3"
+                  className="flex flex-wrap justify-center"
                 >
                   {wordsInLine.map((word, wordIndex) => {
                     const isLastWord =
@@ -78,11 +78,11 @@ export const TextGenerateEffect = ({
                     return (
                       <motion.span
                         key={word + wordIndex}
-                        className="dark:text-white text-[#0a3e8c] opacity-0 inline-block font-extrabold"
+                        className=" text-[rgba(0,20,52)] inline-block font-tasa"
                         style={{
                           filter: filter ? "blur(10px)" : "none",
-                          fontFamily: "Satoshi, sans-serif",
-                          WebkitTextStroke: "1px rgba(255,255,255,0.3)",
+                          // fontFamily: "Satoshi, sans-serif",
+                          // WebkitTextStroke: "1px rgba(255,255,255,0.3)",
                         }}
                       >
                         {word}
@@ -106,11 +106,10 @@ export const TextGenerateEffect = ({
                 return (
                   <motion.span
                     key={word + wordIndex}
-                    className=" text-[#0a3e8c] opacity-0 inline-block drop-shadow-lg dark:bg-neutral-900 dark:shadow-sm dark:ring-1 dark:shadow-white/10 dark:ring-white/10 drop-shadow-white"
+                    className=" text-[rgb(0,20,52)]  inline-block font-tasa"
                     style={{
                       filter: filter ? "blur(10px)" : "none",
-                      fontFamily: "Satoshi, sans-serif",
-                      WebkitTextStroke: "1px rgba(255,255,255,0.3)",
+                      // WebkitTextStroke: "1px rgba(255,255,255,0.3)",
                     }}
                   >
                     {word}

@@ -3,7 +3,7 @@ import { CartProvider } from "@/src/contexts/CartContext";
 import { UserProvider } from "@/src/contexts/UserContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Toaster } from "@/components/ui/sonner";
-import { Manrope } from "next/font/google";
+import { Manrope, Kanit, Limelight, Yatra_One, Forum, TASA_Explorer } from "next/font/google";
 import { WhatsappFab } from "@/src/components/global/WhatsappFab";
 import AgeGate from "@/src/components/global/AgeVerificationModal";
 
@@ -14,13 +14,20 @@ const manrope = Manrope({
   display: "swap",
 });
 
+const tasa = TASA_Explorer({
+  subsets: ["latin"],
+  weight: ["800"],
+  variable: "--font-tasa",
+  display: "swap"
+})
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={manrope.variable}>
+    <html lang="en" className={`${manrope.variable} ${tasa.variable}`}>
       <head>
         <link
           rel="stylesheet"

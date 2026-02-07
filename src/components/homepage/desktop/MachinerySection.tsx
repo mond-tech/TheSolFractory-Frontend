@@ -74,7 +74,7 @@ function ShinyGlassCard({
 
 export default function MachinerySection() {
   return (
-    <section className="relative w-full min-h-[90vh] flex items-center justify-center overflow-hidden">
+    <section className="mt-10 relative w-full min-h-[90vh] flex items-center justify-center overflow-hidden">
       {/* page glow */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -102,8 +102,8 @@ export default function MachinerySection() {
       >
         {/* 🎥 VIDEO BACKGROUND INSIDE CARD */}
         <video
-          // src="https://ja3zeotcy2kd52jg.public.blob.vercel-storage.com/alienrobo1.mp4"
-          src="https://ja3zeotcy2kd52jg.public.blob.vercel-storage.com/alienrobo1_compressed.mp4"
+          // src="/video/alienrobo1_compressed.mp4"
+          src={"https://ja3zeotcy2kd52jg.public.blob.vercel-storage.com/alienrobo1.mp4"}
           autoPlay
           muted
           loop

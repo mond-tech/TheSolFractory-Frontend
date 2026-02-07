@@ -7,7 +7,7 @@ import Carousel from "@/src/components/homepage/desktop/Carousel";
 import VideoHero from "../components/homepage/desktop/VideoHero";
 // import BlenderAnimation from "@/components/BlenderAnimation"
 // import dynamic from 'next/dynamic';
-import SmokeSection from "../testcomponents/SmokeSection";
+// import SmokeSection from "../testcomponents/SmokeSection";
 import ScrollVideo from "../components/homepage/desktop/ScrollVideo";
 import MachinerySection from "../components/homepage/desktop/MachinerySection";
 import FullScreenColor from "../components/homepage/desktop/FullScreenColor";
@@ -34,11 +34,11 @@ export default function HomePage() {
         {/* <main className="relative z-10 bg-[#001534]/80 backdrop-blur-xl border border-white/10 shadow-[0_0_40px_rgba(15,23,42,0.9)]"> */}
         <ScrollVideo videoSrc="https://ja3zeotcy2kd52jg.public.blob.vercel-storage.com/outrobin2.mp4" />
         <ConeCarousel />
+        <MachinerySection />
         {/* <Carousel /> */}
         {/* <BlenderAnimation /> */}
         <SolFactoryAdvantage />
         <MergedCards />
-        <MachinerySection />
         {/* <AnimatedCards /> */}
         <TrustConesSection />
         {/* <SmokeOverlayText
