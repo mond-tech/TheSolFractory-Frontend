@@ -6,7 +6,7 @@ import { useTransform, useScroll } from "framer-motion";
 import { Environment, ContactShadows, Html, useProgress } from "@react-three/drei";
 import { Cone } from "./Cone"; // Ensure this path is correct
 
-const RADIUS = 3.5;
+const RADIUS = 4.5;
 const ENTRANCE_OFFSET = 15; // Start further out for dramatic entry
 
 function Loader() {

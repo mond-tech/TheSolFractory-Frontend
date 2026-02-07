@@ -214,7 +214,7 @@ const ScrollVideo = ({ videoSrc }: { videoSrc: string }) => {
         // 🎯 OVERLAY LOGIC
         // Trigger when video is 90% done (change 0.9 to whatever percentage you want)
         // && !overlayLockedRef.current ensures we only trigger state update once
-        if (!overlayLockedRef.current && currentSmoothTime >= video.duration * 0.9) {
+        if (!overlayLockedRef.current && currentSmoothTime >= video.duration * 0.4) {
           overlayLockedRef.current = true;
           setShowOverlay(true);
         }
@@ -267,8 +267,8 @@ const ScrollVideo = ({ videoSrc }: { videoSrc: string }) => {
           <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
             <div className="">
                 <TextGenerateEffect
-                words="Exceptional quality. Endless customization. True scalability."
-                className="max-w-4xl text-center text-[#00167a] text-4xl md:text-5xl leading-snug drop-shadow-lg"
+                words="Exceptional Quality. Endless Customization. True Scalability."
+                className=" text-center text-[#00167a] text-4xl md:text-5xl leading-snug drop-shadow-lg"
                 />
             </div>
           </div>
