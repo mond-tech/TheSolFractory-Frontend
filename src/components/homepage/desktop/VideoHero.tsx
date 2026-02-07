@@ -58,7 +58,7 @@ export default function VideoHero() {
       />
 
       {/* Overlay */}
-      <div className="fixed inset-0 bg-blue-900/30 backdrop-grayscale-20 pointer-events-none" />
+      <div className="fixed inset-0 bg-gray-900/70 backdrop-grayscale-80 pointer-events-none" />
 
       {/* Content */}
       <div className="relative z-0 flex h-full items-center justify-center px-6">
@@ -66,22 +66,17 @@ export default function VideoHero() {
           <span
             className="
             text-[#07376e] text-3xl md:text-4xl font-semibold mb-6
-            [ text-shadow:
-              1px_0_0_#3E5B6A,
-            -1px_0_0_#3E5B6A,
-              0_1px_0_#3E5B6A,
-              0_-1px_0_#3E5B6A
-            ] text-nowrap"
+            text-nowrap"
           >
             <motion.span className=" flex flex-col items-center justify-center gap-0 text-center sm:mx-0 sm:mb-0 sm:flex-row">
-              <span className="font-sans small-caps text-4xl md:text-5xl font-bold tracking-tight drop-shadow-lg dark:bg-neutral-900 dark:text-white dark:shadow-sm dark:ring-1 dark:shadow-white/10 dark:ring-white/10 drop-shadow-2xl drop-shadow-white">Machine Made</span>
+              <span className="font-sans small-caps text-4xl md:text-5xl tracking-tight drop-shadow-[220] dark:bg-neutral-900 dark:text-white dark:shadow-sm dark:ring-1 dark:shadow-white/10 font-[860] dark:ring-white/10 drop-shadow-white">Machine Made</span>
               <LayoutTextFlip
                 text=""
                 words={["Cones", "Blunts", "Tubes"]}
                 secondtext=""
               className="drop-shadow-2xl drop-shadow-black w-[180px]"
               />
-              <span className="font-sans small-caps text-4xl md:text-5xl font-bold tracking-tight drop-shadow-lg dark:bg-neutral-900 dark:text-white dark:shadow-sm dark:ring-1 dark:shadow-white/10 dark:ring-white/10 drop-shadow-2xl drop-shadow-white">for</span>
+              <span className="font-sans small-caps text-4xl md:text-5xl font-bold tracking-tight drop-shadow-sm dark:bg-neutral-900 dark:text-white dark:shadow-sm dark:ring-1 dark:shadow-white/10 dark:ring-white/10 drop-shadow-2xl drop-shadow-white">for</span>
               <LayoutTextFlip
                 text=""
                 words={["Even Quality", "Stable Shape", "Reliable Filling"]}

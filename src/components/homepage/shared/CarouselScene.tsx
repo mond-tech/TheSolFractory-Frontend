@@ -45,7 +45,7 @@ function CarouselScene(
           isLeft={true}
           angle={0} 
           scrollProgress={scrollProgress}
-          url="/3d-cones/browncone.glb"
+          url="/3d-cones/pinkfiltercone.glb"
         />
 
         {/* CONE 2: Left Entrance (Opposite side of circle) */}

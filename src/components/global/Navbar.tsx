@@ -120,7 +120,7 @@ export default function Navbar() {
           </nav>
 
           <div className="flex items-center gap-5">
-            <button
+            {!ismobile && <button
               onClick={handleClick}
               className={`relative group w-9.75 h-9.75 cursor-pointer flex items-center justify-center rounded-full transition ${
                 (!isOverlappingVideo || !isHomePage) ? "btn-liquid active" : ""
@@ -128,7 +128,7 @@ export default function Navbar() {
               aria-label="User profile"
             >
               <IconUserFilled className="w-5.5 h-5.5 text-white" />
-            </button>
+            </button>}
             {/* {!isLoading && ( isAuthenticated ? (
               <div className="hidden lg:block ml-21 mr-5">
                 <UserProfileDialog />
@@ -189,7 +189,7 @@ export default function Navbar() {
               // }
             >
               <span
-                className={`${(!isOverlappingVideo || !isHomePage) ? "btn-liquid" : ""} w-full h-full flex items-center justify-center rounded-full overflow-hidden`}
+                className={`${(!isOverlappingVideo || !isHomePage) ? "btn-liquid" : ""} w-full h-full flex items-center justify-center rounded-full overflow-hidden cursor-pointer`}
               >
                 <i className="fas fa-shopping-cart text-sm md:text-base text-gray-300 group-hover:text-white transition" />
               </span>
@@ -208,16 +208,12 @@ export default function Navbar() {
               )}
             </button>
 
-
-
-
-
             {ismobile ? <button
               onClick={() => setMobileOpen((prev) => !prev)}
               className={`relative ${(!isOverlappingVideo || !isHomePage) ? "btn-liquid" : ""} group ml-1
                         w-8 h-8 md:w-10 md:h-10
                         flex items-center justify-center
-                        rounded-full`}
+                        rounded-full cursor-pointer`}
               style={{ borderRadius: "50%" }}
               aria-label="Toggle menu"
             >
@@ -238,7 +234,8 @@ export default function Navbar() {
               key={link.id}
               href={link.href}
               onClick={() => setMobileOpen(false)}
-              className={`${(!isOverlappingVideo || !isHomePage) ? "btn-liquid" : ""} w-full py-4 text-left px-6 text-sm font-bold uppercase tracking-widest ${
+              // ${(!isOverlappingVideo || !isHomePage) ? "btn-liquid" : ""} 
+              className={`w-full py-4 text-left px-6 text-sm font-bold uppercase tracking-widest ${
                 isActive(link.href) ? "active" : ""
               }`}
             >
@@ -254,7 +251,7 @@ export default function Navbar() {
               <Link
                 href="/login"
                 onClick={() => setMobileOpen(false)}
-                className={`flex-1 ${(!isOverlappingVideo || !isHomePage) ? "btn-liquid" : ""} py-4 text-center text-sm font-bold uppercase tracking-widest ${
+                className={`flex-1 py-4 btn-primary text-center text-sm font-bold uppercase tracking-widest ${
                   isActive("/login") ? "active" : ""
                 }`}
               >
@@ -263,7 +260,7 @@ export default function Navbar() {
               <Link
                 href="/signup"
                 onClick={() => setMobileOpen(false)}
-                className={`flex-1 ${(!isOverlappingVideo || !isHomePage) ? "btn-liquid" : ""} btn-primary py-4 text-center text-sm font-bold uppercase tracking-widest ${
+                className={`flex-1 btn-primary py-4 text-center text-sm font-bold uppercase tracking-widest ${
                   isActive("/signup") ? "active" : ""
                 }`}
               >
