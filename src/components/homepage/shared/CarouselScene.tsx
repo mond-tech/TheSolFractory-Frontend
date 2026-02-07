@@ -2,9 +2,10 @@
 
 import React, { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useTransform, useScroll } from "framer-motion";
+import { useTransform, MotionValue } from "framer-motion";
 import { Environment, ContactShadows, Html, useProgress } from "@react-three/drei";
 import { Cone } from "./Cone"; // Ensure this path is correct
+import type { Group } from "three";
 
 const RADIUS = 4.5;
 const ENTRANCE_OFFSET = 15; // Start further out for dramatic entry
@@ -14,8 +15,10 @@ function Loader() {
   return <Html center className="text-white font-mono">{progress.toFixed(0)}%</Html>;
 }
 
-function CarouselScene({ scrollProgress }) {
-  const groupRef = useRef();
+function CarouselScene(
+    { scrollProgress } : { scrollProgress: MotionValue<number> }
+) {
+  const groupRef = useRef<Group>(null);
 
   // --- GLOBAL CAROUSEL ANIMATION (Starts after entrance) ---
   // The entire group starts spinning only after cones have settled (0.25)
@@ -80,8 +83,16 @@ function CarouselScene({ scrollProgress }) {
 }
 
 // --- INDIVIDUAL CONE LOGIC ---
-function CarouselItem({ index, isLeft, angle, scrollProgress, url }) {
-  const itemRef = useRef();
+interface CarouselItemProps {
+  index: number;
+  isLeft: boolean;
+  angle: number;
+  scrollProgress: MotionValue<number>;
+  url: string;
+}
+
+function CarouselItem({ index, isLeft, angle, scrollProgress, url }: CarouselItemProps) {
+  const itemRef = useRef<Group>(null);
   
   // 1. CALCULATE TARGET POSITIONS (Where it ends up)
   // We offset X/Z so they face outward/tangent depending on preference.
@@ -136,7 +147,11 @@ function CarouselItem({ index, isLeft, angle, scrollProgress, url }) {
   );
 }
 
-export default function CarouselCanvas({ scrollProgress }) {
+interface CarouselCanvasProps {
+  scrollProgress: MotionValue<number>;
+}
+
+export default function CarouselCanvas({ scrollProgress }: CarouselCanvasProps) {
   return (
     <Canvas camera={{ position: [0, 0, 14], fov: 35 }}>
       <React.Suspense fallback={<Loader />}>
