@@ -67,6 +67,11 @@ export default function ConeCarousel() {
             
             <div className="relative w-[95vw] h-[90vh] rounded-2xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)]
              bg-gradient-to-b bg-slate-950 backdrop-blur-sm overflow-hidden">
+              <div className="absolute top-10 left-0 right-0 z-20 text-center pointer-events-none">
+        <h2 className="text-3xl font-light text-white uppercase tracking-[0.2em]">
+            Featured Designs
+        </h2>
+    </div>
                 <div className="absolute inset-0 z-0 pr-5">
                     {/* Pass the scroll handler down */}
                     <CarouselCanvas 
@@ -78,101 +83,6 @@ export default function ConeCarousel() {
 
         </div>
       </div>
-      
-      {/* <div className="h-screen bg-slate-900 flex items-center justify-center text-white">
-        <h2 className="text-4xl font-bold">Next Section</h2>
-      </div> */}
     </main>
   );
 }
-// "use client";
-
-// import React, { useRef } from "react";
-// import { useScroll } from "framer-motion";
-// import CarouselCanvas from "../shared/CarouselScene"; // Adjust path as needed
-
-// export default function ConeCarousel() {
-//   const containerRef = useRef(null);
-  
-//   const { scrollYProgress } = useScroll({
-//     target: containerRef,
-//     offset: ["start start", "end end"],
-//   });
-
-//   return (
-//     <main className="bg-slate-950 min-h-screen">
-//       {/* Container Height: 600vh 
-//         This is the "physical" distance the user must scroll.
-//         By increasing this from ~270vh to 600vh, the user has to scroll 
-//         much more to complete the same animation sequence, making it feel slower.
-//       */}
-//       <div ref={containerRef} className="relative h-[1300vh]">
-        
-//         {/* Sticky Viewport */}
-//         <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
-            
-//             {/* Visual Frame */}
-//             <div className="relative w-[95vw] h-[90vh] rounded-2xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] bg-gradient-to-b from-slate-900/50 to-slate-950/50 backdrop-blur-sm overflow-hidden">
-//                 <div className="absolute inset-0 z-0">
-//                     <CarouselCanvas scrollProgress={scrollYProgress} />
-//                 </div>
-                
-//                 {/* Optional: Scroll Hint */}
-//                 <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/30 animate-pulse text-sm font-mono pointer-events-none z-10">
-//                     SCROLL TO EXPLORE
-//                 </div>
-//             </div>
-
-//         </div>
-//       </div>
-      
-//       {/* Footer / Next Content Section */}
-//       {/* <div className="h-screen bg-slate-900 flex items-center justify-center text-white">
-//         <h2 className="text-4xl font-bold">Next Section</h2>
-//       </div> */}
-//     </main>
-//   );
-// }
-
-
-// // app/page.js
-// "use client";
-
-// import React, { useRef } from "react";
-// import { useScroll } from "framer-motion";
-// import CarouselCanvas from "../shared/CarouselScene";
-
-// export default function ConeCarousel() {
-//   const containerRef = useRef(null);
-  
-//   // Track scroll progress of the container
-//   const { scrollYProgress } = useScroll({
-//     target: containerRef,
-//     offset: ["start start", "end end"],
-//   });
-
-//   return (
-//     <main className=" min-h-screen">
-//           <div ref={containerRef} className="relative h-[270vh] bg-[rgba(0,20,52,0)] pt-15">
-//       <div className="sticky top-10 m-auto h-[90vh] w-[95vw] overflow-hidden rounded-2xl shadow-[0_5px_35px_rgba(255,255,255,0.25)] outline outline-offset-2 border-white/60">
-      
-//       {/* 1. SCROLL CONTAINER 
-//         height: 500vh ensures a long scroll so the animation plays smoothly.
-//       */}
-//       <div ref={containerRef} className="relative h-1000vh]">
-        
-//         {/* 2. STICKY VIEWPORT
-//           This stays fixed on screen while we scroll through the 500vh container.
-//         */}
-//         <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
-
-//           {/* The 3D Scene */}
-//           <div className="w-full h-full">
-//             <CarouselCanvas scrollProgress={scrollYProgress} />
-//           </div> </div> </div>
-          
-//         </div>
-//       </div>
-//     </main>
-//   );
-// }

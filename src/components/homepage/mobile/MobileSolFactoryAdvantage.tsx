@@ -13,7 +13,7 @@ export default function SolFactoryAdvantageMobile() {
       </h2>
 
       {/* VIDEO */}
-      <div className="mb-8">
+      {/* <div className="mb-8">
         <div className="aspect-video rounded-xl overflow-hidden bg-black">
           <video
             controls
@@ -21,7 +21,7 @@ export default function SolFactoryAdvantageMobile() {
             src="https://ja3zeotcy2kd52jg.public.blob.vercel-storage.com/SOL%20Video%28Compressed%29.mp4"
           />
         </div>
-      </div>
+      </div> */}
 
       {/* STAGGERED CARDS */}
       <div className="grid grid-cols-2 gap-4">

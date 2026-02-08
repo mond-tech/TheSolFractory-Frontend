@@ -133,47 +133,61 @@ const ScrollVideo = ({ videoSrc }: { videoSrc: string }) => {
   }, [videoUrl]); // Re-initialize when Blob URL is ready
 
   return (
-    <div ref={containerRef} className="relative h-[270vh] bg-[rgb(0,20,52)] pt-15">
-      <div className="sticky top-10 m-auto h-[90vh] w-[95vw] overflow-hidden rounded-2xl shadow-[0_5px_35px_rgba(255,255,255,0.25)] outline outline-offset-2 border-white/60">
+    <>
+      <div ref={containerRef} className="relative h-[270vh] bg-[rgb(0,20,52)] pt-15">
+        <div className="sticky top-10 m-auto h-[90vh] w-[95vw] overflow-hidden rounded-2xl shadow-[0_5px_35px_rgba(255,255,255,0.25)] outline outline-offset-2 border-white/60">
+          
+          {/* Loading State */}
+          {isLoading && (
+              <div className="absolute inset-0 flex items-center justify-center text-white z-50">
+                  Loading High-Res Video...
+              </div>
+          )}
+
+          {/* 🎬 Canvas (Visible) */}
+          <canvas
+            ref={canvasRef}
+            className="absolute inset-0 w-full h-full object-cover z-10"
+          />
+
+          {/* ✨ Overlay shown when scrolled enough */}
+          {showOverlay && (
+            <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+              <div className="">
+                  <TextGenerateEffect
+                  words="Exceptional Quality. Endless Customization. True Scalability."
+                  className=" text-center text-4xl md:text-6xl "
+                  />
+              </div>
+            </div>
+          )}
+
+          {/* 🕵️ Hidden Source Video */}
+          {videoUrl && (
+              <video
+              ref={videoRef}
+              src={videoUrl}
+              muted
+              playsInline
+              preload="auto"
+              className="absolute inset-0 w-full h-full opacity-0 pointer-events-none"
+              />
+          )}
+        </div>
         
-        {/* Loading State */}
-        {isLoading && (
-            <div className="absolute inset-0 flex items-center justify-center text-white z-50">
-                Loading High-Res Video...
-            </div>
-        )}
-
-        {/* 🎬 Canvas (Visible) */}
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0 w-full h-full object-cover z-10"
-        />
-
-        {/* ✨ Overlay shown when scrolled enough */}
-        {showOverlay && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-            <div className="">
-                <TextGenerateEffect
-                words="Exceptional Quality. Endless Customization. True Scalability."
-                className=" text-center text-4xl md:text-6xl "
-                />
-            </div>
-          </div>
-        )}
-
-        {/* 🕵️ Hidden Source Video */}
-        {videoUrl && (
-            <video
-            ref={videoRef}
-            src={videoUrl}
-            muted
-            playsInline
-            preload="auto"
-            className="absolute inset-0 w-full h-full opacity-0 pointer-events-none"
-            />
-        )}
+        {/* Overlapping div - 50% on bottom of ScrollVideo, 50% on top of next component */}
+        <div 
+          className='absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-full max-w-4xl px-8 py-12'
+          style={{ zIndex: 100 }}
+        >
+          {/* <div className='backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] p-8 md:p-12'>
+            <h1 className='text-white text-3xl md:text-5xl lg:text-6xl font-bold text-center leading-tight tracking-tight'>
+              Hello Uncle!
+            </h1>
+          </div> */}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
