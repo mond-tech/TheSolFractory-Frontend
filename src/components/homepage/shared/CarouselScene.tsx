@@ -6,6 +6,7 @@ import { useTransform, MotionValue } from "framer-motion";
 import { Environment, ContactShadows, Html, useProgress } from "@react-three/drei";
 import * as THREE from "three";
 import { Cone } from "./Cone"; 
+import { BackgroundSphere } from "./Atmosphere";
 import type { Group } from "three";
 
 // --- EXPORT CONFIGURATION for Page.tsx to use ---
@@ -326,6 +327,7 @@ function CarouselScene({ scrollProgress, onItemClick } : CarouselSceneProps) {
 
   return (
     <>
+      <BackgroundSphere />
       <ambientLight intensity={0.5} />
       <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
       <Environment preset="city" />

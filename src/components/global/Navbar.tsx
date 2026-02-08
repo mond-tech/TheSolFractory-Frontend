@@ -54,7 +54,7 @@ export default function Navbar() {
       // VideoHero is h-screen, so check if scroll is less than viewport height
       const scrollY = window.scrollY;
       const viewportHeight = window.innerHeight;
-      setIsOverlappingVideo(scrollY < viewportHeight * 7.7);
+      setIsOverlappingVideo(scrollY < viewportHeight * 8.7);
     };
 
     // Check initial state

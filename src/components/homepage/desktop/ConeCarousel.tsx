@@ -66,7 +66,7 @@ export default function ConeCarousel() {
         <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
             
             <div className="relative w-[95vw] h-[90vh] rounded-2xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)]
-             bg-gradient-to-b bg-slate-950 backdrop-blur-sm overflow-hidden">
+             bg-gradient-to-b from-[#070b17] via-[#0a0f1f] to-[#050810] backdrop-blur-sm overflow-hidden">
               <div className="absolute top-10 left-0 right-0 z-20 text-center pointer-events-none">
         <h2 className="text-3xl font-light text-white uppercase tracking-[0.2em]">
             Featured Designs
