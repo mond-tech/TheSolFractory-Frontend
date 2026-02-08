@@ -29,10 +29,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${manrope.variable} ${tasa.variable}`}>
       <head>
-        <link
+        {/* <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        />
+        /> */}
       </head>
       <body
         className={`${manrope.className} antialiased selection:bg-blue-600 selection:text-white`}

@@ -9,7 +9,8 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useCart } from "@/src/contexts/CartContext";
 import { useUser } from "@/src/contexts/UserContext";
 import { UserProfileDialog } from "@/src/components/user/UserProfileDialog";
-import { IconUserFilled } from "@tabler/icons-react";
+import { IconUserFilled, IconShoppingCart, IconMenu2, IconX } from "@tabler/icons-react";
+import { HiShoppingCart } from "react-icons/hi";
 import { useRouter } from "next/navigation";
 
 const navLinks = [
@@ -191,7 +192,7 @@ export default function Navbar() {
               <span
                 className={`${(!isOverlappingVideo || !isHomePage) ? "btn-liquid" : ""} w-full h-full flex items-center justify-center rounded-full overflow-hidden cursor-pointer`}
               >
-                <i className="fas fa-shopping-cart text-sm md:text-base text-gray-300 group-hover:text-white transition" />
+                <IconShoppingCart className="w-5 h-5 md:w-6 md:h-6 text-gray-300 group-hover:text-white transition" />
               </span>
 
               {itemCount > 0 && (
@@ -217,7 +218,11 @@ export default function Navbar() {
               style={{ borderRadius: "50%" }}
               aria-label="Toggle menu"
             >
-              <i className={`fas ${mobileOpen ? "fa-times" : "fa-bars"} text-lg`} />
+              {mobileOpen ? (
+                <IconX className="w-5 h-5 md:w-6 md:h-6 text-white" />
+              ) : (
+                <IconMenu2 className="w-5 h-5 md:w-6 md:h-6 text-white" />
+              )}
             </button>: null}
           </div>
         </div>

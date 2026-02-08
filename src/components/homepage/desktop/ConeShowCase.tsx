@@ -26,7 +26,7 @@ export default function MergedCards() {
 
 
       {/* 1 — Size Chart (your first one) */}
-      <InfoCard
+      {/* <InfoCard
         bgColor=""
         title="Size That Fits Your Product Line:"
         description="We manufacture cones in all industry-standard sizes, with fully custom dimensions for brands that want something unique. Whether you’re creating:"
@@ -37,7 +37,7 @@ export default function MergedCards() {
         imageEffect={{
           type: "marquee"
         }}
-      />
+      /> */}
 
       {/* 2 — Paper Options */}
       {isMobile? null : <InfoCard

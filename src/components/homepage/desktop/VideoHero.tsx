@@ -58,7 +58,7 @@ export default function VideoHero() {
       />
 
       {/* Overlay */}
-      <div className="fixed inset-0 bg-gray-900/70 backdrop-grayscale-80 pointer-events-none" />
+      <div className="fixed inset-0 bg-gray-900/50 backdrop-grayscale-50 pointer-events-none" />
 
       {/* Content */}
       <div className="relative z-0 flex h-full items-center justify-center px-6">
