@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatedPinCard } from "@/src/sharedcomponents/PinCard3D";
 import MobileTrustCones from "../mobile/MobileTrustCones";
 import { useIsMobile } from "@/hooks/use-mobile";

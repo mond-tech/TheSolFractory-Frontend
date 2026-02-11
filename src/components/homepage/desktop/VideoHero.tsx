@@ -42,11 +42,11 @@ export default function VideoHero() {
       {/* Video */}
       <video
         ref={videoRef}
-        className={`fixed inset-0 h-full w-full object-cover transition-opacity duration-700 ${
+        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
           videoReady ? "opacity-100" : "opacity-0"
         }`}
-        // src="https://ja3zeotcy2kd52jg.public.blob.vercel-storage.com/solherovideo.mp4"
-        src={"https://ja3zeotcy2kd52jg.public.blob.vercel-storage.com/solvideo-vmake_compressed.mp4"}
+        src="/videos/solvideo-vmake_compressed.mp4" // <-- your video
+        // src={"https://ja3zeotcy2kd52jg.public.blob.vercel-storage.com/solvideo-vmake_compressed.mp4"}
         autoPlay
         muted
         loop
@@ -58,16 +58,47 @@ export default function VideoHero() {
       />
 
       {/* Overlay */}
-      <div className="fixed inset-0 bg-gray-900/50 backdrop-grayscale-50 pointer-events-none" />
+      {/* <div className="fixed inset-0 bg-gray-900/50 backdrop-grayscale-50 pointer-events-none" />*/}
+
+      {/* Dark base overlay */}
+      <div className="pointer-events-none fixed inset-0 z-10 bg-black/80" />
+
+      {/* Green top glow */}
+      <div className="pointer-events-none fixed inset-0 z-20">
+        <div
+          className="
+      absolute
+      top-[-45%]
+      left-1/2
+      h-[120vh]
+      w-[120vw]
+      -translate-x-1/2
+      rounded-full
+      opacity-60
+    "
+          style={{
+            background: `
+        radial-gradient(
+          ellipse at top,
+          rgba(120, 160, 210, 0.45) 0%,
+          rgba(120, 160, 210, 0.28) 30%,
+          rgba(120, 160, 210, 0.14) 56%,
+          rgba(0, 0, 0, 0) 65%
+        )
+      `,
+          }}
+        />
+      </div>
+
+      {/* Edge vignette */}
+      <div className="pointer-events-none fixed inset-0 z-30 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_30%,rgba(0,0,0,0.65)_100%)]" />
 
       {/* Content */}
-      <div className="relative z-0 flex h-full items-center justify-center px-6">
+      <div className="relative z-40 flex h-full items-center justify-center px-6">
         <div className="max-w-5xl text-center flex items-center justify-center">
           <span className="">
             <motion.span className=" flex flex-col items-center justify-center gap-0 text-center sm:mx-0 sm:mb-0 sm:flex-row">
-              <span
-                className="inline-block whitespace-nowrap text-5xl md:text-6xl font-tasa font-extrabold tracking-tight drop-shadow-[0_3.5px_2px_rgba(158,158,158,0.6)] text-[rgba(4,20,50,1)]"
-              >
+              <span className="inline-block whitespace-nowrap text-5xl md:text-6xl font-tasa font-extrabold tracking-tight drop-shadow-[0_3.5px_2px_rgba(158,158,158,0.6)] text-[rgba(4,20,50,1)]">
                 Machine Made
               </span>
               <LayoutTextFlip
@@ -77,9 +108,7 @@ export default function VideoHero() {
                 className="drop-shadow-2xl drop-shadow-black w-[200px]"
               />
 
-              <span
-                className="inline-block whitespace-nowrap text-5xl md:text-6xl font-tasa font-extrabold tracking-tight drop-shadow-[0_3.5px_2px_rgba(158,158,158,0.6)] text-[rgba(4,20,50,1)]"
-              >
+              <span className="inline-block whitespace-nowrap text-5xl md:text-6xl font-tasa font-extrabold tracking-tight drop-shadow-[0_3.5px_2px_rgba(158,158,158,0.6)] text-[rgba(4,20,50,1)]">
                 for
               </span>
               <LayoutTextFlip

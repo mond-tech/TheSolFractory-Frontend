@@ -11,6 +11,24 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <footer className="relative w-full">
+      {/* PAPER SHADOW */}
+<div
+  className="pointer-events-none absolute top-0 left-0 right-0 h-10"
+  style={{
+    background: `
+      linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.35),
+        rgba(0,0,0,0.15),
+        rgba(0,0,0,0.05),
+        transparent
+      )
+    `,
+    filter: "blur(6px)",
+    opacity: 0.55,
+  }}
+/>
+
       {/* FOOTER BACKGROUND */}
       <div
         className="w-full text-white px-6 pt-14 pb-6"

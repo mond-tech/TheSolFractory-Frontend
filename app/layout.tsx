@@ -3,7 +3,7 @@ import { CartProvider } from "@/src/contexts/CartContext";
 import { UserProvider } from "@/src/contexts/UserContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Toaster } from "@/components/ui/sonner";
-import { Manrope, Kanit, Limelight, Yatra_One, Forum, TASA_Explorer } from "next/font/google";
+import { Manrope, TASA_Explorer } from "next/font/google";
 import { WhatsappFab } from "@/src/components/global/WhatsappFab";
 import AgeGate from "@/src/components/global/AgeVerificationModal";
 
@@ -29,10 +29,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${manrope.variable} ${tasa.variable}`}>
       <head>
-        {/* <link
+        <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        /> */}
+        />
       </head>
       <body
         className={`${manrope.className} antialiased selection:bg-blue-600 selection:text-white`}

@@ -10,7 +10,6 @@ import { useCart } from "@/src/contexts/CartContext";
 import { useUser } from "@/src/contexts/UserContext";
 import { UserProfileDialog } from "@/src/components/user/UserProfileDialog";
 import { IconUserFilled, IconShoppingCart, IconMenu2, IconX } from "@tabler/icons-react";
-import { HiShoppingCart } from "react-icons/hi";
 import { useRouter } from "next/navigation";
 
 const navLinks = [
@@ -28,6 +27,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [isOverlappingVideo, setIsOverlappingVideo] = useState(false);
+  const [navBgVariant, setNavBgVariant] = useState<"transparent" | "blur" | "solid">("transparent");
   const { getItemCount } = useCart();
   const { isAuthenticated, isLoading } = useUser();
 
@@ -44,18 +44,36 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    // Only apply scroll-based logic on HomePage
-    if (!isHomePage) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setIsOverlappingVideo(false); // Always show classes on other pages
-      return;
-    }
-
     const handleScroll = () => {
-      // VideoHero is h-screen, so check if scroll is less than viewport height
       const scrollY = window.scrollY;
       const viewportHeight = window.innerHeight;
-      setIsOverlappingVideo(scrollY < viewportHeight * 8.7);
+
+      // Non-home pages: always solid background, no overlap logic
+      if (!isHomePage) {
+        setIsOverlappingVideo(false);
+        setNavBgVariant("solid");
+        return;
+      }
+
+      // Tune these multipliers so they align with your actual layout:
+      const heroEnd = viewportHeight * 1;      // 1) end of top hero video section
+      const bottomStart = viewportHeight * 4;  // 3) start of bottom carousel / cone section
+
+      // 1. While within hero video: no background
+      if (scrollY < heroEnd) {
+        setNavBgVariant("transparent");
+      }
+      // 2. Between hero and bottom carousel: blurred background
+      else if (scrollY < bottomStart) {
+        setNavBgVariant("blur");
+      }
+      // 3. At / after bottom carousel: solid background
+      else {
+        setNavBgVariant("solid");
+      }
+
+      // Keep legacy flag if you still use it elsewhere
+      setIsOverlappingVideo(scrollY < viewportHeight * 1);
     };
 
     // Check initial state
@@ -72,21 +90,28 @@ export default function Navbar() {
 
   return (
     <>
-      {/*border-b bg-[#132135]/80*/} 
+      {/*border-b bg-[rgb(0,20,52)]*/} 
       {/* fixed */}
-       <header className={`top-0 left-0 right-0 z-50 w-full border-white/5 transition-all duration-300 ${
-         (!isOverlappingVideo || !isHomePage) ? "backdrop-blur-xl fixed" : "absolute"
-       }`}>
+        <header
+          className={`fixed top-0 left-0 right-0 z-50 w-full border-white/5 transition-all duration-300 ${
+            navBgVariant === "transparent"
+              ? ""
+              : navBgVariant === "blur"
+              ? "backdrop-blur-xl"
+              : "bg-[rgb(0,20,52)]"
+          }`}
+       //  backdrop-blur-xl
+        >
 
-        <div className="max-w-350 mx-auto px-4 md:px-6 h-20 flex justify-between items-center relative z-50">
+        <div className="max-w-350 mx-auto px-4 md:px-6 h-16 flex justify-between items-center relative z-50">
           <div className="flex items-center gap-3">
-            <Link href="/" className="h-10 md:h-14 block group cursor-pointer ml-3">
+            <Link href="/" className="h-10 md:h-9 block group cursor-pointer ml-3">
               <Image
                 src="/logo.png"
                 alt=""
-                width={80}
-                height={20}
-                className="md:mt-0.5"
+                width={70}
+                height={10}
+                className="md:mt-0"
               />
             </Link>
             
@@ -100,7 +125,7 @@ export default function Navbar() {
                 key={link.id}
                 href={link.href}
                 // text-[#36363694]
-                className={` ${(!isOverlappingVideo || !isHomePage) ? "nav-btn btn-liquid" : ""} px-6 py-2 w-[120px] text-center text-xs font-bold uppercase tracking-widest
+                className={` ${(!isOverlappingVideo || !isHomePage) ? "nav-btn btn-liquid" : ""} px-6 py-[7px] w-[120px] text-center text-[11px] font-bold uppercase tracking-widest
                     text-white drop-shadow-lg hover:text-[#ffffff71] hover:active ${
                   isActive(link.href) ? "active" : ""
                 }`}
@@ -123,12 +148,12 @@ export default function Navbar() {
           <div className="flex items-center gap-5">
             {!ismobile && <button
               onClick={handleClick}
-              className={`relative group w-9.75 h-9.75 cursor-pointer flex items-center justify-center rounded-full transition ${
+              className={`relative group w-9 h-9 cursor-pointer flex items-center justify-center rounded-full transition ${
                 (!isOverlappingVideo || !isHomePage) ? "btn-liquid active" : ""
               }`}
               aria-label="User profile"
             >
-              <IconUserFilled className="w-5.5 h-5.5 text-white" />
+              <IconUserFilled className="w-5 h-5 text-white" />
             </button>}
             {/* {!isLoading && ( isAuthenticated ? (
               <div className="hidden lg:block ml-21 mr-5">
@@ -178,7 +203,7 @@ export default function Navbar() {
             <button
               onClick={() => setCartOpen(true)}
               className="relative group ml-0 
-                         w-8 h-8 md:w-10 md:h-10
+                         w-8 h-8 md:w-9 md:h-9
                          flex items-center justify-center
                          rounded-full"
               aria-label="Open cart"
@@ -192,7 +217,7 @@ export default function Navbar() {
               <span
                 className={`${(!isOverlappingVideo || !isHomePage) ? "btn-liquid" : ""} w-full h-full flex items-center justify-center rounded-full overflow-hidden cursor-pointer`}
               >
-                <IconShoppingCart className="w-5 h-5 md:w-6 md:h-6 text-gray-300 group-hover:text-white transition" />
+                <IconShoppingCart className="w-5 h-5 md:w-5.5 md:h-5.5 text-gray-300 group-hover:text-white transition" />
               </span>
 
               {itemCount > 0 && (

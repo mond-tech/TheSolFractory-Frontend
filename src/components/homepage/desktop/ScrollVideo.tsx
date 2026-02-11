@@ -134,8 +134,9 @@ const ScrollVideo = ({ videoSrc }: { videoSrc: string }) => {
 
   return (
     <>
-      <div ref={containerRef} className="relative h-[270vh] bg-[rgb(0,20,52)] pt-15">
-        <div className="sticky top-10 m-auto h-[90vh] w-[95vw] overflow-hidden rounded-2xl shadow-[0_5px_35px_rgba(255,255,255,0.25)] outline outline-offset-2 border-white/60">
+      <div ref={containerRef} className="relative h-[220vh] bg-[rgb(0,20,52)]">
+        {/* rounded-2xl shadow-[0_5px_35px_rgba(255,255,255,0.25)] outline outline-offset-2 border-white/60 */}
+        <div className="sticky top-0 m-auto h-[100vh] w-full overflow-hidden">
           
           {/* Loading State */}
           {isLoading && (
