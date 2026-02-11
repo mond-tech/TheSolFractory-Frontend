@@ -19,7 +19,7 @@ export default function HomePage() {
         {/* <div className="w-full h-screen bg-white"></div> */}
         <SolFactoryAdvantage />
         <MergedCards />
-        <ScrollVideo videoSrc="/videos/outrobinpurewhite.mp4" />
+        <ScrollVideo videoSrc={process.env.SMOKE_VIDEO_URL || "/videos/outrobinpurewhite.mp4"} />
         <ConeCarousel />
       </main>
     </div>

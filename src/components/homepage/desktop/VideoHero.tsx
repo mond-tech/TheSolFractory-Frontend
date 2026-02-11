@@ -45,7 +45,7 @@ export default function VideoHero() {
         className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
           videoReady ? "opacity-100" : "opacity-0"
         }`}
-        src="/videos/solvideo-vmake_compressed.mp4" // <-- your video
+        src={process.env.HERO_VIDEO_URL || "/videos/solvideo-vmake_compressed.mp4"}
         // src={"https://ja3zeotcy2kd52jg.public.blob.vercel-storage.com/solvideo-vmake_compressed.mp4"}
         autoPlay
         muted

@@ -18,21 +18,27 @@ function Loader() {
   return <Html center className="text-white font-mono">{progress.toFixed(0)}%</Html>;
 }
 
-/* ---------------- INFO CARD ---------------- */
-
-<InfoCard visible={true} index={0} />
 /* ---------------- BLACK Z-LINE ---------------- */
 
-function ZConnection({ visible }: { visible: boolean }) {
-  const lineRef = useRef<THREE.Line>(null);
+function ZConnection({
+  visible,
+}: {
+  visible: boolean;
+  activeIndex?: number;
+  rotation?: number;
+}) {
+  const geometry = React.useMemo(() => new THREE.BufferGeometry(), []);
+  const material = React.useMemo(
+    () =>
+      new THREE.LineBasicMaterial({
+        color: "#000000", // pure black
+        linewidth: 2,
+      }),
+    []
+  );
 
   useFrame(() => {
-    if (!lineRef.current || !visible) {
-      if (lineRef.current) lineRef.current.visible = false;
-      return;
-    }
-
-    lineRef.current.visible = true;
+    if (!visible) return;
 
     // Fixed card position
     const cardPos = new THREE.Vector3(-4, -1.6, RADIUS);
@@ -40,11 +46,7 @@ function ZConnection({ visible }: { visible: boolean }) {
     // ✅ FIXED middle cone position (carousel guarantees cone is here)
     const conePos = new THREE.Vector3(0, -0.4, RADIUS);
 
-    const mid = new THREE.Vector3(
-      conePos.x - 1.2,
-      conePos.y,
-      conePos.z
-    );
+    const mid = new THREE.Vector3(conePos.x - 1.2, conePos.y, conePos.z);
 
     const positions = new Float32Array([
       cardPos.x, cardPos.y, cardPos.z,
@@ -52,24 +54,16 @@ function ZConnection({ visible }: { visible: boolean }) {
       conePos.x, conePos.y, conePos.z,
     ]);
 
-    lineRef.current.geometry.setAttribute(
-      "position",
-      new THREE.BufferAttribute(positions, 3)
-    );
+    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
   });
 
-  return (
-    <line
-      ref={lineRef}
-      geometry={new THREE.BufferGeometry()}
-      material={
-        new THREE.LineBasicMaterial({
-          color: "#000000", // pure black
-          linewidth: 2,
-        })
-      }
-    />
+  // Use primitive so TS/JSX don't confuse this with an SVG <line>
+  const lineObject = React.useMemo(
+    () => new THREE.Line(geometry, material),
+    [geometry, material]
   );
+
+  return visible ? <primitive object={lineObject} /> : null;
 }
 
 
@@ -147,6 +141,11 @@ function CarouselItem({
   angle: number;
   scrollProgress: any;
 }) {
+  // If scrollProgress isn't ready yet, avoid calling hooks that depend on it
+  if (!scrollProgress || typeof scrollProgress.get !== "function") {
+    return null;
+  }
+
   const ref = useRef<THREE.Group>(null);
   const targetX = Math.sin(angle) * RADIUS;
   const targetZ = Math.cos(angle) * RADIUS;

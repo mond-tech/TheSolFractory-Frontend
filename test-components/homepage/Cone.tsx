@@ -3,7 +3,11 @@
 import React from "react";
 import { useGLTF, Center } from "@react-three/drei";
 
-export function Cone({ url }) {
+interface ConeProps {
+  url: string;
+}
+
+export function Cone({ url }: ConeProps) {
   const { scene } = useGLTF(url);
   const sceneClone = React.useMemo(() => scene.clone(), [scene]);
 
