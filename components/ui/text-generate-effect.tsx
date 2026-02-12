@@ -56,7 +56,7 @@ export const TextGenerateEffect = ({
     <div className={cn("font-bold", className)}>
       <motion.div
         ref={scope}
-        className=" text-3xl md:text-[48px] leading-snug tracking-wide text-center"
+        className=" text-3xl md:text-6xl leading-snug tracking-wide text-center"
       >
         <div className="flex flex-col items-center">
 
@@ -78,7 +78,7 @@ export const TextGenerateEffect = ({
                     return (
                       <motion.span
                         key={word + wordIndex}
-                        className=" text-[rgba(0,20,52)] inline-block font-tasa"
+                        className=" text-[rgba(0,20,52)] inline-block font-josepin"
                         style={{
                           filter: filter ? "blur(10px)" : "none",
                           // fontFamily: "Satoshi, sans-serif",
@@ -106,7 +106,7 @@ export const TextGenerateEffect = ({
                 return (
                   <motion.span
                     key={word + wordIndex}
-                    className=" text-[rgb(0,20,52)]  inline-block font-tasa"
+                    className=" text-[#001434]  inline-block font-josepin"
                     style={{
                       filter: filter ? "blur(10px)" : "none",
                       // WebkitTextStroke: "1px rgba(255,255,255,0.3)",

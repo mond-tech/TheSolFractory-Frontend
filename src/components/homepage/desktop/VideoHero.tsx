@@ -45,7 +45,9 @@ export default function VideoHero() {
         className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
           videoReady ? "opacity-100" : "opacity-0"
         }`}
-        src={process.env.HERO_VIDEO_URL || "/videos/solvideo-vmake_compressed.mp4"}
+        src={
+          process.env.HERO_VIDEO_URL || "/videos/solvideo-vmake_compressed.mp4"
+        }
         // src={"https://ja3zeotcy2kd52jg.public.blob.vercel-storage.com/solvideo-vmake_compressed.mp4"}
         autoPlay
         muted
@@ -96,29 +98,67 @@ export default function VideoHero() {
       {/* Content */}
       <div className="relative z-40 flex h-full items-center justify-center px-6">
         <div className="max-w-5xl text-center flex items-center justify-center">
-          <span className="">
-            <motion.span className=" flex flex-col items-center justify-center gap-0 text-center sm:mx-0 sm:mb-0 sm:flex-row">
-              <span className="inline-block whitespace-nowrap text-5xl md:text-6xl font-tasa font-extrabold tracking-tight drop-shadow-[0_3.5px_2px_rgba(158,158,158,0.6)] text-[rgba(4,20,50,1)]">
+          <motion.div
+            className="
+        flex flex-col items-center justify-center text-center
+        md:flex-col md:items-center
+      "
+          >
+            {/* FIRST LINE (Desktop) */}
+            <div className="flex flex-col items-center md:flex-row md:gap-2">
+              <span
+                className="
+  whitespace-nowrap 
+  text-5xl md:text-8xl 
+  font-josefin tracking-tight
+  bg-gradient-to-b 
+  from-[#9cc4ff] 
+  via-[#4f86e8] 
+  to-[#002765]
+  bg-clip-text 
+  text-transparent
+  drop-shadow-[0.1px_0.8px_5px_#111111]
+"
+              >
                 Machine Made
               </span>
+
               <LayoutTextFlip
                 text=""
                 words={["Cones", "Blunts", "Tubes"]}
                 secondtext=""
-                className="drop-shadow-2xl drop-shadow-black w-[200px]"
+                className="w-auto md:w-[300px] drop-shadow-2xl drop-shadow-black"
               />
+            </div>
 
-              <span className="inline-block whitespace-nowrap text-5xl md:text-6xl font-tasa font-extrabold tracking-tight drop-shadow-[0_3.5px_2px_rgba(158,158,158,0.6)] text-[rgba(4,20,50,1)]">
+            {/* SECOND LINE (Desktop) */}
+            <div className="flex flex-col items-center md:flex-row md:gap-3 mt-2">
+              <span
+                className="
+  whitespace-nowrap 
+  text-5xl md:text-8xl 
+  font-josefin tracking-tight
+  bg-gradient-to-b 
+  from-[#9cc4ff] 
+  via-[#4f86e8] 
+  to-[#002765]
+  bg-clip-text 
+  text-transparent
+  
+  drop-shadow-[0.2px_0.8px_5px_#000000]
+"
+              >
                 for
               </span>
+
               <LayoutTextFlip
                 text=""
                 words={["Even Quality", "Stable Shape", "Reliable Filling"]}
                 secondtext=""
-                className="text-center w-[390px] md:text-left drop-shadow-2xl drop-shadow-black"
+                className="w-auto md:w-[630px] drop-shadow-2xl drop-shadow-black text-left"
               />
-            </motion.span>
-          </span>
+            </div>
+          </motion.div>
         </div>
       </div>
     </div>
