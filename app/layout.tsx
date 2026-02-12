@@ -3,7 +3,7 @@ import { CartProvider } from "@/src/contexts/CartContext";
 import { UserProvider } from "@/src/contexts/UserContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Toaster } from "@/components/ui/sonner";
-import { Manrope, TASA_Explorer } from "next/font/google";
+import { Instrument_Sans, Josefin_Sans, Manrope, Mulish, Poppins, Quicksand, TASA_Explorer } from "next/font/google";
 import { WhatsappFab } from "@/src/components/global/WhatsappFab";
 import AgeGate from "@/src/components/global/AgeVerificationModal";
 
@@ -21,13 +21,34 @@ const tasa = TASA_Explorer({
   display: "swap"
 })
 
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-poppins",
+  display: "swap"
+})
+
+const josefin = Josefin_Sans({
+  subsets: ["latin"],
+  weight: ["500"],
+  variable: "--font-josefin",
+  display: "swap"
+})
+
+const mulish = Mulish({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-mulish",
+  display: "swap"
+})
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${manrope.variable} ${tasa.variable}`}>
+    <html lang="en" className={`${manrope.variable} ${tasa.variable} ${poppins.variable} ${josefin.variable} ${mulish.variable}`}>
       <head>
         <link
           rel="stylesheet"
