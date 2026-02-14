@@ -188,6 +188,26 @@ const ScrollVideo = ({ videoSrc }: { videoSrc: string }) => {
           </div> */}
         </div>
       </div>
+          <div
+    style={{
+        height: "80px",
+        background: "white",
+        maskImage: 'url("/torn-edge.png")',
+        WebkitMaskImage: 'url("/torn-edge.png")',
+        maskSize: "100% 100%",
+        WebkitMaskSize: "100% 100%",
+        maskRepeat: "no-repeat",
+        WebkitMaskRepeat: "no-repeat",
+        marginBottom: "-1px",
+        zIndex: 90,
+
+        /* 👇 realism magic */
+        boxShadow: `
+        0 2px 2px rgba(0,0,0,0.04),
+        0 6px 12px rgba(0,0,0,0.08)
+        `,
+    }}
+    ></div>
     </>
   );
 };

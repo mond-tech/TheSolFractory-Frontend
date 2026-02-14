@@ -74,7 +74,7 @@ function ShinyGlassCard({
  
 export default function MachinerySection() {
   return (
-    <section className=" relative w-full min-h-[90vh] flex items-center justify-center overflow-hidden">
+    <section className=" relative w-full min-h-[90vh] pt-[5%] flex items-center justify-center overflow-hidden">
       {/* page glow */}
       <div
         className="absolute inset-0 pointer-events-none"

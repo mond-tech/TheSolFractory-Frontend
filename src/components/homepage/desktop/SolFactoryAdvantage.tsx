@@ -21,7 +21,7 @@ export default function SolFactoryAdvantage() {
 
   return (
     // relative z-10 bg-[#001574]
-    <section className="w-full py-14 px-6 mt-0 flex flex-col items-center">
+    <section className="w-full py-14 px-6 mt-[5%] flex flex-col items-center">
       {/* TITLE */}
       <h2
         className="text-white text-3xl md:text-[33px] font-w-[400px] text-center mb-15"
