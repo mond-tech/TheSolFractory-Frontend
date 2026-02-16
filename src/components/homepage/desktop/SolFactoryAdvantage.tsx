@@ -1,6 +1,7 @@
 "use client";
-
+ 
 import React from "react";
+import { motion } from "framer-motion";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
 import MobileSolFactoryAdvantage from "../mobile/MobileSolFactoryAdvantage";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -11,42 +12,75 @@ import {
   IconHeartHandshake,
 } from "@tabler/icons-react";
 import FullPageLoader from "@/src/components/global/FullPageLoader";
-
+ 
+/* ================= ANIMATION VARIANTS ================= */
+ 
+const containerVariants = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.18 },
+  },
+};
+ 
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring" as const,
+      stiffness: 90,
+      damping: 18,
+      mass: 0.6,
+    },
+  },
+};
+ 
+const cardVariants = {
+  hidden: { opacity: 0, y: 32 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring" as const,
+      stiffness: 110,
+      damping: 20,
+      mass: 0.7,
+    },
+  },
+};
+ 
 export default function SolFactoryAdvantage() {
   const isMobile = useIsMobile();
-
+ 
   if (isMobile === null) return <FullPageLoader />;
-
+ 
   if (isMobile) return <MobileSolFactoryAdvantage />;
-
+ 
   return (
-    // relative z-10 bg-[#001574]
     <section className="w-full py-14 px-6 mt-[5%] flex flex-col items-center">
       {/* TITLE */}
-      <h2
+      <motion.h2
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
         className="text-white text-3xl md:text-[33px] font-w-[400px] text-center mb-15"
         style={{ textShadow: "0 0 3px rgba(255,255,255,0.6)" }}
       >
         The SOL Factory Advantage
-      </h2>
-
-      {/* VIDEO FULL WIDTH */}
-      {/* <div className="w-full max-w-7xl flex justify-center mb-14">
-        <div className="w-full rounded-2xl aspect-22/5 flex items-center justify-center">
-          <video
-            controls
-            className="w-full h-111 rounded-2xl object-cover"
-            src="https://ja3zeotcy2kd52jg.public.blob.vercel-storage.com/SOL%20Video%28Compressed%29.mp4"
-          />
-        </div>
-      </div> */}
-
+      </motion.h2>
+ 
       {/* 4 CARDS GRID */}
-      <div
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-80px" }}
         className="
-        max-w-7xl 
-        w-full 
-        grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 
+        max-w-7xl
+        w-full
+        grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4
         gap-8
       "
       >
@@ -60,7 +94,7 @@ export default function SolFactoryAdvantage() {
             for smooth packing and even burns.
           </p>
         </CardGlowWrapper>
-
+ 
         <CardGlowWrapper>
           <h3 className="font-semibold text-lg mb-2 text-white flex items-center gap-3">
             <IconBrain />
@@ -71,7 +105,7 @@ export default function SolFactoryAdvantage() {
             product line.
           </p>
         </CardGlowWrapper>
-
+ 
         <CardGlowWrapper>
           <h3 className="font-semibold text-lg mb-2 text-white flex items-center gap-3">
             <IconBuilding stroke={2} size={25} />
@@ -82,7 +116,7 @@ export default function SolFactoryAdvantage() {
             production.
           </p>
         </CardGlowWrapper>
-
+ 
         <CardGlowWrapper>
           <h3 className="font-semibold text-lg mb-2 text-white flex items-center gap-3">
             <IconHeartHandshake stroke={2} />
@@ -93,21 +127,24 @@ export default function SolFactoryAdvantage() {
             manufacturing experience.
           </p>
         </CardGlowWrapper>
-      </div>
+      </motion.div>
     </section>
   );
 }
-
-/* Reusable Glow Wrapper */
+ 
+/* ================= REUSABLE GLOW WRAPPER ================= */
+ 
 const CardGlowWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div
+    <motion.div
+      variants={cardVariants}
+      style={{ willChange: "transform" }}
       className="
         relative rounded-xl p-6 bg-white/5 border border-white/10
         shadow-[0_0_20px_rgba(0,0,0,0.4)]
-        transition-all duration-300 
+        transition-all duration-300
         hover:shadow-[0_0_40px_rgba(0,0,0,0.6)]
-        hover:-translate-y-2 
+        hover:-translate-y-2
         hover:scale-[1.03]
         bor-shadow
       "
@@ -119,9 +156,8 @@ const CardGlowWrapper = ({ children }: { children: React.ReactNode }) => {
         disabled={false}
         inactiveZone={0.01}
       />
-
-      {/* content */}
+ 
       <div className="relative z-10">{children}</div>
-    </div>
+    </motion.div>
   );
 };

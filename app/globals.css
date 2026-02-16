@@ -942,3 +942,95 @@ body.smoke-active header {
 .animate-smokeFloat {
   animation: smokeFloat 40s infinite alternate ease-in-out;
 }
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(10, 20, 40, 0.45);
+  backdrop-filter: blur(12px);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  z-index: 9999;
+  overflow: hidden;
+}
+ 
+/* ===== MOVING BORDER ===== */
+.moving-border::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    #3b82f6,
+    #60a5fa,
+    #3b82f6,
+    transparent
+  );
+animation: spinBorder 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+will-change: transform;
+}
+ 
+/* mask center */
+.moving-border::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: rgba(10, 20, 40, 0.85);
+  backdrop-filter: blur(14px);
+}
+ 
+/* arrow */
+.scroll-arrow {
+  position: relative;
+  z-index: 2;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid white;
+  border-bottom: 2px solid white;
+  transform: rotate(45deg);
+  animation: arrowFloat 2.4s infinite ease-in-out;
+    will-change: transform, opacity;
+ 
+}
+ 
+/* animations */
+@keyframes spinBorder {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+ 
+@keyframes arrowFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(-4px) rotate(45deg);
+  }
+  40% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(2px) rotate(45deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(8px) rotate(45deg);
+  }
+}
+/* hover polish */
+.scroll-indicator:hover::before {
+  filter: brightness(1.4);
+}

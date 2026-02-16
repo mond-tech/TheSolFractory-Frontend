@@ -1,6 +1,7 @@
 "use client";
  
 import React, { useRef, useState, useCallback } from "react";
+import { motion } from "framer-motion";
 import {
   IconRocket,
   IconDropletFilled,
@@ -14,6 +15,34 @@ const FEATURES = [
   { icon: IconDropletFilled, label: "Consistent fill" },
   { icon: IconShieldCheck, label: "Industrial-grade reliability" },
 ] as const;
+ 
+/* ================= ANIMATION VARIANTS ================= */
+ 
+const containerVariants = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.18 },
+  },
+};
+ 
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" as const },
+  },
+};
+ 
+const cardVariants = {
+  hidden: { opacity: 0, y: 40, scale: 0.96 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.5, ease: "easeOut" as const },
+  },
+};
  
 /* ================= SHINY FEATURE CARD ================= */
  
@@ -37,7 +66,9 @@ function ShinyGlassCard({
   }, []);
  
   return (
-    <div
+    <motion.div
+      variants={cardVariants}
+      whileHover={{ y: -6 }}
       ref={cardRef}
       onMouseMove={onMove}
       onMouseLeave={() => setShine({ x: 50, y: 50 })}
@@ -59,14 +90,17 @@ function ShinyGlassCard({
         }}
       />
  
-      <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/10">
+      <motion.div
+        whileHover={{ scale: 1.08 }}
+        className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/10"
+      >
         <Icon className="h-6 w-6 text-white" stroke={1.5} />
-      </div>
+      </motion.div>
  
       <span className="relative z-10 md:text-lg text-md uppercase tracking-wider text-white">
         {label}
       </span>
-    </div>
+    </motion.div>
   );
 }
  
@@ -76,15 +110,9 @@ export default function MachinerySection() {
   return (
     <section className=" relative w-full min-h-[90vh] pt-[5%] flex items-center justify-center overflow-hidden">
       {/* page glow */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        // style={{
-        //   background:
-        //     "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(59,130,246,0.18), transparent 60%)",
-        // }}
-      />
+      <div className="absolute inset-0 pointer-events-none" />
  
-      {/* ================= CENTER GLASS HERO (VIDEO INSIDE CARD) ================= */}
+      {/* ================= CENTER GLASS HERO ================= */}
       <div
         className="relative z-10 w-[95vw] mx-auto rounded-3xl overflow-hidden px-8 py-12 md:py-24 "
         style={{
@@ -100,12 +128,9 @@ export default function MachinerySection() {
           `,
         }}
       >
-        {/* 🎥 VIDEO BACKGROUND INSIDE CARD */}
+        {/* 🎥 VIDEO */}
         <video
-          // src="/video/alienrobo1_compressed.mp4"
-          src={
-            "https://ja3zeotcy2kd52jg.public.blob.vercel-storage.com/alienrobo1.mp4"
-          }
+          src="https://ja3zeotcy2kd52jg.public.blob.vercel-storage.com/alienrobo1.mp4"
           autoPlay
           muted
           loop
@@ -113,9 +138,8 @@ export default function MachinerySection() {
           className="absolute inset-0 w-full h-full object-cover"
         />
  
-        {/* bg-blue-800/40 backdrop-grayscale-80  // bg-[#081427]/70 */}
         <div className="absolute inset-0 bg-blue-950/50 backdrop-blur-[2px]" />
-        {/* glass highlight */}
+ 
         <div
           className="pointer-events-none absolute inset-0"
           style={{
@@ -124,36 +148,41 @@ export default function MachinerySection() {
           }}
         />
  
-        {/* ================= CENTER CONTENT ================= */}
-        <div className="relative z-10 flex flex-col gap-12 md:gap-18 items-center text-center">
+        {/* ================= CONTENT ================= */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-80px" }}
+          className="relative z-10 flex flex-col gap-12 md:gap-18 items-center text-center"
+        >
           <div className="flex flex-col gap-4">
-            <h1 className="text-[40px] md:text-7xl font-bold text-white leading-tight font-tasa">
+            <motion.h1
+              variants={fadeUp}
+              className="text-[40px] md:text-7xl font-bold text-white leading-tight font-tasa"
+            >
               Cone Automation
-            </h1>
+            </motion.h1>
  
-            <p
-              className="
-    text-lg
-    md:text-lg
-    lg:text-2xl
-    font-medium
-    text-white/95
-  "
-              style={{
-                textShadow: "0 4px 18px rgba(0,0,0,0.45)",
-              }}
+            <motion.p
+              variants={fadeUp}
+              className="text-lg md:text-lg lg:text-2xl font-medium text-white/95"
+              style={{ textShadow: "0 4px 18px rgba(0,0,0,0.45)" }}
             >
               Automate your pre-roll production with high-speed fill and seal
               technology.
-            </p>
+            </motion.p>
           </div>
  
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-12">
+          <motion.div
+            variants={containerVariants}
+            className="grid grid-cols-1 sm:grid-cols-3 gap-12"
+          >
             {FEATURES.map((f) => (
               <ShinyGlassCard key={f.label} {...f} />
             ))}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );

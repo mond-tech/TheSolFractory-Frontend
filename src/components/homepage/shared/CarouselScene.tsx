@@ -14,7 +14,7 @@ import { Cone } from "./Cone";
 import { OrbitControls } from "@react-three/drei";
 import type { Group } from "three";
 import CinematicSmoke from "./CinemeticSmoke";
-import { Stars } from "@/src/sharedcomponents/build/stars";
+// import { Stars } from "@/src/sharedcomponents/build/stars";
 
 // --- EXPORT CONFIGURATION for Page.tsx to use ---
 export const RADIUS = 6.5;
@@ -137,10 +137,10 @@ function NavArrows({
   return (
     <Html fullscreen style={{ pointerEvents: "none" }} zIndexRange={[100, 0]}>
       <div
-        className={`absolute inset-0 flex items-center justify-between transition-opacity duration-500 ${visible ? "opacity-100" : "opacity-0"}`}
+        className={`absolute inset-0 flex items-center justify-between px-6 md:px-10 lg:px-16 transition-opacity duration-500 ${visible ? "opacity-100" : "opacity-0"}`}
       >
         {/* LEFT ARROW */}
-        <div className="pointer-events-auto flex items-center ml-3 md:ml-6 lg:ml-4">
+        <div className="pointer-events-auto flex items-center">
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -168,7 +168,7 @@ function NavArrows({
         </div>
 
         {/* RIGHT ARROW */}
-        <div className="pointer-events-auto flex items-center -ml-6 md:-ml-10 lg:-ml-15">
+        <div className="pointer-events-auto flex items-center">
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -671,6 +671,56 @@ function SmokePlane({
   );
 }
 
+// Smoke emitter placed toward the back-top-right of the scene, built from layered SmokePlanes
+function SmokeEmitter({
+  position = [6, 4.5, -6],
+  color = "#9fb4ff",
+}: {
+  position?: [number, number, number];
+  color?: string;
+}) {
+  const groupRef = useRef<THREE.Group>(null);
+
+  useFrame((state) => {
+    if (!groupRef.current) return;
+    const t = state.clock.elapsedTime;
+    // Gentle vertical breathing motion to keep the emitter feeling alive but not jittery
+    groupRef.current.position.y = position[1] + Math.sin(t * 0.25) * 0.25;
+  });
+
+  return (
+    <group ref={groupRef} position={position}>
+      {/* Core plume */}
+      <SmokePlane
+        position={[0, 0, 0]}
+        scale={[18, 12]}
+        rotation={[0, 0, 0]}
+        opacity={0.18}
+        drift
+        color={color}
+      />
+      {/* Mid layer, slightly offset */}
+      <SmokePlane
+        position={[-2, 1.5, 0.5]}
+        scale={[14, 10]}
+        rotation={[0.1, 0.15, 0]}
+        opacity={0.14}
+        drift
+        color={color}
+      />
+      {/* Softer outer haze */}
+      <SmokePlane
+        position={[-4, 3, 1]}
+        scale={[12, 8]}
+        rotation={[0.15, 0.25, 0.1]}
+        opacity={0.1}
+        drift
+        color={color}
+      />
+    </group>
+  );
+}
+
 function DustParticles({ count = 620 }: { count?: number }) {
   const pointsRef = useRef<THREE.Points>(null);
 
@@ -823,7 +873,7 @@ function CarouselScene({ scrollProgress, onItemClick }: CarouselSceneProps) {
   const [isConeCentered, setIsConeCentered] = useState(false);
   const [centeredConePosition, setCenteredConePosition] = useState<THREE.Vector3 | null>(null);
   const [showCardWithDelay, setShowCardWithDelay] = useState(false);
-  const [groupRotation, setGroupRotation] = useState(0);
+  const [groupRotation, setGroupRotation] = useState(0); // logical carousel rotation, not actual group transform
   const delayTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const anglePerCone = (Math.PI * 2) / CONE_DATA.length;
   const controlsRef = useRef<OrbitControlsImpl>(null);
@@ -892,41 +942,36 @@ function CarouselScene({ scrollProgress, onItemClick }: CarouselSceneProps) {
       if (showUI) setShowUI(false);
       if (isConeCentered) setIsConeCentered(false);
       groupRef.current.rotation.y = 0;
+      if (groupRotation !== 0) setGroupRotation(0);
     } else {
       if (!showUI) setShowUI(true);
 
       const carouselProgress =
         (currentScroll - ANIMATION_END) / (1 - ANIMATION_END);
       const rawStep = carouselProgress * CONE_DATA.length;
-      const currentStep = Math.min(Math.floor(rawStep), CONE_DATA.length - 1);
+      const currentStep = Math.min(
+        Math.round(rawStep),
+        CONE_DATA.length - 1,
+      );
 
       if (currentStep !== activeIndex) {
         setActiveIndex(currentStep);
       }
 
-      const targetRotation = -currentStep * anglePerCone;
-      const lerpedRotation = THREE.MathUtils.lerp(
-        groupRef.current.rotation.y,
-        targetRotation,
-        0.1,
-      );
-      groupRef.current.rotation.y = lerpedRotation;
-      setGroupRotation(lerpedRotation);
-
-      // Check if the active cone is centered (angle close to 0)
-      const activeAngle = (activeIndex / CONE_DATA.length) * Math.PI * 2;
-      const actualAngle = activeAngle + groupRotation;
-
-      const x = Math.sin(actualAngle) * RADIUS;
-      const z = Math.cos(actualAngle) * RADIUS;
-      const conePosition = new THREE.Vector3(x, 0, z);
-
-      if (heroLightRef.current?.target) {
-        heroLightRef.current.target.position.set(x, 0, z);
-        heroLightRef.current.target.updateMatrixWorld();
+      // Compute logical carousel rotation from the discrete active step so
+      // the active cone is always exactly at the front (no partial offsets).
+      const logicalRotation = -currentStep * anglePerCone;
+      if (groupRotation !== logicalRotation) {
+        setGroupRotation(logicalRotation);
       }
-      const currentRotation = groupRef.current.rotation.y;
-      const relativeAngle = activeAngle + currentRotation;
+
+      // We always keep the actual THREE group unrotated to avoid camera-relative drift;
+      // all cone positions are derived from `groupRotation` instead.
+      groupRef.current.rotation.y = 0;
+
+      // Check if the active cone is centered (angle close to 0 in logical space)
+      const activeAngle = (activeIndex / CONE_DATA.length) * Math.PI * 2;
+      const relativeAngle = activeAngle + groupRotation;
       // Normalize angle to [-PI, PI] range
       const normalizedAngle =
         ((relativeAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
@@ -941,9 +986,18 @@ function CarouselScene({ scrollProgress, onItemClick }: CarouselSceneProps) {
         setIsConeCentered(centered);
       }
 
-      // Update centered cone position for spotlight
+      // Update centered cone position for spotlight based on actual logical angle
       if (centered) {
+        const frontAngle = activeAngle + groupRotation;
+        const x = Math.sin(frontAngle) * RADIUS;
+        const z = Math.cos(frontAngle) * RADIUS;
+        const conePosition = new THREE.Vector3(x, 0, z);
         setCenteredConePosition(conePosition);
+
+        if (heroLightRef.current?.target) {
+          heroLightRef.current.target.position.set(x, 0, z);
+          heroLightRef.current.target.updateMatrixWorld();
+        }
       } else {
         setCenteredConePosition(null);
       }
@@ -1142,11 +1196,7 @@ function CarouselScene({ scrollProgress, onItemClick }: CarouselSceneProps) {
 
       {/* BACKGROUND ELEMENTS - Render first with low renderOrder */}
       {/* STEP 7 — BACKGROUND SMOKE (TUNED) */}
-      {/* <SmokePlane position={[0, 5, -8]} scale={[36, 22]} opacity={0.25} />
-
-      <SmokePlane position={[-6, 4, -6]} scale={[30, 20]} opacity={0.04} />
-
-      <SmokePlane position={[6, 4, -6]} scale={[30, 20]} opacity={0.04} /> */}
+      <SmokeEmitter position={[6, 4.5, -6]} />
 
       {/* STEP 7 — FOREGROUND DEPTH (PARALLAX) */}
       {/* <SmokePlane position={[0, -2, -3]} scale={[28, 18]} opacity={0.05} /> */}
@@ -1154,7 +1204,7 @@ function CarouselScene({ scrollProgress, onItemClick }: CarouselSceneProps) {
       <DustParticles count={150} />
 
       {/* STARS - Moonish feeling background */}
-      <Stars count={1200} />
+      {/* <Stars count={1200} /> */}
 
       {/* TERRAIN FLOOR WITH DISPLACEMENT MAPPING - Render before cones */}
       <TerrainFloor
@@ -1175,6 +1225,7 @@ function CarouselScene({ scrollProgress, onItemClick }: CarouselSceneProps) {
               index={i}
               isLeft={isLeft}
               angle={angle}
+              carouselRotation={groupRotation}
               scrollProgress={scrollProgress}
               url={data.url}
               modelScale={data.scale}
@@ -1220,6 +1271,7 @@ interface CarouselItemProps {
   index: number;
   isLeft: boolean;
   angle: number;
+  carouselRotation: number;
   scrollProgress: MotionValue<number>;
   url: string;
   modelScale: number;
@@ -1232,6 +1284,7 @@ function CarouselItem({
   index,
   isLeft,
   angle,
+  carouselRotation,
   scrollProgress,
   url,
   modelScale,
@@ -1249,8 +1302,9 @@ function CarouselItem({
       activeConeRef.current = null;
     }
   }, [isActive, activeConeRef]);
-  const targetX = Math.sin(angle) * RADIUS;
-  const targetZ = Math.cos(angle) * RADIUS;
+  const worldAngle = angle + carouselRotation;
+  const targetX = Math.sin(worldAngle) * RADIUS;
+  const targetZ = Math.cos(worldAngle) * RADIUS;
   const startX = isLeft ? -ENTRANCE_OFFSET : ENTRANCE_OFFSET;
 
   const x = useTransform(scrollProgress, [0, ANIMATION_END], [startX, targetX]);
@@ -1366,15 +1420,13 @@ export default function CarouselCanvas({
           toneMapping: THREE.ACESFilmicToneMapping,
           outputColorSpace: THREE.SRGBColorSpace,
         }}
-        camera={{ position: [0, -1, 18], fov: 40 }}
+        camera={{ position: [0, 0, 18], fov: 40 }}
       >
         <React.Suspense fallback={<Loader />}>
-          <CameraRig>
-            <CarouselScene
-              scrollProgress={scrollProgress}
-              onItemClick={onItemClick}
-            />
-          </CameraRig>
+          <CarouselScene
+            scrollProgress={scrollProgress}
+            onItemClick={onItemClick}
+          />
         </React.Suspense>
       </Canvas>
     </div>

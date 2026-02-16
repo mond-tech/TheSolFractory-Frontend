@@ -45,7 +45,9 @@ export default function VideoHero() {
         className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
           videoReady ? "opacity-100" : "opacity-0"
         }`}
-        src={process.env.HERO_VIDEO_URL || "/videos/solvideo-vmake_compressed.mp4"}
+        src={
+          process.env.HERO_VIDEO_URL || "/videos/solvideo-vmake_compressed.mp4"
+        }
         // src={"https://ja3zeotcy2kd52jg.public.blob.vercel-storage.com/solvideo-vmake_compressed.mp4"}
         autoPlay
         muted
@@ -121,6 +123,17 @@ export default function VideoHero() {
           </span>
         </div>
       </div>
+      <button
+        aria-label="Scroll to machinery section"
+        className="scroll-indicator moving-border"
+        onClick={() => {
+          document
+            .getElementById("machinery-section")
+            ?.scrollIntoView({ behavior: "smooth" });
+        }}
+      >
+        <span className="scroll-arrow" />
+      </button>
     </div>
   );
 }
