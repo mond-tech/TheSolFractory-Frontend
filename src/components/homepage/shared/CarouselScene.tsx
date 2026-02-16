@@ -28,7 +28,7 @@ export const CONE_DATA = [
     description: "Smooth matte finish",
     url: "/3d-cones/straight/beige_cone.glb",
     scale: 46,
-    rotationOffset: 2.7,
+    rotationOffset: 2,
   },
   {
     id: 2,
@@ -36,7 +36,7 @@ export const CONE_DATA = [
     description: "Dark reflective surface",
     url: "/3d-cones/straight/black_cone_v01.glb",
     scale: 47,
-    rotationOffset: 2.7,
+    rotationOffset: 1.4,
   },
   {
     id: 3,
@@ -44,7 +44,7 @@ export const CONE_DATA = [
     description: "Clean minimal design",
     url: "/3d-cones/straight/white roll.glb",
     scale: 1,
-    rotationOffset: 4.5,
+    rotationOffset: 1.4,
   },
   {
     id: 4,
@@ -52,7 +52,7 @@ export const CONE_DATA = [
     description: "Organic material feel",
     url: "/3d-cones/brown roll.glb",
     scale: 1.5,
-    rotationOffset: 1.7,
+    rotationOffset: 3.9,
   },
   {
     id: 5,
@@ -60,7 +60,7 @@ export const CONE_DATA = [
     description: "Transparent optics",
     url: "/3d-cones/straight/Cone Glass Filter.glb",
     scale: 0.5,
-    rotationOffset: 4.12,
+    rotationOffset: 0.6,
   },
   {
     id: 6,
@@ -68,7 +68,7 @@ export const CONE_DATA = [
     description: "Heavy duty manufacturing",
     url: "/3d-cones/straight/Roll 1.glb",
     scale: 40,
-    rotationOffset: 0.7,
+    rotationOffset: 2.3,
   },
   {
     id: 7,
@@ -76,7 +76,7 @@ export const CONE_DATA = [
     description: "Cold rolled steel",
     url: "/3d-cones/straight/Roll 2glb.glb",
     scale: 40,
-    rotationOffset: 0.7,
+    rotationOffset: 2.1,
   },
   {
     id: 8,
@@ -84,7 +84,7 @@ export const CONE_DATA = [
     description: "High durability polymer",
     url: "/3d-cones/straight/Transparent Cone.glb",
     scale: 3.2,
-    rotationOffset: 0,
+    rotationOffset: -0.5,
   },
 ];
 
@@ -949,10 +949,18 @@ function CarouselScene({ scrollProgress, onItemClick }: CarouselSceneProps) {
       const carouselProgress =
         (currentScroll - ANIMATION_END) / (1 - ANIMATION_END);
       const rawStep = carouselProgress * CONE_DATA.length;
-      const currentStep = Math.min(
-        Math.round(rawStep),
-        CONE_DATA.length - 1,
-      );
+
+      // Base target index from scroll, then clamp so we never jump more than
+      // one cone per frame (prevents "skipping" 2 cones on fast scroll/click).
+      let desiredStep = Math.floor(rawStep + 0.0001);
+      desiredStep = Math.min(CONE_DATA.length - 1, Math.max(0, desiredStep));
+
+      let currentStep = desiredStep;
+      if (desiredStep > activeIndex + 1) {
+        currentStep = activeIndex + 1;
+      } else if (desiredStep < activeIndex - 1) {
+        currentStep = activeIndex - 1;
+      }
 
       if (currentStep !== activeIndex) {
         setActiveIndex(currentStep);
