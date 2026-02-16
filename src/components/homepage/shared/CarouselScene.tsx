@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useRef, useState, useEffect, Suspense } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
 import { useTransform, MotionValue } from "framer-motion";
 import { useHelper } from "@react-three/drei";
+import useSound from 'use-sound';
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { DirectionalLightHelper, SpotLightHelper } from "three";
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
@@ -116,6 +117,23 @@ function NavArrows({
   const showPrev = visible && activeIndex > 0;
   const showNext = visible && activeIndex < CONE_DATA.length - 1;
 
+  // Sound file path - public folder files are served from root
+  // Wrap in try-catch to handle cases where sound might not load
+  const [playClickSound] = useSound('/sounds/bubble.mp3', {
+    volume: 0.5,
+    interrupt: true,
+  });
+
+  // Safe sound play function that handles errors
+  const handlePlaySound = () => {
+    try {
+      playClickSound();
+    } catch (error) {
+      // Silently fail if sound can't play (e.g., autoplay restrictions)
+      console.debug('Sound playback failed:', error);
+    }
+  };
+
   return (
     <Html fullscreen style={{ pointerEvents: "none" }} zIndexRange={[100, 0]}>
       <div
@@ -127,6 +145,7 @@ function NavArrows({
             onClick={(e) => {
               e.stopPropagation();
               onPrev();
+              handlePlaySound();
             }}
             disabled={!showPrev}
             className={`${btnClass} ${showPrev ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8 pointer-events-none"}`}
@@ -154,6 +173,7 @@ function NavArrows({
             onClick={(e) => {
               e.stopPropagation();
               onNext();
+              handlePlaySound();
             }}
             disabled={!showNext}
             className={`${btnClass} ${showNext ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8 pointer-events-none"}`}
@@ -492,6 +512,7 @@ function CenteredConeOrbitControls({
       minPolarAngle={0}
       maxPolarAngle={Math.PI}
       autoRotate={false}
+      enableRotate={true} 
     />
   );
 }
@@ -531,6 +552,7 @@ interface CarouselSceneProps {
 }
 import { useTexture } from "@react-three/drei";
 
+
 // Terrain Floor Component with Displacement Mapping
 function TerrainFloor({
   position = [0, -4.25, 1],
@@ -565,6 +587,12 @@ function TerrainFloor({
     materialRef.current.displacementScale = 6 + mouseY * 0.5;
   });
 
+  const [heightMap, normalMap, matcap] = useLoader(THREE.TextureLoader, [
+    "/textures/height.png",          // 👈 your mountain height map
+    "/textures/mountainTexture.jpg",     // same normal map as wolf
+    "/matcap/mat-2.png",    // same matcap as wolf
+  ]);
+
   return (
     <mesh
       ref={meshRef}
@@ -589,7 +617,9 @@ function TerrainFloor({
         emissiveIntensity={0.05}
       />
 
-      {/* <pointLight color="#009fff" intensity={50} /> */}
+      
+
+      <pointLight color="#009fff" intensity={50} /> 
     </mesh>
   );
 }
@@ -1177,11 +1207,11 @@ function CarouselScene({ scrollProgress, onItemClick }: CarouselSceneProps) {
       <ContactShadows opacity={0.4} scale={15} blur={2.4} far={4.5} />
 
       {/* NEW: Orbit Controls for Centered Cone Only */}
-      <CenteredConeOrbitControls
+      {/* <CenteredConeOrbitControls
         isActive={isConeCentered}
         conePosition={centeredConePosition}
         activeConeRef={activeConeRef}
-      />
+      /> */}
     </>
   );
 }
