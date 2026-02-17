@@ -17,7 +17,7 @@ export default function HomePage() {
          <ImageSequenceScroll />
          {!isMobile ? null : <MachinerySection />}
          {/* <div className="w-full h-screen bg-white"></div> */}
-        {isMobile ? null : <ConeCarousel />}
+        {/* {isMobile ? null : <ConeCarousel />} */}
       </main>
     </div>
   );

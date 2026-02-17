@@ -54,7 +54,7 @@ export default function VideoHero() {
       </div>
 
       {/* 3. OVERLAYS (For readability) */}
-      <div className="absolute inset-0 z-10 bg-black/70 pointer-events-none" />
+      <div className="absolute inset-0 z-10 bg-black/40 pointer-events-none" />
       
       {/* Subtle Blue Vignette */}
       <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,10,30,0.8)_100%)] pointer-events-none" />
@@ -82,7 +82,7 @@ export default function VideoHero() {
               <div className="text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]">
                 <LayoutTextFlip
                   words={["Cones", "Blunts", "Tubes"]}
-                  className="w-[140px] text-center sm:w-[180px] sm:text-right" text={""} secondtext={""}                />
+                  className="w-[180px] text-center sm:w-[180px] min-w-[400px] sm:text-right" text={""} secondtext={""}/>          
               </div>
 
               <span className="font-medium text-slate-500 italic">for</span>
@@ -91,7 +91,7 @@ export default function VideoHero() {
               <div className="text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]">
                 <LayoutTextFlip
                   words={["Perfect Quality", "Stable Shape", "Reliable Filling"]}
-                  className="w-[280px] text-center sm:w-[350px] sm:text-left" text={""} secondtext={""}                />
+                  className="w-[280px] text-center sm:w-[350px] min-w-[400px] sm:text-left" text={""} secondtext={""}/>
               </div>
             </div>
           </motion.div>

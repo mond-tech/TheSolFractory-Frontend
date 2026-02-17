@@ -65,7 +65,7 @@ export default function Navbar() {
       }
       // 2. Between hero and bottom carousel: blurred background
       else if (scrollY < bottomStart) {
-        setNavBgVariant("blur");
+        setNavBgVariant("solid");
       }
       // 3. At / after bottom carousel: solid background
       else {
