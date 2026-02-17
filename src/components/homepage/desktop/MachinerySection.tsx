@@ -130,13 +130,18 @@ export default function MachinerySection() {
       >
         {/* 🎥 VIDEO */}
         <video
-          src="https://ja3zeotcy2kd52jg.public.blob.vercel-storage.com/alienrobo1.mp4"
-          autoPlay
           muted
+          autoPlay
           loop
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
-        />
+        >
+            {/* Mobile Video (loads only on screens smaller than 768px) */}
+            <source src={process.env.NEXT_PUBLIC_MACHINERY_VIDEO_MOBILE_URL} type="video/mp4" media="(max-width: 767px)" />
+            
+            {/* Desktop Video (loads on larger screens) */}
+            <source src={process.env.NEXT_PUBLIC_MACHINERY_VIDEO_DESKTOP_URL} type="video/mp4" />
+        </video>
  
         <div className="absolute inset-0 bg-blue-950/50 backdrop-blur-[2px]" />
  

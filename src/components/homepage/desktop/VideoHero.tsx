@@ -61,38 +61,47 @@ export default function VideoHero() {
 
       {/* 4. HERO CONTENT */}
       <div className="relative z-20 flex h-full items-center justify-center px-4">
-        <div className="flex max-w-7xl flex-col items-center justify-center text-center">
+        <div className="flex flex-col items-center justify-center text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
             className="flex flex-col items-center"
           >
-            {/* MAIN HEADING: Metallic Gradient */}
+            {/* MAIN HEADING */}
             <h1 className="mb-2 text-5xl font-black tracking-tighter sm:text-6xl md:text-7xl lg:text-8xl font-tasa">
-              <span className="bg-gradient-to-b from-white via-blue-100 to-blue-600 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(37,99,235,0.6)]">
+              <span className="bg-gradient-to-b from-white via-blue-100 to-blue-700 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(37,99,235,0.6)]">
                 Machine Made
               </span>
             </h1>
 
-            {/* SUB HEADING: Bright Cyan Highlights */}
+            {/* SUB HEADING ROW */}
             <div className="flex flex-col flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xl font-bold tracking-wide sm:flex-row sm:text-2xl md:text-3xl text-slate-300">
               
-              {/* Product Type (Bright Blue) */}
+              {/* Product Type - Fixed width of 180px */}
               <div className="text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]">
                 <LayoutTextFlip
+                  width="190px"
                   words={["Cones", "Blunts", "Tubes"]}
-                  className="w-[180px] text-center sm:w-[180px] min-w-[400px] sm:text-right" text={""} secondtext={""}/>          
+                  className="text-cyan-400" 
+                  text="" 
+                  secondtext=""
+                />
               </div>
 
-              <span className="font-medium text-slate-500 italic">for</span>
+              <span className="font-light italic text-white/60 mx-2">for</span>
 
-              {/* Benefit (Bright Blue) */}
+              {/* Benefit - Fixed width of 400px (wide enough for 'Perfect Quality') */}
               <div className="text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]">
                 <LayoutTextFlip
+                  width="390px"
                   words={["Perfect Quality", "Stable Shape", "Reliable Filling"]}
-                  className="w-[280px] text-center sm:w-[350px] min-w-[400px] sm:text-left" text={""} secondtext={""}/>
+                  className="text-cyan-400" 
+                  text="" 
+                  secondtext=""
+                />
               </div>
+              
             </div>
           </motion.div>
         </div>

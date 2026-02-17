@@ -8,13 +8,15 @@ export const LayoutTextFlip = ({
   secondtext = "",
   words = ["Landing Pages", "Component Blocks", "Page Sections", "3D Shaders"],
   duration = 3000,
-  className = ""
+  className = "",
+  width = "auto"
 }: {
   text: string;
   secondtext: string;
   words: string[];
   duration?: number;
   className?: string;
+  width? : string;
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
  
@@ -37,8 +39,9 @@ export const LayoutTextFlip = ({
  
       <motion.span
         layout
+        style={{ width: width }}
         //rounded-md border border-transparent ring
-        className={`relative overflow-hidden min-w-35.5 px-4 py-2 font-tasa text-5xl font-bold tracking-tight text-white drop-shadow-lg md:text-6xl  ${className}`}
+        className={`relative inline-flex justify-center overflow-hidden px-4 py-2 font-tasa text-5xl font-bold tracking-tight text-white drop-shadow-lg md:text-6xl  ${className}`}
       >
         <AnimatePresence mode="popLayout">
           <motion.span
