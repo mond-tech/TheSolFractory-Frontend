@@ -1,194 +1,134 @@
 "use client";
-
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from "react";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 
-const ScrollVideo = ({ videoSrc }: { videoSrc: string }) => {
+const ImageSequenceScroll = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const overlayLockedRef = useRef(false); // Prevents re-rendering loop
 
-  const scrollProgressRef = useRef(0);
-  const rafRef = useRef<number | null>(null);
-  const overlayLockedRef = useRef(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [images, setImages] = useState<HTMLImageElement[]>([]);
+  const [showOverlay, setShowOverlay] = useState(false); // Controls text visibility
+  
+  // CONFIGURATION
+  const frameCount = 191; 
+  const imagesFolder = "videos/frames-q2"; 
 
-  // State for Blob URL and UI
-  const [videoUrl, setVideoUrl] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [showOverlay, setShowOverlay] = useState(false);
-
-  // 1. Load Video into Blob (Memory) to prevent network lag
+  // 1. Preload Images
   useEffect(() => {
-    let active = true;
-    const fetchVideo = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(videoSrc);
-        const blob = await response.blob();
-        const objectUrl = URL.createObjectURL(blob);
+    let loadedCount = 0;
+    const imgArray: HTMLImageElement[] = [];
+
+    const loadImages = async () => {
+      for (let i = 0; i < frameCount; i++) {
+        const img = new Image();
+        const fileName = `frame_${i.toString().padStart(4, "0")}.jpg`;
+        img.src = `${imagesFolder}/${fileName}`;
         
-        if (active) {
-          setVideoUrl(objectUrl);
-          setIsLoading(false);
-        }
-      } catch (error) {
-        console.error("Failed to load video", error);
-        setIsLoading(false);
+        img.onload = () => {
+          loadedCount++;
+          setLoadingProgress(Math.round((loadedCount / frameCount) * 100));
+        };
+        imgArray.push(img);
       }
+      setImages(imgArray);
     };
 
-    fetchVideo();
+    loadImages();
+  }, []);
 
-    return () => {
-      active = false;
-      if (videoUrl) URL.revokeObjectURL(videoUrl);
-    };
-  }, [videoSrc]);
-
-  // 2. Canvas & Scroll Animation Loop
+  // 2. Canvas Animation Loop
   useEffect(() => {
-    const video = videoRef.current;
+    if (loadingProgress < 100) return;
+
     const canvas = canvasRef.current;
     const container = containerRef.current;
+    
+    if (!canvas || !container || images.length === 0) return;
 
-    // Wait until we have the videoUrl and elements
-    if (!video || !canvas || !container || !videoUrl) return;
-
-    const ctx = canvas.getContext("2d", { alpha: false }); // alpha: false optimizes performance
+    // Optimization: alpha: false speeds up drawing
+    const ctx = canvas.getContext("2d", { alpha: false });
     if (!ctx) return;
 
-    let currentSmoothTime = 0;
+    // Set High Quality Scaling
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "medium";
 
-    const resize = () => {
-      // Set canvas size to match video resolution for sharpness
-      if (video.videoWidth) {
-         canvas.width = video.videoWidth;
-         canvas.height = video.videoHeight;
-      }
-    };
+    if (images[0]) {
+      canvas.width = images[0].naturalWidth || window.innerWidth;
+      canvas.height = images[0].naturalHeight || window.innerHeight;
+    }
 
-    const onScroll = () => {
+    const render = () => {
       const rect = container.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       
-      // Calculate scroll progress (0 to 1)
-      // We subtract windowHeight to ensure we reach 1.0 when the bottom of container hits bottom of screen
+      const scrollY = -rect.top;
       const totalDist = rect.height - windowHeight;
-      // Invert rect.top because it goes negative as we scroll down
-      const rawProgress = -rect.top / totalDist;
-      
+      const rawProgress = scrollY / totalDist;
       const progress = Math.min(Math.max(rawProgress, 0), 1);
-      scrollProgressRef.current = progress;
-    };
 
-    const render = () => {
-      if (video.duration) {
-        // Calculate target time based on scroll
-        const targetTime = video.duration * scrollProgressRef.current;
-        
-        // INTERPOLATION: Move current time towards target time smoothly (0.12 factor)
-        // This creates the "weighted" feel
-        currentSmoothTime += (targetTime - currentSmoothTime) * 0.12;
-
-        // Only update video if difference is significant (performance optimization)
-        if (Math.abs(video.currentTime - currentSmoothTime) > 0.01) {
-          video.currentTime = currentSmoothTime;
-        }
-
-        // Draw the current video frame to canvas
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-        // 🎯 OVERLAY LOGIC
-        // Trigger when video is 90% done (change 0.9 to whatever percentage you want)
-        // && !overlayLockedRef.current ensures we only trigger state update once
-        if (!overlayLockedRef.current && currentSmoothTime >= video.duration * 0.4) {
-          overlayLockedRef.current = true;
-          setShowOverlay(true);
-        }
+      // 🎯 OVERLAY TRIGGER LOGIC
+      // Trigger when scrolled 40% (0.4). Adjust this number to change timing.
+      if (!overlayLockedRef.current && progress > 0.4) {
+        overlayLockedRef.current = true;
+        setShowOverlay(true);
       }
 
-      rafRef.current = requestAnimationFrame(render);
+      // Hide overlay if we scroll back up (Optional)
+      if (overlayLockedRef.current && progress < 0.3) {
+         overlayLockedRef.current = false;
+         setShowOverlay(false);
+      }
+
+      const frameIndex = Math.min(
+        frameCount - 1,
+        Math.floor(progress * (frameCount - 1))
+      );
+      
+      const img = images[frameIndex];
+      
+      if (img && img.complete && img.naturalWidth > 0) {
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      }
+
+      requestAnimationFrame(render);
     };
 
-    // Events
-    const handleMetadata = () => {
-      resize();
-      // Initial draw
-      render(); 
-    };
+    const animId = requestAnimationFrame(render);
+    return () => cancelAnimationFrame(animId);
 
-    video.addEventListener("loadedmetadata", handleMetadata);
-    window.addEventListener("resize", resize);
-    window.addEventListener("scroll", onScroll, { passive: true });
-
-    // Start loop
-    render();
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", resize);
-      video.removeEventListener("loadedmetadata", handleMetadata);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, [videoUrl]); // Re-initialize when Blob URL is ready
+  }, [loadingProgress, images]);
 
   return (
     <>
-      <div ref={containerRef} className="relative h-[220vh] bg-[rgb(0,20,52)]">
-        {/* rounded-2xl shadow-[0_5px_35px_rgba(255,255,255,0.25)] outline outline-offset-2 border-white/60 */}
-        <div className="sticky top-0 m-auto h-[100vh] w-full overflow-hidden">
-          
-          {/* Loading State */}
-          {isLoading && (
-              <div className="absolute inset-0 flex items-center justify-center text-white z-50">
-                  Loading High-Res Video...
-              </div>
-          )}
+    <div ref={containerRef} className="relative h-[300vh] bg-black">
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
+        
+        {/* Loading Screen */}
+        {loadingProgress < 100 && (
+           <div className="absolute inset-0 z-50 flex items-center justify-center bg-black text-white">
+             Loading {loadingProgress}%
+           </div>
+        )}
 
-          {/* 🎬 Canvas (Visible) */}
-          <canvas
-            ref={canvasRef}
-            className="absolute inset-0 w-full h-full object-cover z-10"
-          />
-
-          {/* ✨ Overlay shown when scrolled enough */}
-          {showOverlay && (
-            <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+        <canvas ref={canvasRef} className="w-full h-full object-cover" />
+        
+        {/* ✨ OVERLAY SECTION ✨ */}
+        {showOverlay && (
+            <div className="absolute inset-0 z-50 flex items-center justify-center pointer-events-none">
               <div className="">
                   <TextGenerateEffect
                   words="Exceptional Quality. Endless Customization. True Scalability."
-                  className=" text-center text-4xl md:text-6xl "
+                  className="text-center text-4xl md:text-6xl text-white drop-shadow-md"
                   />
               </div>
             </div>
-          )}
-
-          {/* 🕵️ Hidden Source Video */}
-          {videoUrl && (
-              <video
-              ref={videoRef}
-              src={videoUrl}
-              muted
-              playsInline
-              preload="auto"
-              className="absolute inset-0 w-full h-full opacity-0 pointer-events-none"
-              />
-          )}
-        </div>
-        
-        {/* Overlapping div - 50% on bottom of ScrollVideo, 50% on top of next component */}
-        <div 
-          className='absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-full max-w-4xl px-8 py-12'
-          style={{ zIndex: 100 }}
-        >
-          {/* <div className='backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] p-8 md:p-12'>
-            <h1 className='text-white text-3xl md:text-5xl lg:text-6xl font-bold text-center leading-tight tracking-tight'>
-              Hello Uncle!
-            </h1>
-          </div> */}
-        </div>
+        )}
       </div>
-          <div
+    </div>
+        <div
     style={{
         height: "80px",
         background: "white",
@@ -212,4 +152,139 @@ const ScrollVideo = ({ videoSrc }: { videoSrc: string }) => {
   );
 };
 
-export default ScrollVideo;
+export default ImageSequenceScroll;
+
+// "use client";
+// import React, { useRef, useEffect, useState, useMemo } from "react";
+// import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
+
+// const ImageSequenceScroll = () => {
+//   const containerRef = useRef<HTMLDivElement>(null);
+//   const canvasRef = useRef<HTMLCanvasElement>(null);
+//   const overlayLockedRef = useRef(false); // Prevents re-rendering loop
+
+//   const [loadingProgress, setLoadingProgress] = useState(0);
+//   const [images, setImages] = useState<HTMLImageElement[]>([]);
+//   const [showOverlay, setShowOverlay] = useState(false); // Controls text visibility
+  
+//   // CONFIGURATION
+//   const frameCount = 191; // Update this to your total number of frames
+//   const imagesFolder = "videos/frames-q1"; // Place your images in public/frames/
+
+//   // 1. Preload Images
+//   useEffect(() => {
+//     let loadedCount = 0;
+//     const imgArray: HTMLImageElement[] = [];
+
+//     const loadImages = async () => {
+//       for (let i = 0; i < frameCount; i++) {
+//         const img = new Image();
+//         // Pad number with zeros (e.g., 0001, 0010)
+//         const fileName = `frame_${i.toString().padStart(4, "0")}.jpg`;
+//         img.src = `${imagesFolder}/${fileName}`;
+        
+//         img.onload = () => {
+//           loadedCount++;
+//           setLoadingProgress(Math.round((loadedCount / frameCount) * 100));
+//         };
+//         imgArray.push(img);
+//       }
+//       setImages(imgArray);
+//     };
+
+//     loadImages();
+//   }, []);
+
+//   // 2. Canvas Animation Loop
+//   useEffect(() => {
+//     // BLOCKER: Don't start rendering or sizing until fully loaded
+//     if (loadingProgress < 100) return;
+
+//     const canvas = canvasRef.current;
+//     const container = containerRef.current;
+    
+//     // Ensure we have images and refs
+//     if (!canvas || !container || images.length === 0) return;
+
+//     const ctx = canvas.getContext("2d");
+//     if (!ctx) return;
+
+//     // NOW it is safe to check dimensions because we know loading is 100%
+//     if (images[0]) {
+//       // Fallbacks in case naturalWidth is still weird (rare if loaded)
+//       canvas.width = images[0].naturalWidth || window.innerWidth;
+//       canvas.height = images[0].naturalHeight || window.innerHeight;
+//     }
+
+//     const render = () => {
+//       const rect = container.getBoundingClientRect();
+//       const windowHeight = window.innerHeight;
+      
+//       // Calculate how much we have scrolled past the container top
+//       // We want the animation to start when the container hits the top of viewport
+//       const scrollY = -rect.top;
+      
+//       // Calculate total scrollable distance (height of container - height of viewport)
+//       const totalDist = rect.height - windowHeight;
+      
+//       // Normalize to 0 -> 1
+//       const rawProgress = scrollY / totalDist;
+//       const progress = Math.min(Math.max(rawProgress, 0), 1);
+
+//       const frameIndex = Math.min(
+//         frameCount - 1,
+//         Math.floor(progress * (frameCount - 1))
+//       );
+      
+//       const img = images[frameIndex];
+      
+//       // Performance optimization: verify dimensions match before clearing
+//       if (img && img.complete && img.naturalWidth > 0) {
+//         // Optional: Only clear if you have transparency. 
+//         // For video frames (opaque), you can skip clearRect for performance.
+//         ctx.clearRect(0, 0, canvas.width, canvas.height); 
+        
+//         // Use standard drawImage
+//         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+//       }
+
+//       requestAnimationFrame(render);
+//     };
+
+//     const animId = requestAnimationFrame(render);
+//     return () => cancelAnimationFrame(animId);
+
+//   // CRITICAL CHANGE: Add loadingProgress to dependencies
+//   }, [loadingProgress, images]);
+
+//   return (
+//     <div ref={containerRef} className="relative h-[300vh] bg-black">
+//       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
+        
+//         {/* Loading Screen */}
+//         {loadingProgress < 100 && (
+//            <div className="absolute inset-0 z-50 flex items-center justify-center bg-black text-white">
+//              Loading {loadingProgress}%
+//            </div>
+//         )}
+
+//         <canvas ref={canvasRef} className="w-full h-full object-cover" />
+        
+//         {/* overlay */}
+//         {showOverlay && (
+//             <div className="absolute inset-0 z-50 flex items-center justify-center pointer-events-none">
+//               <div className="">
+//                   <TextGenerateEffect
+//                   words="Exceptional Quality. Endless Customization. True Scalability."
+//                   className="text-center text-4xl md:text-6xl text-white drop-shadow-md"
+//                   />
+//               </div>
+//             </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default ImageSequenceScroll;
+

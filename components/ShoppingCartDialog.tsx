@@ -1,6 +1,6 @@
 "use client";
-
-import React, { useEffect } from "react";
+ 
+import { useEffect } from "react";
 import { X, Trash2 } from "lucide-react";
 import {
   Dialog,
@@ -12,19 +12,19 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/src/contexts/CartContext";
 import { useRouter } from "next/navigation";
-
+ 
 interface ShoppingCartDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
-
+ 
 export function ShoppingCartDialog({
   open,
   onOpenChange,
 }: ShoppingCartDialogProps) {
   const { items, updateQuantity, removeItem, getTotal } = useCart();
   const total = getTotal();
-
+ 
   // Prevent body scroll when cart is open
   useEffect(() => {
     if (open) {
@@ -36,16 +36,16 @@ export function ShoppingCartDialog({
       document.body.style.overflow = "unset";
     };
   }, [open]);
-
+ 
   const router = useRouter();
-
+ 
   const increaseQty = (productId: number) => {
     const item = items.find((i) => i.productId === productId);
     if (item) {
       updateQuantity(productId.toString(), item.quantity + 1);
     }
   };
-
+ 
   const decreaseQty = (productId: number) => {
     const item = items.find((i) => i.productId === productId);
     if (item && item.quantity > 1) {
@@ -55,11 +55,11 @@ export function ShoppingCartDialog({
       removeItem(productId.toString());
     }
   };
-
-
+ 
+ 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-[#132135] z-1000001 border-l border-gray-700 text-white w-full max-w-md h-full p-0 sm:rounded-none fixed right-0 top-0 !left-auto !bottom-0 flex flex-col shadow-2xl cart-drawer !translate-x-0 !translate-y-0 data-[state=closed]:!slide-out-to-left-0 data-[state=closed]:!slide-out-to-top-0 data-[state=open]:!slide-in-from-left-0 data-[state=open]:!slide-in-from-top-0 data-[state=closed]:!zoom-out-100 data-[state=open]:!zoom-in-100">
+      <DialogContent className="bg-[#132135] z-1000001 border-l border-gray-700 text-white w-full max-w-md h-full p-0 rounded-none fixed right-0 top-0 !left-auto !bottom-0 flex flex-col shadow-2xl cart-drawer !translate-x-0 !translate-y-0 data-[state=closed]:!slide-out-to-left-0 data-[state=closed]:!slide-out-to-top-0 data-[state=open]:!slide-in-from-left-0 data-[state=open]:!slide-in-from-top-0 data-[state=closed]:!zoom-out-100 data-[state=open]:!zoom-in-100">
         <DialogHeader className="px-6 pt-6 pb-4 border-b border-gray-700">
           <div className="flex items-center justify-between" style={{ textShadow: "0 0 2px rgba(255,255,255,0.6)" }}>
             <DialogTitle className="text-xl font-semibold text-white">
@@ -67,14 +67,14 @@ export function ShoppingCartDialog({
             </DialogTitle>
             <button
               onClick={() => onOpenChange(false)}
-              className="text-gray-400 hover:text-white transition-colors p-1"
+              className="text-gray-400 hover:text-white transition-colors p-1 cursor-pointer"
               aria-label="Close"
             >
               <X className="h-5 w-5" />
             </button>
           </div>
         </DialogHeader>
-
+ 
         <div
           className="px-6 py-4 flex-1 overflow-y-auto scrollbar-hide"
           style={{ maxHeight: "calc(100vh - 200px)" }}
@@ -106,7 +106,7 @@ export function ShoppingCartDialog({
                       </div>
                     )}
                   </div>
-
+ 
                   {/* Product Details */}
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-white text-lg mb-1">
@@ -124,11 +124,11 @@ export function ShoppingCartDialog({
                       >
                         −
                       </button>
-
+ 
                       <span className="min-w-[32px] text-center text-white font-medium">
                         {item.quantity}
                       </span>
-
+ 
                       <button
                         onClick={() => increaseQty(item.productId)}
                         className="w-8 h-8 flex items-center justify-center rounded-md
@@ -139,7 +139,7 @@ export function ShoppingCartDialog({
                       </button>
                     </div>
                   </div>
-
+ 
                   {/* Price and Delete */}
                   <div className="flex flex-col items-end gap-2">
                     <button
@@ -161,7 +161,7 @@ export function ShoppingCartDialog({
             </div>
           )}
         </div>
-
+ 
         {/* Total and Actions */}
         <div className="px-6 py-4 space-y-4 border-t border-gray-700 mt-auto">
           <div className="flex justify-between items-center">
@@ -173,10 +173,10 @@ export function ShoppingCartDialog({
               })}
             </span>
           </div>
-
+ 
           <div className="flex gap-3">
             {/* <Button
-              className="btn-liquid not-md:w-42 px-9 py-5 font-bold uppercase tracking-widest active 
+              className="btn-liquid not-md:w-42 px-9 py-5 font-bold uppercase tracking-widest active
                     text-gray-300 hover:text-white border-gray-500 rounded-3xl hover:bg-gray-800 transition border-2"
               onClick={() => {
                 // Handle place order
@@ -185,10 +185,10 @@ export function ShoppingCartDialog({
             >
               PLACE ORDER
             </Button> */}
-
+ 
             <Button
               variant="outline"
-              className="btn-liquid px-9 not-md:w-42 py-5 font-bold uppercase tracking-widest active
+              className="btn-liquid px-9 w-full py-5 font-bold uppercase tracking-widest active
                     text-gray-300 hover:text-white border-gray-500 rounded-3xl hover:bg-gray-800 transition border-2 mr-1.5"
               onClick={() => {
                 // Handle request quote
@@ -203,4 +203,3 @@ export function ShoppingCartDialog({
     </Dialog>
   );
 }
-

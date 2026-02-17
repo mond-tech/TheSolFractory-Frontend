@@ -1,21 +1,23 @@
+"use client"
+import ImageSequenceScroll from "../components/homepage/desktop/ScrollVideo";
 import VideoHero from "../components/homepage/desktop/VideoHero";
-import ScrollVideo from "../components/homepage/desktop/ScrollVideo";
 import MachinerySection from "../components/homepage/desktop/MachinerySection";
-// import ConeCarousel from "@/test-components/homepage/ConeCarousel";
 import ConeCarousel from "../components/homepage/desktop/ConeCarousel";
+import { useIsMobile } from "@/hooks/use-mobile";
+// import ConeCarousel from "@/test-components/homepage/ConeCarousel";
 
 export default function HomePage() {
+
+  const isMobile = useIsMobile();
+
   return (
     <div className="relative ">
       <VideoHero />
       <main className="relative z-10 bg-[#001534]">
-         {/* <main className="relative z-10 bg-[#001534]/80 backdrop-blur-xl border border-white/10 shadow-[0_0_40px_rgba(15,23,42,0.9)]"> */}
-         {/* <ScrollVideo videoSrc="https://ja3zeotcy2kd52jg.public.blob.vercel-storage.com/outrobin2.mp4" /> */}
-         {/* <ConeCarousel /> */}
-         <MachinerySection />
+         <ImageSequenceScroll />
+         {!isMobile ? null : <MachinerySection />}
          {/* <div className="w-full h-screen bg-white"></div> */}
-         <ScrollVideo videoSrc={process.env.SMOKE_VIDEO_URL || "/videos/outrobinpurewhite.mp4"} />
-        <ConeCarousel />
+        {isMobile ? null : <ConeCarousel />}
       </main>
     </div>
   );

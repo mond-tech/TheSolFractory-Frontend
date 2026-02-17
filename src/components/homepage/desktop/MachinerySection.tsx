@@ -1,7 +1,7 @@
 "use client";
  
 import React, { useRef, useState, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion, easeOut } from "framer-motion";
 import {
   IconRocket,
   IconDropletFilled,
@@ -30,7 +30,7 @@ const fadeUp = {
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: "easeOut" as const },
+    transition: { duration: 0.6, ease: easeOut },
   },
 };
  
@@ -40,7 +40,7 @@ const cardVariants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.5, ease: "easeOut" as const },
+    transition: { duration: 0.5, ease: easeOut },
   },
 };
  

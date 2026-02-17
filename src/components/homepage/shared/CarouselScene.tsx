@@ -584,7 +584,7 @@ function TerrainFloor({
     if (!materialRef.current) return;
 
     const mouseY = state.pointer.y; // normalized (-1 to 1)
-    materialRef.current.displacementScale = 6 + mouseY * 0.5;
+    materialRef.current.displacementScale = 6 // + mouseY * 0.5;
   });
 
   const [heightMap, normalMap, matcap] = useLoader(THREE.TextureLoader, [
