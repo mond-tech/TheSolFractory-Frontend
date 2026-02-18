@@ -117,7 +117,7 @@ export default function VideoHero() {
       </div>
 
       {/* SCROLL INDICATOR */}
-      <motion.button
+      {/* <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
@@ -130,7 +130,7 @@ export default function VideoHero() {
          <div className="h-10 w-6 rounded-full border-2 border-white/50 p-1">
            <div className="h-2 w-full animate-bounce rounded-full bg-white" />
          </div>
-      </motion.button>
+      </motion.button> */}
     </section>
   );
 }
