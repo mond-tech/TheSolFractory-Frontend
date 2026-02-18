@@ -97,6 +97,24 @@ function Loader() {
   );
 }
 
+function LoadingBridge({
+  onLoadingChange,
+  onReady,
+}: {
+  onLoadingChange?: (loading: boolean, progress: number) => void;
+  onReady?: () => void;
+}) {
+  const { active, progress } = useProgress();
+
+  useEffect(() => {
+    const isLoading = active || progress < 100;
+    onLoadingChange?.(isLoading, progress);
+    if (!isLoading && progress >= 100) onReady?.();
+  }, [active, onLoadingChange, onReady, progress]);
+
+  return null;
+}
+
 // --- NAV ARROWS ---
 function NavArrows({
   visible,
@@ -119,7 +137,7 @@ function NavArrows({
 
   // Sound file path - public folder files are served from root
   // Wrap in try-catch to handle cases where sound might not load
-  const [playClickSound] = useSound('/sounds/bubble.mp3', {
+  const [playClickSound] = useSound('/sounds/click.ogg', {
     volume: 0.5,
     interrupt: true,
   });
@@ -1410,14 +1428,50 @@ function CarouselItem({
 export default function CarouselCanvas({
   scrollProgress,
   onItemClick,
+  onLoadingChange,
+  showSmoke = true,
 }: {
   scrollProgress: MotionValue<number>;
   onItemClick: (index: number) => void;
+  onLoadingChange?: (loading: boolean, progress: number) => void;
+  showSmoke?: boolean;
 }) {
+  const [ready, setReady] = useState(false);
+  const glRef = useRef<THREE.WebGLRenderer | null>(null);
+  const sceneRef = useRef<THREE.Scene | null>(null);
+
+  useEffect(() => {
+    return () => {
+      // Best-effort explicit disposal to free GPU memory when this viewer is unmounted.
+      const scene = sceneRef.current;
+      if (scene) {
+        disposeObject3D(scene);
+      }
+
+      const gl = glRef.current;
+      if (gl) {
+        try {
+          gl.renderLists?.dispose?.();
+          gl.dispose?.();
+          // @ts-expect-error - forceContextLoss exists on some renderers
+          gl.forceContextLoss?.();
+        } catch {
+          // ignore
+        }
+      }
+      sceneRef.current = null;
+      glRef.current = null;
+    };
+  }, []);
+
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div
+      className={`relative w-full h-full overflow-hidden transition-opacity duration-500 ${
+        ready ? "opacity-100" : "opacity-0"
+      }`}
+    >
       {/* Smoke Behind Everything */}
-      <CinematicSmoke />
+      {showSmoke ? <CinematicSmoke /> : null}
 
       {/* 3D Canvas */}
       <Canvas
@@ -1429,14 +1483,61 @@ export default function CarouselCanvas({
           outputColorSpace: THREE.SRGBColorSpace,
         }}
         camera={{ position: [0, 0, 18], fov: 40 }}
+        onCreated={({ gl, scene }) => {
+          glRef.current = gl;
+          sceneRef.current = scene;
+        }}
       >
+        <LoadingBridge
+          onLoadingChange={onLoadingChange}
+          onReady={() => setReady(true)}
+        />
         <React.Suspense fallback={<Loader />}>
-          <CarouselScene
-            scrollProgress={scrollProgress}
-            onItemClick={onItemClick}
-          />
+          <CarouselScene scrollProgress={scrollProgress} onItemClick={onItemClick} />
         </React.Suspense>
       </Canvas>
     </div>
   );
+}
+
+function disposeMaterial(mat: THREE.Material) {
+  // Dispose textures attached to material
+  const anyMat = mat as unknown as Record<string, unknown>;
+  for (const key of Object.keys(anyMat)) {
+    const v = anyMat[key];
+    if (v && typeof v === "object" && (v as THREE.Texture).isTexture) {
+      try {
+        (v as THREE.Texture).dispose();
+      } catch {
+        // ignore
+      }
+    }
+  }
+  try {
+    mat.dispose();
+  } catch {
+    // ignore
+  }
+}
+
+function disposeObject3D(root: THREE.Object3D) {
+  root.traverse((obj) => {
+    const mesh = obj as THREE.Mesh;
+    const geom = (mesh as unknown as { geometry?: THREE.BufferGeometry }).geometry;
+    if (geom) {
+      try {
+        geom.dispose();
+      } catch {
+        // ignore
+      }
+    }
+
+    const material = (mesh as unknown as { material?: THREE.Material | THREE.Material[] })
+      .material;
+    if (Array.isArray(material)) {
+      material.forEach(disposeMaterial);
+    } else if (material) {
+      disposeMaterial(material);
+    }
+  });
 }
