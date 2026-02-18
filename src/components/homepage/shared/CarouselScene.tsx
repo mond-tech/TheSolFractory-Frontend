@@ -230,6 +230,7 @@ function ConnectionArrow({
   const lineRef = useRef<THREE.Line>(null);
   const cardCircleRef = useRef<THREE.Mesh>(null);
   const coneCircleRef = useRef<THREE.Mesh>(null);
+  const [lineObject, setLineObject] = React.useState<THREE.Line | null>(null);
 
   // Create geometry and material once
   const lineGeometry = React.useMemo(() => new THREE.BufferGeometry(), []);
@@ -335,14 +336,13 @@ function ConnectionArrow({
   React.useEffect(() => {
     if (!lineRef.current) {
       lineRef.current = new THREE.Line(lineGeometry, lineMaterial);
+      setLineObject(lineRef.current);
     }
   }, [lineGeometry, lineMaterial]);
 
-  if (!visible) return null;
-
   return (
     <>
-      {lineRef.current && <primitive object={lineRef.current} />}
+      {lineObject && <primitive object={lineObject} />}
       <mesh
         ref={cardCircleRef}
         geometry={circleGeometry}
@@ -739,47 +739,56 @@ function SmokeEmitter({
   );
 }
 
+// Helper function to initialize particle data (moved outside to avoid impure function during render)
+function initializeParticleData(count: number) {
+  const pos = new Float32Array(count * 3);
+  const vel = new Float32Array(count * 3);
+  const col = new Float32Array(count * 3);
+  const sd = new Float32Array(count);
+  const b = { x: 18, yMin: 0.5, yMax: 9, z: 14 };
+
+  for (let i = 0; i < count; i++) {
+    // Start within a wide box
+    pos[i * 3 + 0] = (Math.random() - 0.5) * b.x * 2;
+    pos[i * 3 + 1] = Math.random() * (b.yMax - b.yMin) + b.yMin;
+    pos[i * 3 + 2] = (Math.random() - 0.5) * b.z * 2;
+
+    // Much smaller initial random velocity for slower motion
+    vel[i * 3 + 0] = (Math.random() - 0.5) * 0.006;
+    vel[i * 3 + 1] = (Math.random() - 0.2) * 0.006;
+    vel[i * 3 + 2] = (Math.random() - 0.5) * 0.006;
+
+    // Warm tinted colors with slight variation
+    const t = 0.85 + Math.random() * 0.25;
+    col[i * 3 + 0] = 1.0 * t; // r
+    col[i * 3 + 1] = 0.85 * t; // g
+    col[i * 3 + 2] = 0.7 * t; // b
+
+    // Per-particle seed for smooth oscillation
+    sd[i] = Math.random() * Math.PI * 2;
+  }
+
+  return {
+    positions: pos,
+    velocities: vel,
+    colors: col,
+    seeds: sd,
+    bounds: b,
+  };
+}
+
 function DustParticles({ count = 620 }: { count?: number }) {
   const pointsRef = useRef<THREE.Points>(null);
+  const particleDataRef = useRef<ReturnType<typeof initializeParticleData> | null>(null);
 
   // Initialize positions, velocities and colors once
-  const { positions, velocities, colors, seeds, bounds } = React.useMemo(() => {
-    const cnt = count;
-    const pos = new Float32Array(cnt * 3);
-    const vel = new Float32Array(cnt * 3);
-    const col = new Float32Array(cnt * 3);
-    const sd = new Float32Array(cnt);
-    const b = { x: 18, yMin: 0.5, yMax: 9, z: 14 };
-
-    for (let i = 0; i < cnt; i++) {
-      // Start within a wide box
-      pos[i * 3 + 0] = (Math.random() - 0.5) * b.x * 2;
-      pos[i * 3 + 1] = Math.random() * (b.yMax - b.yMin) + b.yMin;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * b.z * 2;
-
-      // Much smaller initial random velocity for slower motion
-      vel[i * 3 + 0] = (Math.random() - 0.5) * 0.006;
-      vel[i * 3 + 1] = (Math.random() - 0.2) * 0.006;
-      vel[i * 3 + 2] = (Math.random() - 0.5) * 0.006;
-
-      // Warm tinted colors with slight variation
-      const t = 0.85 + Math.random() * 0.25;
-      col[i * 3 + 0] = 1.0 * t; // r
-      col[i * 3 + 1] = 0.85 * t; // g
-      col[i * 3 + 2] = 0.7 * t; // b
-
-      // Per-particle seed for smooth oscillation
-      sd[i] = Math.random() * Math.PI * 2;
+  React.useEffect(() => {
+    if (particleDataRef.current == null) {
+      particleDataRef.current = initializeParticleData(count);
     }
-
-    return {
-      positions: pos,
-      velocities: vel,
-      colors: col,
-      seeds: sd,
-      bounds: b,
-    };
   }, [count]);
+
+  const { positions, velocities, colors, seeds, bounds } = particleDataRef.current ?? initializeParticleData(count);
 
   // create geometry once
   React.useEffect(() => {
@@ -924,6 +933,13 @@ function CarouselScene({ scrollProgress, onItemClick }: CarouselSceneProps) {
   );
 
 
+  // Reset card visibility when conditions change
+  useEffect(() => {
+    if (!isConeCentered || !showUI) {
+      setShowCardWithDelay(false);
+    }
+  }, [isConeCentered, showUI]);
+
   // Handle delay when cone becomes centered
   useEffect(() => {
     // Clear any existing timeout
@@ -932,9 +948,8 @@ function CarouselScene({ scrollProgress, onItemClick }: CarouselSceneProps) {
       delayTimeoutRef.current = null;
     }
 
-    // Immediately hide when activeIndex changes or not centered
+    // Only set delay if cone is centered and UI is visible
     if (!isConeCentered || !showUI) {
-      setShowCardWithDelay(false);
       return;
     }
 
@@ -1453,7 +1468,6 @@ export default function CarouselCanvas({
         try {
           gl.renderLists?.dispose?.();
           gl.dispose?.();
-          // @ts-expect-error - forceContextLoss exists on some renderers
           gl.forceContextLoss?.();
         } catch {
           // ignore
