@@ -5,7 +5,6 @@ import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
 import { useTransform, MotionValue } from "framer-motion";
 import { useHelper } from "@react-three/drei";
 import useSound from 'use-sound';
-import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { DirectionalLightHelper, SpotLightHelper } from "three";
 import { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { ContactShadows, Html, useProgress } from "@react-three/drei";
@@ -14,79 +13,12 @@ import { Cone } from "./Cone";
 import { OrbitControls } from "@react-three/drei";
 import type { Group } from "three";
 import CinematicSmoke from "./CinemeticSmoke";
-// import { Stars } from "@/src/sharedcomponents/build/stars";
+import { CONE_DATA } from "@/sampledata/cone";
 
 // --- EXPORT CONFIGURATION for Page.tsx to use ---
 export const RADIUS = 6.5;
 export const ENTRANCE_OFFSET = 12;
 export const ANIMATION_END = 0.35;
-
-export const CONE_DATA = [
-  {
-    id: 1,
-    title: "Beige Cone",
-    description: "Smooth matte finish",
-    url: "/3d-cones/straight/beige_cone.glb",
-    scale: 46,
-    rotationOffset: 2,
-  },
-  {
-    id: 2,
-    title: "Black Obsidian",
-    description: "Dark reflective surface",
-    url: "/3d-cones/straight/black_cone_v01.glb",
-    scale: 47,
-    rotationOffset: 1.4,
-  },
-  {
-    id: 3,
-    title: "White Roll",
-    description: "Clean minimal design",
-    url: "/3d-cones/straight/white roll.glb",
-    scale: 1,
-    rotationOffset: 1.4,
-  },
-  {
-    id: 4,
-    title: "Brown Texture",
-    description: "Organic material feel",
-    url: "/3d-cones/brown roll.glb",
-    scale: 1.5,
-    rotationOffset: 3.9,
-  },
-  {
-    id: 5,
-    title: "Glass Filter",
-    description: "Transparent optics",
-    url: "/3d-cones/straight/Cone Glass Filter.glb",
-    scale: 0.5,
-    rotationOffset: 0.6,
-  },
-  {
-    id: 6,
-    title: "Industrial Roll",
-    description: "Heavy duty manufacturing",
-    url: "/3d-cones/straight/Roll 1.glb",
-    scale: 40,
-    rotationOffset: 2.3,
-  },
-  {
-    id: 7,
-    title: "Blue Steel",
-    description: "Cold rolled steel",
-    url: "/3d-cones/straight/Roll 2glb.glb",
-    scale: 40,
-    rotationOffset: 2.1,
-  },
-  {
-    id: 8,
-    title: "Clear Plastic",
-    description: "High durability polymer",
-    url: "/3d-cones/straight/Transparent Cone.glb",
-    scale: 3.2,
-    rotationOffset: -0.5,
-  },
-];
 
 function Loader() {
   const { progress } = useProgress();
