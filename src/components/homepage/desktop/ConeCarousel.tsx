@@ -28,7 +28,7 @@ type LazyCarouselCanvasProps = {
 // );
 
 const LazyCarouselCanvas = dynamic<LazyCarouselCanvasProps>(
-  () => import("./ConeCarousel2").then((m) => m.default),
+  () => import("../desktop/ConeCarousel2").then((m) => m.default),
   { ssr: false, loading: () => null }
 );
 
@@ -41,7 +41,7 @@ export default function LusionReplica() {
 
   // STATE
   const [mount3D, setMount3D] = useState(false);
-  const [is3DReady, setIs3DReady] = useState(false);
+  const [is3DReady, setIs3DReady] = useState(true);
   const [progress, setProgress] = useState(0); 
   
   // Use a ref to track mount state inside GSAP without stale closures
@@ -71,16 +71,17 @@ export default function LusionReplica() {
           start: "top top",
           end: "bottom bottom",
           scrub: 0.5,
+          pin: sticky,
           invalidateOnRefresh: true, // Forces recalculation on resize/load
           onUpdate: (self) => {
             sceneProgress.set(self.progress);
             setProgress(self.progress);
 
             // Mount logic using ref to prevent React dependency loops
-            if (self.progress > 0.8 && !mountTrackRef.current) {
+            if (self.progress > 0.2 && !mountTrackRef.current) {
               mountTrackRef.current = true;
               setMount3D(true);
-            } else if (self.progress < 0.7 && mountTrackRef.current) {
+            } else if (self.progress < 0.15 && mountTrackRef.current) {
               mountTrackRef.current = false;
               setMount3D(false);
               setIs3DReady(false);
@@ -98,7 +99,7 @@ export default function LusionReplica() {
       tl.to(content, {
         opacity: 0,
         x: 50,
-        duration: 0.15,
+        duration: 0.2,
         ease: "power1.out"
       }, 0);
 
@@ -125,12 +126,12 @@ export default function LusionReplica() {
         rotation: 0,
         zIndex: 9999,
         borderRadius: "0px",
-        duration: 0.6, // One smooth continuous motion
+        duration: 1, // One smooth continuous motion
         ease: "power3.inOut" // The cinematic Lusion feel
       }, 0);
 
       // 4. Spacer to hold screen while 3D spins
-      tl.to({}, { duration: 0.4 }); 
+      tl.to({}, { duration: 4 }); 
 
     }, containerRef);
 
@@ -139,7 +140,7 @@ export default function LusionReplica() {
 
   return (
     <div className="pt-20">
-            <div
+        <div
     style={{
         height: "80px",
         background: "white",
@@ -168,11 +169,38 @@ export default function LusionReplica() {
         {/* STICKY VIEWPORT */}
         <div 
           ref={stickyRef} 
-          className="sticky top-0 left-0 w-full h-screen overflow-hidden flex items-center z-10"
+          // sticky top-0 left-0
+          className="relative w-[99.98684%] h-screen overflow-hidden flex items-center z-10"
         >
           {/* Global Background */}
           {/* from-gray-50 to-gray-200 */}
           <div className="absolute inset-0 bg-gradient-to-br bg-white-z-10" />
+
+          {mount3D && (
+            <div className={`absolute inset-0 z-40 w-full h-full transition-opacity duration-500 
+            ${is3DReady ? 'opacity-100' : 'opacity-0'}`}
+            style={{ zIndex: 10000 }}
+            >
+              <LazyCarouselCanvas
+                scrollProgress={sceneProgress}
+                onItemClick={() => {}}
+                showSmoke={true}
+                onLoadingChange={(loading, prog) => {
+                  if (!loading && prog >= 100) {
+                    setTimeout(() => setIs3DReady(true), 100);
+                  }
+                }}
+              />
+            </div>
+          )}
+
+          {/* Loader */}
+          {mount3D && !is3DReady && (
+            <div className="absolute inset-0 flex items-center justify-center z-50 bg-white/10 backdrop-blur-sm"
+            style={{ zIndex: 10001 }}>
+              <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+            </div>
+          )}
 
           {/* Main Grid */}
           <div className="w-full max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-x-0 gap-y-0 items-center h-full">
@@ -195,29 +223,7 @@ export default function LusionReplica() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/0 to-[#00f0ff]/10" />
                 </div>
-
-                {/* 3D Scene */}
-                {mount3D && (
-                  <div className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${is3DReady ? 'opacity-100' : 'opacity-0'}`}>
-                    <LazyCarouselCanvas
-                      scrollProgress={sceneProgress}
-                      onItemClick={() => {}}
-                      showSmoke={true}
-                      onLoadingChange={(loading, prog) => {
-                        if (!loading && prog >= 100) {
-                          setTimeout(() => setIs3DReady(true), 100);
-                        }
-                      }}
-                    />
-                  </div>
-                )}
                 
-                {/* Loader */}
-                {mount3D && !is3DReady && (
-                  <div className="absolute inset-0 flex items-center justify-center z-50 bg-white/10 backdrop-blur-sm">
-                    <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                  </div>
-                )}
               </div>
             </div>
 
@@ -286,11 +292,12 @@ export default function LusionReplica() {
       </div>
 
       {/* PROOF OF LAYOUT (Next Section) */}
-      <div className="h-screen bg-[#0b0d12] text-white flex items-center justify-center relative z-20">
+      {/* <div className="h-screen bg-[#0b0d12] text-white flex items-center justify-center relative z-20">
         <h2 className="text-4xl font-light tracking-tight">Next Section</h2>
-      </div>
+      </div> */}
 
-    </div></div>
+    </div>
+    </div>
   );
 }
 

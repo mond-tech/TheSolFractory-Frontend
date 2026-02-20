@@ -18,10 +18,10 @@ export default function HomePage() {
       <main className="relative z-10 bg-[#001534]">
          {/* <ConeCarousel1 /> */}
          <ImageSequenceScroll />
-         {/* {!isMobile ? null : <MachinerySection />} */}
          <MachinerySection />
-         {/* <div className="w-full h-screen bg-white"></div> */}
+         {/* {!isMobile ? null : <MachinerySection />} */}
         {isMobile ? null : <ConeCarousel />}
+         {/* <div className="w-full h-screen bg-white"></div> */}
       </main>
     </div>
   );

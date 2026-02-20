@@ -98,7 +98,13 @@ export default function VideoHero() {
                 />
               </div>
 
-              <span className="font-light italic text-white/60 mx-2">for</span>
+            <h1 className="mb-2 text-5xl font-black tracking-tighter sm:text-6xl md:text-7xl lg:text-6xl font-tasa">
+              <span className="bg-gradient-to-b from-white via-blue-100 to-blue-700 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(37,99,235,0.6)]">
+                for
+              </span>
+            </h1>
+              {/* <span className="font-bold text-5xl text-white/60 mx-2">For</span> */}
+
 
               {/* Benefit - Fixed width of 400px (wide enough for 'Perfect Quality') */}
               <div className="text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]">
